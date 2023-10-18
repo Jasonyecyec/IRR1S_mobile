@@ -1,2 +1,2 @@
 # IRR1S_mobile
-PWA for capstone
+Progressive Web Application (PWA)  for capstone
