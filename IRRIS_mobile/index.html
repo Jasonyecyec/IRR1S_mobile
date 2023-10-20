@@ -4,14 +4,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="manifest" href="/manifest.json">
-    <meta name="viewport" content="width=device-width, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, viewport-fit=cover"/>
     <meta name="theme-color" content="#000000"/>
     <link rel="apple-touch-icon" href="cropped_512.jpg"/>
 
-    <title>Vite + React</title>
+    <title>IRIS</title>
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function () {
+              navigator.serviceWorker.register('/sw.js')
+                  .then(registration => {
+                      // Registration was successful
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                  }, error => {
+                      // registration failed :(
+                      console.log('ServiceWorker registration failed: ', err);
+                  });
+          });
+      }
+
+ 
+  </script>
     <script type="module" src="/src/main.jsx"></script>
+  
   </body>
 </html>
