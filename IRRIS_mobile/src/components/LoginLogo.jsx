@@ -9,7 +9,7 @@ const LoginLogo = ({ icon, text }) => {
     const navigation = useNavigate();
 
   return (
-    <div className="bg-secondaryColor bg-border relative text-center flex flex-col items-center p-14 w-full">
+    <div className="bg-secondaryColor bg-border relative text-center flex flex-col items-center p-12 w-full">
       <button
         onClick={() => navigation(-1)}
         className="absolute top-10 left-10"
