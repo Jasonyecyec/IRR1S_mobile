@@ -6,7 +6,7 @@ export default {
       colors: {
         mainColor: "#2563eb",
         secondaryColor: "#EEF2FF",
-        thirdColor: "#f8faff",
+        thirdColor: "#f8fa ff",
         accentColor: "#7447EB",
       },
     },

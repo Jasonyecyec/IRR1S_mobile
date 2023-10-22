@@ -10,7 +10,7 @@ const StudentLogin = () => {
     <div className="flex flex-col items-center">
       <LoginLogo icon={StudentIcon} text="Login as a Student"/>
 
-      <div className="flex flex-col w-8/12 mt-28 space-y-8">
+      <div className="flex flex-col w-8/12 mt-16 space-y-8">
         <input
           placeholder="Email"
           className="border border-mainColor rounded-md p-3"
@@ -20,9 +20,13 @@ const StudentLogin = () => {
           type="password"
           className="border border-mainColor rounded-md p-3"
         />
-        <button className="bg-mainColor text py-4 rounded-md font-semibold text-secondaryColor">
-          <Link to='/home'>LOGIN</Link>
+
+
+        <button >
+          <Link to='/home' className="bg-mainColor text py-4 rounded-md font-semibold text-secondaryColor w-full inline-block">LOGIN</Link>
+
         </button>
+        <p> Dont have an account? Activate Here Here</p>
       </div>
     </div>
   );
