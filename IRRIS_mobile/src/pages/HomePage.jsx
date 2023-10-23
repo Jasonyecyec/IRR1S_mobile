@@ -8,7 +8,7 @@ import UserSample from "../assets/images/user_sample.jpg"
 
 const HomePage = () => {
   return (
-    <div className="h-full">
+    <div className="">
       <div className="flex justify-between">
         <button>
           <img src={UserSample} className="w-10 h-10 rounded-full "/>
@@ -69,7 +69,7 @@ const HomePage = () => {
         </div>
 
         <hr/>
-        <div className="mt-5 flex justify-between">
+        <div className="mt-1 flex justify-between">
           <p className="text-left">Reported <span className="block">Oct 21, 2023</span></p>
           <p className="text-right">SB BLDG. 203<span className="block">E FAN AND DESK</span></p>
         </div>
