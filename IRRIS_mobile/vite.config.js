@@ -16,14 +16,22 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
+            src: "icon_192.png",
+            type: "image/png",
+            sizes: "64x64 32x32 24x24 16x16",
+            purpose: "maskable"
+          },
+          {
             src: 'icon_192.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'maskable'
           },
           {
             src: 'icon_512.png',
             type: 'image/png',
             sizes: '512x512',
+            purpose: 'maskable'
           },
         ],
       },
