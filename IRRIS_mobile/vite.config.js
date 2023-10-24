@@ -8,20 +8,20 @@ export default defineConfig({
     react(),
     VitePWA({
       manifest: {
-        name: 'AnimeVerse',
-        short_name: 'AnimeVerse',
+        name: 'IRRIS',
+        short_name: 'IRRIS',
         start_url: '/',
         background_color: '#ffffff',
         theme_color: '#000000',
         display: 'standalone',
         icons: [
           {
-            src: '/icon_192.png',
+            src: 'icon_192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/icon_512.png',
+            src: 'icon_512.png',
             type: 'image/png',
             sizes: '512x512',
           },
