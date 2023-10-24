@@ -1,6 +1,6 @@
 {
-  "short_name": "IRRIS",
   "name": "IRRIS PWA",
+  "short_name": "IRRIS",
   "icons": [
     {
       "src": "icon_192.png",
