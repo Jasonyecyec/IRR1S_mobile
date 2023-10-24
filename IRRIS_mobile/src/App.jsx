@@ -17,8 +17,6 @@ import PersonelLogin from "./pages/PersonelLogin"
 
 
 function App() {
-  const [count, setCount] = useState(0);
-  console.log("test");
 
   return (
     <>
