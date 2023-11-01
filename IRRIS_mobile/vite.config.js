@@ -16,6 +16,26 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
+            src: "/icon_16.png",
+            type: "image/png",
+            sizes: "16x16",
+          },
+          {
+            src: "/icon_20.png",
+            type: "image/png",
+            sizes: "20x20",
+          },
+          {
+            src: "/icon_32.png",
+            type: "image/png",
+            sizes: "32x32",
+          },
+          {
+            src: "/icon_64.png",
+            type: "image/png",
+            sizes: "64x64",
+          },
+          {
             src: "/icon_144.png",
             type: "image/png",
             sizes: "144x144",
