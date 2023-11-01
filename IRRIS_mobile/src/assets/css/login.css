@@ -1,0 +1,8 @@
+.curve{
+    -webkit-border-top-left-radius: 130px;
+    -webkit-border-top-right-radius: 130px;
+    -moz-border-radius-topleft: 130px;
+    -moz-border-radius-topright: 130px;
+    border-top-left-radius: 130px;
+    border-top-right-radius: 130px;
+}
