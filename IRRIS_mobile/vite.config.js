@@ -12,7 +12,7 @@ export default defineConfig({
         short_name: 'IRRIS',
         start_url: '/',
         background_color: '#ffffff',
-        theme_color: '#000000',
+        theme_color: '#ffffff',
         display: 'standalone',
         icons: [
           {

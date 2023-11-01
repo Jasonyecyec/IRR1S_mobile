@@ -22,7 +22,7 @@ function App() {
     <>
 
       <Routes>
-        <Route path="/" element={<SplashScreen />} />
+        <Route path="/" element={<Login />} />
         {/* Uncomment and adjust the following lines as per your requirements */}
         <Route path="/login" element={<Login />} />
         <Route path="/student" element={<StudentLogin />} />
