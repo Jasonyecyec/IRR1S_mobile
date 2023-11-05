@@ -38,3 +38,22 @@ body {
   -webkit-border-radius: 0px 0px 150px 150px;
   -moz-border-radius: 0px 0px 150px 150px;
 }
+
+.otp-input{
+  width: 2em !important
+}
+
+/* input,
+textarea,
+button,
+select,
+a {
+    -webkit-tap-highlight-color: transparent;
+} */
+
+
+button,
+a
+{
+    -webkit-tap-highlight-color: transparent;
+}

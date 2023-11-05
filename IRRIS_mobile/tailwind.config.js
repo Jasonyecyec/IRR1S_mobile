@@ -6,10 +6,11 @@ export default {
       colors: {
         mainColor: "#2563eb",
         secondaryColor: "#EEF2FF",
-        thirdColor: "#f8fa ff",
+        thirdColor: "#f8faff",
         accentColor: "#7447EB",
       },
     },
   },
   plugins: [],
+  
 };

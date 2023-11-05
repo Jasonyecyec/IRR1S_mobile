@@ -14,6 +14,10 @@ import Home from "./pages/Home"
 import ErrorPage from "./pages/ErrorPage"
 import StudentLogin from "./pages/StudentLogin"
 import PersonelLogin from "./pages/PersonelLogin"
+import ActivateAccountPage from './pages/ActivateAccountPage';
+import OTPInputPage from './pages/OTPInputPage';
+import ActivateSuccessPage from './pages/ActivateSuccessPage';
+import CreatePasswordPage from './pages/CreatePasswordPage';
 
 
 function App() {
@@ -25,6 +29,10 @@ function App() {
         <Route path="/" element={<Login />} />
         {/* Uncomment and adjust the following lines as per your requirements */}
         <Route path="/login" element={<Login />} />
+        <Route path="/activate" element={<ActivateAccountPage />} />
+        <Route path="/otp-input" element={<OTPInputPage />} />
+        <Route path="/activate-success" element={<ActivateSuccessPage />} />
+        <Route path="/create-password" element={<CreatePasswordPage />} />
         <Route path="/student" element={<StudentLogin />} />
         <Route path="/personel" element={<PersonelLogin />} />
         <Route path="/home/*" element={<Home />} />

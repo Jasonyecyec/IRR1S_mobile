@@ -9,7 +9,7 @@ import RequestPage from "./RequestPage";
 
 const Home = () => {
   return (
-    <div className="h-screen relative  bg-secondaryColor">
+    <div className="h-screen relative  bg-thirdColor">
       <div className="w-full p-5">
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -21,8 +21,7 @@ const Home = () => {
 
       <div className="bg-[#16425B] absolute py-2 bottom-5 left-1/2 transform -translate-x-1/2 rounded-lg  w-10/12  flex px-5 justify-center">
         <div className="relative w-full flex justify-around ">
-          <Link to="/home">
-            {" "}
+          <Link to="/home">      
             <button>
               <img src={EyeIcon} className="w-14 h-14" />
             </button>
@@ -35,10 +34,9 @@ const Home = () => {
           </div>
 
           <Link to="settings">
-            {" "}
             <button>
               <img src={MenuIcon} className="w-14 h-14" />
-            </button>{" "}
+            </button>
           </Link>
         </div>
 

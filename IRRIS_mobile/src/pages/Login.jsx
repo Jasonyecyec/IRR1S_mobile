@@ -31,10 +31,10 @@ const Login = () => {
 
         <button>
           <Link
-            to="/home"
+            to="/activate"
             className="py-4 bg-mainColor rounded-lg text-white font-semibold text-xl w-full inline-block"
           >
-            Student
+            Login
           </Link>
         </button>
         {/* <button>
