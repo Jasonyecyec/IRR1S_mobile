@@ -11,7 +11,7 @@ import HomeProcessButton from "../components/HomeProcessButton";
 
 const HomePage = () => {
   return (
-    <div className="">
+    <div className="h-full">
       <div className="flex justify-between">
         <button>
           <img src={UserSample} className="w-10 h-10 rounded-full " />
@@ -36,10 +36,10 @@ const HomePage = () => {
       <div className="w-full h-28 shadow-lg  mt-5 rounded-md bg-white"></div>
 
       <div className="w-full flex  mt-10  justify-between  ">
-        <HomeProcessButton link={"request"} icon={RequestIcon} name="Request"/>
-        <HomeProcessButton link={"report"} icon={ReportIcon} name="Report"/>
-        <HomeProcessButton link={"reserve"} icon={ReserveIcon} name="Reserve"/>
-        <HomeProcessButton link={"more"} icon={MoreIcon} name="More"/>
+        <HomeProcessButton link={"request"} icon={RequestIcon} name="Request" />
+        <HomeProcessButton link={"report"} icon={ReportIcon} name="Report" />
+        <HomeProcessButton link={"reserve"} icon={ReserveIcon} name="Reserve" />
+        <HomeProcessButton link={"more"} icon={MoreIcon} name="More" />
       </div>
 
       <div className="bg-white rounded-lg shadow-md mt-10 p-5">

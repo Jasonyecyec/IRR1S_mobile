@@ -86,7 +86,7 @@ const CreatePasswordPage = () => {
             <EyeSlash size="24" color="#969696" weight="light"/>
           ) : (
             <Eye size="24" color="#969696" weight="light"/>
-          )}
+          )}  
         </button>
       </div>
 
