@@ -11,7 +11,7 @@ const BottomNavigation = () => {
   };
 
   return (
-    <div className="shadow-2xl h-[10%]  relative w-full  flex px-5 justify-around items-center">
+    <div className="shadow-2xl h-[10%] bg-white relative w-full  flex px-5 justify-around items-center">
       <button className="">
         <Link to="/home" className="text-center  flex flex-col items-center">
           <House
