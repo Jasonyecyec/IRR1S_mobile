@@ -7,7 +7,7 @@ const QRScannerPage = ({ onScan }) => {
   useEffect(() => {
     setTimeout(() => {
       // Delay initialization
-      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+      const config = { fps: 10, qrbox: { width: 250, height: 500 } };
       const html5QrCode = new Html5Qrcode(qrBoxId); // Use the ID string here
 
       Html5Qrcode.getCameras()
