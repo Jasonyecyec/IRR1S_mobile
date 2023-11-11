@@ -4,7 +4,7 @@ import BottomNavigation from "./BottomNavigation";
 const HomepageLayoutStudent = ({ children }) => {
   return (
     <div className="h-screen w-screen ">
-      <main className="h-[90%]  bg-thirdColor p-5">{children}</main>
+      <main className="h-[90%]  bg-thirdColor">{children}</main>
       <BottomNavigation />
     </div>
   );

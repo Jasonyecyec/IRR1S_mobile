@@ -11,7 +11,7 @@ import HomeProcessButton from "../components/HomeProcessButton";
 
 const HomePage = () => {
   return (
-    <div className="h-full">
+    <div className="h-full  p-5">
       <div className="flex justify-between">
         <button>
           <img src={UserSample} className="w-10 h-10 rounded-full " />

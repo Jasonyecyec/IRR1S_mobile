@@ -7,10 +7,9 @@ const QRScannerPage = ({ onScan }) => {
   useEffect(() => {
     setTimeout(() => {
       // Delay initialization
-      // Delay initialization
       const config = {
         fps: 10,
-        qrbox: { width: 250, height: 500 },
+        qrbox: { width: 250, height: 350 },
         // Add the facingMode configuration here
         aspectRatio: 1.7777778,
         facingMode: { exact: "environment" },
@@ -54,7 +53,9 @@ const QRScannerPage = ({ onScan }) => {
             onScan(decodedText);
           },
           (errorMessage) => {
-            console.log(errorMessage);
+            // Handle the error here if back camera is not available
+            console.error("Error with back camera: ", errorMessage);
+            // Optionally, you can alert the user or take some other action
           }
         )
         .catch((err) => console.error(err));
