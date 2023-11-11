@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import IRISLogo from "../assets/images/iris_logo.png";
 import { useNavigate, Link } from "react-router-dom";
-import "../assets/css/login.css"
+import "../assets/css/login.css";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const [formFields, setFormFields] = useState({ email: "", password: "" });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    console.log(value);
+    setFormFields((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className=" h-screen w-screen flex flex-col items-center">
@@ -19,13 +28,21 @@ const Login = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit,asdasdasd
           </p>
         </div> */}
+
         <input
+          type="email"
+          name="email"
+          value={formFields.email}
+          onChange={handleChange}
           placeholder="Email"
           className="border border-mainColor rounded-md p-3"
         />
         <input
-          placeholder="Password"
           type="password"
+          name="password"
+          value={formFields.password}
+          onChange={handleChange}
+          placeholder="Password"
           className="border border-mainColor rounded-md p-3"
         />
 
