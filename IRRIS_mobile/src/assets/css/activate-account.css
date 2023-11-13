@@ -1,0 +1,23 @@
+.background {
+  background: linear-gradient(
+      180deg,
+      rgba(254, 254, 254, 0.23) 0.02%,
+      rgba(181, 194, 236, 0.23) 0.03%,
+      rgba(0, 0, 0, 0.06) 13.4%,
+      rgba(0, 17, 73, 0) 99.98%
+    ),
+    #eef2ff;
+}
+
+.background-image {
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; */
+  /* background: url("../images/bg_eye.png"), 50% / cover no-repeat; */
+  opacity: 70%;
+  /* background: url("../images/bg_eye.png"); */
+  mix-blend-mode: overlay;
+  /* z-index: 1; */
+}
