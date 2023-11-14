@@ -5,10 +5,12 @@ import { Spinner } from "flowbite-react";
 import "../styles/login/login.css";
 import { containsGmail, validatePassword } from "../utils/utils";
 import { Eye, EyeSlash } from "@phosphor-icons/react";
-import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import { login, getStudent } from "../services/api/authService";
+import useUserStore from "../services/state/userStore";
 
 const Login = () => {
+  const { setEmail } = useUserStore();
   const [formFields, setFormFields] = useState({ email: "", password: "" });
   const [isShowPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState({ isError: false, message: "" });
@@ -17,12 +19,16 @@ const Login = () => {
     message: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [invalidAccount, setInvalidAccount] = useState({
-    isError: false,
-    message: "",
-  });
+  const [isAccountError, setAccountError] = useState(false);
 
   const navigate = useNavigate();
+
+  const notify = (message) =>
+    toast.error(message, {
+      style: {
+        fontSize: "1rem",
+      },
+    });
 
   useEffect(() => {
     let timeoutId;
@@ -74,7 +80,6 @@ const Login = () => {
 
     if (formFields.password === "") {
       setPasswordError({ isError: true, message: "Please input password." });
-      isError = true;
     } else if (!validation.isValid) {
       setPasswordError({ isError: true, message: validation.errors });
       isError = true;
@@ -83,20 +88,35 @@ const Login = () => {
     if (!isError) {
       setIsLoading(true);
       try {
-        console.log("sending data", formFields);
         const response = await login(formFields.email, formFields.password);
         if (response) {
+          console.log("Login success", response);
+          setEmail(response.user_email);
           navigate(response.route);
         }
-        console.log("Login successful", response);
         // Handle successful login here (e.g., navigate to another page, store the token)
       } catch (error) {
-        // Handle error (e.g., show error message)
-        console.log("Login failed", error);
+        setIsLoading(false);
 
-        if (error) {
-          setIsLoading(false);
-          console.log("error response", error.response.data);
+        if (error.response) {
+          const status = error.response.status;
+          let errorMessage = "";
+
+          switch (status) {
+            //Account is not in database
+            case 422:
+              errorMessage = "Account doesn't exist";
+              break;
+            //Account in database but wrong password
+            case 401:
+              errorMessage = "Wrong password";
+              break;
+            // Handle other status codes if needed
+            default:
+              errorMessage = "An error occurred";
+          }
+          setAccountError(true);
+          notify(errorMessage);
         }
       }
     }
@@ -108,6 +128,8 @@ const Login = () => {
 
   return (
     <div className=" h-screen w-screen flex flex-col items-center  element relative">
+      <Toaster />
+
       <div className="flex justify-center items-center w-full h-[35%] z-10">
         <img src={IRISLogo} />
       </div>
@@ -163,9 +185,9 @@ const Login = () => {
             "Login"
           )}
         </button>
-        {/* <p>Checking user role</p> */}
       </div>
 
+      {/* Background design input */}
       <div className="bg-input-login w-full h-[33rem] absolute bottom-0"></div>
     </div>
   );

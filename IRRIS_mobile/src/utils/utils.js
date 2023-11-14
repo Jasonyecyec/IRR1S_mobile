@@ -30,3 +30,29 @@ export const validatePassword = (password) => {
     errors: errors.trim(), // Remove any trailing whitespace
   };
 };
+
+export const maskEmail = (email) => {
+  const atIndex = email.indexOf("@");
+  const dotIndex = email.lastIndexOf(".");
+
+  if (atIndex !== -1 && dotIndex !== -1) {
+    const username = email.slice(0, atIndex);
+    const maskedUsername =
+      username.length > 1
+        ? `${username[0]}${"*".repeat(username.length - 2)}${username.slice(
+            -1
+          )}`
+        : username;
+    const domain = email.slice(atIndex, dotIndex);
+    const maskedEmail = `${maskedUsername}${domain}${email.slice(dotIndex)}`;
+    return maskedEmail;
+  }
+
+  return email; // Return the original email if '@' or '.' is not found
+};
+
+export const formatTime = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+};

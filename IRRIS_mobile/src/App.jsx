@@ -21,6 +21,9 @@ import HomepageLayoutStudent from "./components/ui/HomepageLayoutStudent";
 import ReportPage from "./pages/student/ReportPage";
 import HomePage from "./pages/HomePage";
 import QRScannerPage from "./pages/student/QRScannerPage";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import TransitionWrapper from "./components/ui/TransitionWrapper";
+import "./index.css";
 
 function App() {
   const [scannedCode, setScannedCode] = useState("");
@@ -31,11 +34,39 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <TransitionWrapper location={location}>
+              <Login />
+            </TransitionWrapper>
+          }
+        />
         {/* Uncomment and adjust the following lines as per your requirements */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/activate" element={<ActivateAccountPage />} />
-        <Route path="/otp-input" element={<OTPInputPage />} />
+        <Route
+          path="/login"
+          element={
+            <TransitionWrapper location={location}>
+              <Login />
+            </TransitionWrapper>
+          }
+        />
+        <Route
+          path="/activate"
+          element={
+            <TransitionWrapper location={location}>
+              <ActivateAccountPage />
+            </TransitionWrapper>
+          }
+        />
+        <Route
+          path="/otp-input"
+          element={
+            <TransitionWrapper location={location}>
+              <OTPInputPage />
+            </TransitionWrapper>
+          }
+        />
         <Route path="/activate-success" element={<ActivateSuccessPage />} />
         <Route path="/create-password" element={<CreatePasswordPage />} />
         <Route path="/student" element={<StudentLogin />} />

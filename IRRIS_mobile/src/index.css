@@ -39,8 +39,8 @@ body {
   -moz-border-radius: 0px 0px 150px 150px;
 }
 
-.otp-input{
-  width: 2em !important
+.otp-input {
+  width: 2em !important;
 }
 
 /* input,
@@ -51,9 +51,25 @@ a {
     -webkit-tap-highlight-color: transparent;
 } */
 
-
 button,
-a
-{
-    -webkit-tap-highlight-color: transparent;
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.slide-enter {
+  transform: translateX(100%);
+}
+
+.slide-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.slide-exit {
+  transform: translateX(0);
+}
+
+.slide-exit-active {
+  transform: translateX(-100%);
+  transition: transform 300ms ease-in-out;
 }
