@@ -8,6 +8,7 @@ import { Eye, EyeSlash } from "@phosphor-icons/react";
 import toast, { Toaster } from "react-hot-toast";
 import { login, getStudent } from "../services/api/authService";
 import useUserStore from "../services/state/userStore";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const { setEmail } = useUserStore();
@@ -43,12 +44,6 @@ const Login = () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [isShowPassword]);
-
-  const passwordIcon = isShowPassword ? (
-    <EyeSlash size={30} color="#9c9c9c" />
-  ) : (
-    <Eye size={30} color="#9c9c9c" />
-  );
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -92,6 +87,12 @@ const Login = () => {
         if (response) {
           console.log("Login success", response);
           setEmail(response.user_email);
+
+          if (response.token) {
+            //set token in cookies
+            Cookies.set("authToken", response.token);
+          }
+
           navigate(response.route);
         }
         // Handle successful login here (e.g., navigate to another page, store the token)
@@ -125,6 +126,12 @@ const Login = () => {
   const handleShowPassword = () => {
     setShowPassword(!isShowPassword);
   };
+
+  const passwordIcon = isShowPassword ? (
+    <EyeSlash size={30} color="#9c9c9c" />
+  ) : (
+    <Eye size={30} color="#9c9c9c" />
+  );
 
   return (
     <div className=" h-screen w-screen flex flex-col items-center  element relative">

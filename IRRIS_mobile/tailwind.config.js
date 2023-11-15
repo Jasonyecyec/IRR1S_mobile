@@ -8,6 +8,7 @@ export default {
         secondaryColor: "#EEF2FF",
         thirdColor: "#f8faff",
         accentColor: "#7447EB",
+        errorColor: "#FF0000",
       },
     },
   },

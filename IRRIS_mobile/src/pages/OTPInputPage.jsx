@@ -88,9 +88,9 @@ const OTPInputPage = () => {
       <div className="flex flex-col items-center mt-20 space-y-5">
         <img src={OTPLogo} className="w-32 h-32" alt="otp logo" />
         <h1 className="text-3xl font-bold text-mainColor">OTP Verification</h1>
-        <p className="w-4/5 text-center text-xl font-semibold ">
+        <p className="w-[85%] text-center text-xl font-semibold ">
           Enter the OTP sent to
-          <span className="text-mainColor font-bold">
+          <span className="text-mainColor font-bold block">
             {email && maskEmail(email)}
           </span>
         </p>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NotificationIcon from "../assets/images/notification_icon.png";
 import RequestIcon from "../assets/images/request_icon.png";
 import ReportIcon from "../assets/images/report_icon.png";
@@ -8,12 +8,18 @@ import UserSample from "../assets/images/user_sample.jpg";
 import PointsIcon from "../assets/images/points_icon.png";
 import { Link } from "react-router-dom";
 import HomeProcessButton from "../components/HomeProcessButton";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const handleProfileButton = () => {
+    navigate("/student/profile");
+  };
   return (
-    <div className="h-full  p-5">
+    <div className="h-full p-5">
       <div className="flex justify-between">
-        <button>
+        <button onClick={handleProfileButton}>
           <img src={UserSample} className="w-10 h-10 rounded-full " />
         </button>
 

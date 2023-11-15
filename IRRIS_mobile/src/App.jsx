@@ -20,6 +20,7 @@ import CreatePasswordPage from "./pages/CreatePasswordPage";
 import HomepageLayoutStudent from "./components/ui/HomepageLayoutStudent";
 import ReportPage from "./pages/student/ReportPage";
 import HomePage from "./pages/HomePage";
+import StudentProfilePage from "./pages/student/StudentProfilePage";
 import QRScannerPage from "./pages/student/QRScannerPage";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TransitionWrapper from "./components/ui/TransitionWrapper";
@@ -67,16 +68,31 @@ function App() {
             </TransitionWrapper>
           }
         />
-        <Route path="/activate-success" element={<ActivateSuccessPage />} />
-        <Route path="/create-password" element={<CreatePasswordPage />} />
-        <Route path="/student" element={<StudentLogin />} />
-        <Route path="/personel" element={<PersonelLogin />} />
         <Route
-          path="/home"
+          path="/activate-success"
           element={
-            <HomepageLayoutStudent>
-              <HomePage />
-            </HomepageLayoutStudent>
+            <TransitionWrapper location={location}>
+              <ActivateSuccessPage />
+            </TransitionWrapper>
+          }
+        />
+        <Route
+          path="/create-password"
+          element={
+            <TransitionWrapper location={location}>
+              <CreatePasswordPage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/student/home"
+          element={
+            <TransitionWrapper location={location}>
+              <HomepageLayoutStudent>
+                <HomePage />
+              </HomepageLayoutStudent>
+            </TransitionWrapper>
           }
         />
 
@@ -95,6 +111,15 @@ function App() {
             <HomepageLayoutStudent>
               <QRScannerPage onScan={handleScan} />
             </HomepageLayoutStudent>
+          }
+        />
+
+        <Route
+          path="/student/profile"
+          element={
+            <TransitionWrapper location={location}>
+              <StudentProfilePage />
+            </TransitionWrapper>
           }
         />
         <Route path="/home/history" element={<ErrorPage />} />

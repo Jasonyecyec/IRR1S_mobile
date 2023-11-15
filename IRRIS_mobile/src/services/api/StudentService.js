@@ -29,3 +29,17 @@ export const resendOTP = async (email) => {
     throw error;
   }
 };
+
+export const createPassword = async (email, password, confirmPassword) => {
+  try {
+    const response = await api.post(`/create-password`, {
+      email,
+      password,
+      confirmPassword,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Create password error", error.response);
+    throw error;
+  }
+};
