@@ -24,6 +24,8 @@ import StudentProfilePage from "./pages/student/StudentProfilePage";
 import QRScannerPage from "./pages/student/QRScannerPage";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TransitionWrapper from "./components/ui/TransitionWrapper";
+import MorePage from "./pages/student/MorePage";
+import RedeemPage from "./pages/student/RedeemPage";
 import "./index.css";
 
 function App() {
@@ -97,10 +99,28 @@ function App() {
         />
 
         <Route
-          path="/home/report"
+          path="/student/report"
           element={
             <HomepageLayoutStudent>
               <ReportPage />
+            </HomepageLayoutStudent>
+          }
+        />
+
+        <Route
+          path="/student/more"
+          element={
+            <HomepageLayoutStudent>
+              <MorePage />
+            </HomepageLayoutStudent>
+          }
+        />
+
+        <Route
+          path="/student/redeem"
+          element={
+            <HomepageLayoutStudent>
+              <RedeemPage />
             </HomepageLayoutStudent>
           }
         />
@@ -122,7 +142,8 @@ function App() {
             </TransitionWrapper>
           }
         />
-        <Route path="/home/history" element={<ErrorPage />} />
+
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </>
   );

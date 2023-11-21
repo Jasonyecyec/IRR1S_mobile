@@ -13,7 +13,10 @@ const BottomNavigation = () => {
   return (
     <div className="shadow-2xl h-[10%] bg-white relative w-full  flex px-5 justify-around items-center">
       <button className="">
-        <Link to="/home" className="text-center  flex flex-col items-center">
+        <Link
+          to="/student/home"
+          className="text-center  flex flex-col items-center"
+        >
           <House
             size={30}
             color={`${currentPage === "home" ? "#2563eb" : "#9c9c9c"}`}
@@ -24,7 +27,7 @@ const BottomNavigation = () => {
 
       <button>
         <Link
-          to="/home/report"
+          to="/student/report"
           className="text-center  flex flex-col items-center"
         >
           <Eye size={30} color="#9c9c9c" />
@@ -44,20 +47,26 @@ const BottomNavigation = () => {
       <div className="w-8 h-14"></div>
 
       <button>
-        <Link to="/home" className="text-center flex flex-col items-center">
+        <Link
+          to="/student/more"
+          className="text-center flex flex-col items-center"
+        >
           <Eye
             size={30}
             color="#9c9c9c"
             className="text-center  flex flex-col items-center"
           />
-          Menu
+          More
         </Link>
       </button>
 
       <button>
-        <Link to="/home" className="text-center  flex flex-col items-center">
+        <Link
+          to="/student/redeem"
+          className="text-center  flex flex-col items-center"
+        >
           <Eye size={30} color="#9c9c9c" />
-          Menu
+          Redeem
         </Link>
       </button>
     </div>

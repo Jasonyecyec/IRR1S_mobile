@@ -20,6 +20,16 @@ export const verifyOTP = async (email, otp) => {
   }
 };
 
+// export const getUser = async (email, otp) => {
+//   try {
+//     const response = await api.post(`/verify-otp`, { email, otp });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Verify OTP error", error.response);
+//     throw error;
+//   }
+// };
+
 export const resendOTP = async (email) => {
   try {
     const response = await api.post(`/resend-otp`, { email });

@@ -11,7 +11,7 @@ import useUserStore from "../services/state/userStore";
 import Cookies from "js-cookie";
 
 const Login = () => {
-  const { setEmail } = useUserStore();
+  const { setEmail, setUser } = useUserStore();
   const [formFields, setFormFields] = useState({ email: "", password: "" });
   const [isShowPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState({ isError: false, message: "" });
@@ -30,6 +30,18 @@ const Login = () => {
         fontSize: "1rem",
       },
     });
+
+  useEffect(() => {
+    // Check for authToken cookie
+    const authToken = Cookies.get("authToken");
+
+    console.log("authToken", authToken);
+
+    // If authToken does  exist, redirect to home page
+    if (authToken) {
+      navigate("/student/home");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     let timeoutId;
@@ -75,6 +87,7 @@ const Login = () => {
 
     if (formFields.password === "") {
       setPasswordError({ isError: true, message: "Please input password." });
+      isError = true;
     } else if (!validation.isValid) {
       setPasswordError({ isError: true, message: validation.errors });
       isError = true;
@@ -87,10 +100,10 @@ const Login = () => {
         if (response) {
           console.log("Login success", response);
           setEmail(response.user_email);
-
+          setUser(response.user);
           if (response.token) {
             //set token in cookies
-            Cookies.set("authToken", response.token);
+            Cookies.set("authToken", response.token, { expires: 7 });
           }
 
           navigate(response.route);
