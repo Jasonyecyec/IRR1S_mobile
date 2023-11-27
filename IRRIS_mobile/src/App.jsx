@@ -26,6 +26,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TransitionWrapper from "./components/ui/TransitionWrapper";
 import MorePage from "./pages/student/MorePage";
 import RedeemPage from "./pages/student/RedeemPage";
+import LoginPassword from "./pages/LoginPassword";
 import "./index.css";
 
 function App() {
@@ -54,6 +55,16 @@ function App() {
             </TransitionWrapper>
           }
         />
+
+        <Route
+          path="/login-password"
+          element={
+            <TransitionWrapper location={location}>
+              <LoginPassword />
+            </TransitionWrapper>
+          }
+        />
+
         <Route
           path="/activate"
           element={

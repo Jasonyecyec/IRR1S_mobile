@@ -8,6 +8,9 @@ import { Eye, EyeSlash } from "@phosphor-icons/react";
 import toast, { Toaster } from "react-hot-toast";
 import { login, getStudent } from "../services/api/authService";
 import useUserStore from "../services/state/userStore";
+import QCULogo from "../assets/images/qcu_logo.png";
+import QCUImage from "../assets/images/qcu_image.jpg";
+
 import Cookies from "js-cookie";
 
 const Login = () => {
@@ -15,10 +18,10 @@ const Login = () => {
   const [formFields, setFormFields] = useState({ email: "", password: "" });
   const [isShowPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState({ isError: false, message: "" });
-  const [passwordError, setPasswordError] = useState({
-    isError: false,
-    message: "",
-  });
+  // const [passwordError, setPasswordError] = useState({
+  //   isError: false,
+  //   message: "",
+  // });
   const [isLoading, setIsLoading] = useState(false);
   const [isAccountError, setAccountError] = useState(false);
 
@@ -65,13 +68,11 @@ const Login = () => {
       [name]: value,
     }));
 
-    name === "email"
-      ? setEmailError({ ...emailError, isError: false })
-      : setPasswordError({ ...passwordError, isError: false });
+    setEmailError({ ...emailError, isError: false });
   };
 
   const handleSubmit = async () => {
-    const validation = validatePassword(formFields.password);
+    // const validation = validatePassword(formFields.password);
     let isError = false;
 
     if (formFields.email === "") {
@@ -85,13 +86,13 @@ const Login = () => {
       isError = true;
     }
 
-    if (formFields.password === "") {
-      setPasswordError({ isError: true, message: "Please input password." });
-      isError = true;
-    } else if (!validation.isValid) {
-      setPasswordError({ isError: true, message: validation.errors });
-      isError = true;
-    }
+    // if (formFields.password === "") {
+    //   setPasswordError({ isError: true, message: "Please input password." });
+    //   isError = true;
+    // } else if (!validation.isValid) {
+    //   setPasswordError({ isError: true, message: validation.errors });
+    //   isError = true;
+    // }
 
     if (!isError) {
       setIsLoading(true);
@@ -121,10 +122,6 @@ const Login = () => {
             case 422:
               errorMessage = "Account doesn't exist";
               break;
-            //Account in database but wrong password
-            case 401:
-              errorMessage = "Wrong password";
-              break;
             // Handle other status codes if needed
             default:
               errorMessage = "An error occurred";
@@ -147,15 +144,15 @@ const Login = () => {
   );
 
   return (
-    <div className=" h-screen w-screen flex flex-col items-center  element relative">
+    <div className=" h-screen w-screen flex flex-col items-center justify-center   relative">
       <Toaster />
 
-      <div className="flex justify-center items-center w-full h-[35%] z-10">
-        <img src={IRISLogo} />
-      </div>
+      <div className="bg-white rounded-md w-[80%] flex flex-col items-center justify-center space-y-10 px-5 py-14 z-10 shadow-lg relative mb-20">
+        <div className="absolute top-[-3rem] rounded-full bg-white shadow-md">
+          <img src={QCULogo} alt="qcu-logo" className="w-24 h-24" />
+        </div>
 
-      <div className="flex flex-col  w-full h-[65%] z-10 space-y-8 px-16 pt-20">
-        <div className="relative w-full  items-center">
+        <div className="relative w-full items-center">
           <input
             type="email"
             name="email"
@@ -168,30 +165,7 @@ const Login = () => {
           />
 
           {emailError.isError && (
-            <p className="text-red-400">{emailError.message}</p>
-          )}
-        </div>
-
-        <div className="relative w-full flex flex-col justify-center">
-          <button
-            onClick={handleShowPassword}
-            className=" absolute right-2 top-2.5x`"
-          >
-            {passwordIcon}
-          </button>
-
-          <input
-            type={`${isShowPassword ? "text" : "password"}`}
-            name="password"
-            value={formFields.password}
-            onChange={handleChange}
-            placeholder="Password"
-            className={`${
-              passwordError.isError ? "border-rose-500" : ""
-            } border-mainColor  border-2 rounded-md p-3 w-full focus:outline-none focus:border-mainColor`}
-          />
-          {passwordError.isError && (
-            <p className="text-red-400">{passwordError.message}</p>
+            <p className="text-red-400 italic">{emailError.message}</p>
           )}
         </div>
 
@@ -208,7 +182,10 @@ const Login = () => {
       </div>
 
       {/* Background design input */}
-      <div className="bg-input-login w-full h-[33rem] absolute bottom-0"></div>
+      <div className="bg-qcu-image w-full h-[70%] absolute top-0">
+        <img src={QCUImage} className="w-full h-full opacity-50 bg-blue-100" />
+      </div>
+      <div className="bg-input-login w-full h-[30rem] absolute bottom-0"></div>
     </div>
   );
 };

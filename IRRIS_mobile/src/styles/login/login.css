@@ -1,3 +1,10 @@
 .bg-input-login {
   background-image: url("../../assets/images/bg-input-login.png");
 }
+
+.bg-qcu-image {
+  /* background-image: url("../../assets/images/qcu_image.jpg"); */
+  /* object-fit: cover;
+  background-repeat: no-repeat;
+  background-color: red; */
+}
