@@ -52,10 +52,6 @@ const CreatePasswordPage = () => {
   };
 
   useEffect(() => {
-    console.log("formFields", formFields);
-  }, [formFields]);
-
-  useEffect(() => {
     let timeoutId = null;
     let timeouId2 = null;
 
@@ -153,17 +149,14 @@ const CreatePasswordPage = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center space-y-10 background">
+    <div className="h-screen w-screen flex flex-col items-center space-y-10 background pt-14">
       <Toaster />
-      <h1 className="text-3xl text-mainColor font-bold mt-24">
+      <h1 className="text-3xl text-mainColor font-bold mt-20">
         Create Password
       </h1>
 
       <div className="flex flex-col space-y-2 relative w-4/5 ">
-        <label
-          htmlFor="password"
-          className=" text-mainColor font-semibold text-xl"
-        >
+        <label htmlFor="password" className=" text-mainColor font-bold text-xl">
           Password
         </label>
 
@@ -191,8 +184,8 @@ const CreatePasswordPage = () => {
           )}
         </button>
         {passwordError.isError && (
-          <span className="text-errorColor text-base">
-            {passwordError.message}
+          <span className="text-errorColor text-base italic">
+            *{passwordError.message}
           </span>
         )}
       </div>
@@ -200,7 +193,7 @@ const CreatePasswordPage = () => {
       <div className="flex flex-col space-y-2 relative w-4/5">
         <label
           htmlFor="confirmPassword"
-          className=" text-mainColor font-semibold text-xl"
+          className=" text-mainColor font-bold text-xl"
         >
           Confirm Password
         </label>
@@ -229,8 +222,8 @@ const CreatePasswordPage = () => {
         </button>
 
         {confirmPasswordError.isError && (
-          <span className="text-errorColor text-base">
-            {confirmPasswordError.message}
+          <span className="text-errorColor text-base italic">
+            * {confirmPasswordError.message}
           </span>
         )}
       </div>

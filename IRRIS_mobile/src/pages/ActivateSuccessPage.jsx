@@ -1,10 +1,11 @@
 import React from "react";
 import StudentIcon from "../assets/images/student_login_icon.png";
+import "../index.css";
 import { Link } from "react-router-dom";
 
 const ActivateSuccessPage = () => {
   return (
-    <div className="h-screen w-screen flex flex-col items-center space-y-10">
+    <div className="h-screen w-screen flex background flex-col items-center space-y-10">
       <div className="mt-24 ">
         <img src={StudentIcon} alt="studentIcon" className="w-50" />
       </div>
