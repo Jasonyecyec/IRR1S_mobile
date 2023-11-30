@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,10 +13,16 @@ import studentProfile from "./studentProfile.js";
 import { Link } from "react-router-dom";
 import StudentQR from "../../assets/images/student_qr.png";
 import useUserStore from "../../services/state/userStore";
+import { Button, Modal } from "flowbite-react";
 
 const StudentProfilePage = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    console.log("user", user);
+  }, []);
   const handleSignOutButton = () => {
     // To remove a specific cookie
     Cookies.remove("authToken");
@@ -28,15 +34,38 @@ const StudentProfilePage = () => {
     navigate("/student/home");
   };
   return (
-    <div>
-      <div className="border border-2 p-6 relative ">
-        <div className="flex items-center justify-center mb-10">
+    <div className="">
+      <Modal
+        show={openModal}
+        size="md"
+        onClose={() => setOpenModal(false)}
+        popup
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this product?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => setOpenModal(false)}>
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setOpenModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <div className="border border-2 p-6 relative bg-mainColor text-white rounded-b-[2rem]">
+        <div className="flex items-center  justify-center mb-10">
           <p className="font-semibold text-xl">My Profile</p>
           <button
             onClick={handleCloseProfile}
             className="absolute top-4 right-2"
           >
-            <XCircle size={32} color="#2563eb" />
+            <XCircle size={32} color="#ffffff" />
           </button>
         </div>
 
@@ -67,7 +96,7 @@ const StudentProfilePage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col p-6 text-lg space-y-5">
+      <div className="flex flex-col p-6 text-lg space-y-8">
         {studentProfile?.map((item, index) => {
           const IconComponent = item.icon;
           return (
@@ -88,7 +117,7 @@ const StudentProfilePage = () => {
 
         <button
           onClick={handleSignOutButton}
-          className="bg-red-200  p-3 rounded-lg  flex justify-center items-center"
+          className="bg-mainColor text-white font-semibold  p-3 rounded-lg  flex justify-center items-center"
         >
           Sign Out
           <SignOut size={24} color="#121212" className="ml-4" />

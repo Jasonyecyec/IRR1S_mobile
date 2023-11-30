@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const CreatePasswordPage = () => {
-  const { email } = useUserStore();
+  const { email, setUser } = useUserStore();
   const navigate = useNavigate();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(false);
@@ -135,6 +135,9 @@ const CreatePasswordPage = () => {
           formFields.password,
           formFields.confirmPassword
         );
+
+        //set user
+        setUser(response.user);
 
         //set token in cookies
         Cookies.set("authToken", response.token);

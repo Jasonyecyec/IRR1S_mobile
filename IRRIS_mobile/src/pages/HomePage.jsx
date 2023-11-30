@@ -49,7 +49,10 @@ const HomePage = () => {
         </div>
 
         <div className="bg-[#d4e3f9] border-2 border-white flex justify-center rounded-full">
-          <button className="bg-[#def7fe] rounded-full p-4 border-[8px] border-[#87a2b1] flex items-center justify-center">
+          <button
+            onClick={() => navigate("/student/scan-facility")}
+            className="bg-[#def7fe] rounded-full p-4 border-[8px] border-[#87a2b1] flex items-center justify-center"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="60"
