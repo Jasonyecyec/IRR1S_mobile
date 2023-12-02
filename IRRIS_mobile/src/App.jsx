@@ -18,7 +18,6 @@ import OTPInputPage from "./pages/OTPInputPage";
 import ActivateSuccessPage from "./pages/ActivateSuccessPage";
 import CreatePasswordPage from "./pages/CreatePasswordPage";
 import HomepageLayoutStudent from "./components/ui/HomepageLayoutStudent";
-import ReportPage from "./pages/student/ReportPage";
 import HomePage from "./pages/HomePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import QRScannerPage from "./pages/student/QRScannerPage";
@@ -28,6 +27,7 @@ import MorePage from "./pages/student/MorePage";
 import RedeemPage from "./pages/student/RedeemPage";
 // import LoginPassword from "./pages/LoginPassword";
 import ScanFacilityPage from "./pages/ScanFacilityPage";
+import ReportIssuePage from "./pages/ReportIssuePage";
 import "./index.css";
 
 function App() {
@@ -111,11 +111,11 @@ function App() {
         />
 
         <Route
-          path="/student/report"
+          path="/student/report-issue"
           element={
-            <HomepageLayoutStudent>
-              <ReportPage />
-            </HomepageLayoutStudent>
+            <TransitionWrapper location={location}>
+              <ReportIssuePage />
+            </TransitionWrapper>
           }
         />
 

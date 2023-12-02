@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import StudentQR from "../../assets/images/student_qr.png";
 import useUserStore from "../../services/state/userStore";
 import { Button, Modal } from "flowbite-react";
+import LogoutModal from "@/src/components/LogoutModal";
 
 const StudentProfilePage = () => {
   const { user } = useUserStore();
@@ -33,9 +34,20 @@ const StudentProfilePage = () => {
   const handleCloseProfile = () => {
     navigate("/student/home");
   };
+
+  const onCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="">
-      <Modal
+      {openModal && (
+        <LogoutModal
+          onCloseModal={onCloseModal}
+          handleSignOutButton={handleSignOutButton}
+        />
+      )}
+      {/* <Modal
         show={openModal}
         size="md"
         onClose={() => setOpenModal(false)}
@@ -57,7 +69,7 @@ const StudentProfilePage = () => {
             </div>
           </div>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
       <div className="border border-2 p-6 relative bg-mainColor text-white rounded-b-[2rem]">
         <div className="flex items-center  justify-center mb-10">
           <p className="font-semibold text-xl">My Profile</p>
@@ -116,11 +128,11 @@ const StudentProfilePage = () => {
         })}
 
         <button
-          onClick={handleSignOutButton}
+          onClick={() => setOpenModal(true)}
           className="bg-mainColor text-white font-semibold  p-3 rounded-lg  flex justify-center items-center"
         >
           Sign Out
-          <SignOut size={24} color="#121212" className="ml-4" />
+          <SignOut size={24} color="#ffffff" className="ml-4" />
         </button>
 
         <div className="flex justify-center">

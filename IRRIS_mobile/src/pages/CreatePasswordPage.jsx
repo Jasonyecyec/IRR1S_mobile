@@ -171,8 +171,8 @@ const CreatePasswordPage = () => {
           className={`${
             passwordError.isError
               ? "border-errorColor"
-              : "border-mainColor focus:border-mainColor"
-          }  border-2 rounded-md p-3 w-full focus:outline-none `}
+              : "border-slate-500 focus:border-mainColor"
+          }  border rounded-md p-3 w-full focus:outline-none `}
           placeholder="Password "
         />
 
@@ -208,8 +208,8 @@ const CreatePasswordPage = () => {
           className={`${
             confirmPasswordError.isError
               ? "border-errorColor"
-              : "border-mainColor"
-          }  border-2 rounded-md p-3 w-full`}
+              : "border-slate-500 focus:border-mainColor"
+          }  border rounded-md p-3 w-full`}
           placeholder="Confirm password "
         />
 

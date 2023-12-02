@@ -77,7 +77,7 @@ const ActivateAccountPage = () => {
     <div className=" h-screen w-screen flex flex-col items-center justify-center   relative">
       <Toaster />
 
-      <div className="bg-white rounded-md w-[80%] flex flex-col items-center justify-center space-y-5  px-5 py-10 z-10 shadow-lg relative mb-20">
+      <div className="bg-white rounded-md w-[80%] flex flex-col items-center justify-center space-y-5  px-5 py-16 z-10 shadow-lg relative mb-20">
         <div className="absolute top-[-3rem] rounded-full bg-white shadow-md">
           <img src={QCULogo} alt="qcu-logo" className="w-24 h-24" />
         </div>
@@ -93,7 +93,7 @@ const ActivateAccountPage = () => {
               placeholder="Email"
               className={`${
                 emailError.isError ? "border-rose-500" : ""
-              } rounded-md p-3 w-full focus:outline-none focus:border-mainColor border-mainColor  border-2`}
+              } rounded-md p-3 w-full focus:outline-none focus:border-mainColor border-slate-500  border`}
             />
             <p className={`text-red-400 italic `}>
               <span className={`${emailError.isError ? "hidden" : "none"}`}>
