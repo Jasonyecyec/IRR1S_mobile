@@ -124,6 +124,9 @@ const Login = () => {
             case 422:
               errorMessage = "Account doesn't exist";
               break;
+            case 401:
+              errorMessage = "Account isn't activated";
+              break;
             // Handle other status codes if needed
             default:
               errorMessage = "An error occurred";
@@ -165,7 +168,7 @@ const Login = () => {
               placeholder="Email"
               className={`${
                 emailError.isError ? "border-rose-500" : ""
-              } rounded-md p-3 w-full focus:outline-none focus:border-mainColor border-mainColor  border-2`}
+              } rounded-md p-3 w-full focus:outline-none focus:border-mainColor border-slate-500  border`}
             />
             <p className={`text-red-400 italic `}>
               <span className={`${emailError.isError ? "hidden" : "none"}`}>
@@ -184,7 +187,7 @@ const Login = () => {
               placeholder="Password"
               className={`${
                 passwordError.isError ? "border-rose-500" : ""
-              } rounded-md p-3 w-full focus:outline-none focus:border-mainColor border-mainColor  border-2`}
+              } rounded-md p-3 w-full focus:outline-none focus:border-mainColor border-slate-500  border`}
             />
             <p className={`text-red-400 italic `}>
               <span className={`${passwordError.isError ? "hidden" : "none"}`}>
