@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import StudentQR from "../../assets/images/student_qr.png";
 import useUserStore from "../../services/state/userStore";
 import { Button, Modal } from "flowbite-react";
-import LogoutModal from "@/src/components/LogoutModal";
+import ConfirmationModal from "@/src/components/ConfirmationModal";
 
 const StudentProfilePage = () => {
   const { user } = useUserStore();
@@ -24,7 +24,7 @@ const StudentProfilePage = () => {
   useEffect(() => {
     console.log("user", user);
   }, []);
-  const handleSignOutButton = () => {
+  const handleConfirmButton = () => {
     // To remove a specific cookie
     Cookies.remove("authToken");
 
@@ -42,34 +42,13 @@ const StudentProfilePage = () => {
   return (
     <div className="">
       {openModal && (
-        <LogoutModal
+        <ConfirmationModal
           onCloseModal={onCloseModal}
-          handleSignOutButton={handleSignOutButton}
+          handleConfirmButton={handleConfirmButton}
+          content=" Are you sure you want to logout?"
         />
       )}
-      {/* <Modal
-        show={openModal}
-        size="md"
-        onClose={() => setOpenModal(false)}
-        popup
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center">
-            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete this product?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={() => setOpenModal(false)}>
-                {"Yes, I'm sure"}
-              </Button>
-              <Button color="gray" onClick={() => setOpenModal(false)}>
-                No, cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal> */}
+
       <div className="border border-2 p-6 relative bg-mainColor text-white rounded-b-[2rem]">
         <div className="flex items-center  justify-center mb-10">
           <p className="font-semibold text-xl">My Profile</p>

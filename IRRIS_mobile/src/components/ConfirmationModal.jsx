@@ -1,7 +1,7 @@
 import React from "react";
 import { X, WarningCircle } from "@phosphor-icons/react";
 
-const LogoutModal = ({ onCloseModal, handleSignOutButton }) => {
+const ConfirmationModal = ({ onCloseModal, handleConfirmButton, content }) => {
   return (
     <div
       className="fixed z-20 inset-0 bg-gray-800 bg-opacity-50 p-5 overflow-y-auto h-full w-full flex justify-center items-center"
@@ -20,13 +20,11 @@ const LogoutModal = ({ onCloseModal, handleSignOutButton }) => {
         </div>
 
         <div className="">
-          <p className="text-center text-xl font-semibold">
-            Are you sure you want to logout?
-          </p>
+          <p className="text-center text-xl font-semibold">{content}</p>
         </div>
         <div className="flex font-semibold space-x-5">
           <button
-            onClick={handleSignOutButton}
+            onClick={handleConfirmButton}
             className="px-4 bg-red-700 text-white w-full rounded-md text-lg py-3 mr-2"
           >
             Yes
@@ -44,4 +42,4 @@ const LogoutModal = ({ onCloseModal, handleSignOutButton }) => {
   );
 };
 
-export default LogoutModal;
+export default ConfirmationModal;
