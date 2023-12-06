@@ -116,6 +116,7 @@ const Login = () => {
         setIsLoading(false);
 
         if (error.response) {
+          console.log("error");
           const status = error.response.status;
           let errorMessage = "";
 
@@ -125,7 +126,11 @@ const Login = () => {
               errorMessage = "Account doesn't exist";
               break;
             case 401:
-              errorMessage = "Account isn't activated";
+              if (error.response.data.message == "Wrong password") {
+                errorMessage = error.response.data.message;
+              } else {
+                errorMessage = "Account isn't activated";
+              }
               break;
             // Handle other status codes if needed
             default:
