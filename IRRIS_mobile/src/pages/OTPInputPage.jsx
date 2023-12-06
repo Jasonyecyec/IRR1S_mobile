@@ -52,6 +52,7 @@ const OTPInputPage = () => {
     //disable the button
     submitButtonRef.current.disabled = true;
     try {
+      console.log("email", email);
       const response = await notifyVerifyOTP(email, otp);
       setTimeout(() => {
         navigate(response.route);

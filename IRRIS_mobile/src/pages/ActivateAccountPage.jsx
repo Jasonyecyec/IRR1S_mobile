@@ -13,10 +13,10 @@ import { containsGmail } from "../utils/utils";
 import "../index.css";
 
 const ActivateAccountPage = () => {
-  // const { email } = useUserStore();
+  const { email, setEmail } = useUserStore();
   const navigate = useNavigate();
   const [emailError, setEmailError] = useState({ isError: false, message: "" });
-  const [email, setEmail] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const activateButtonRef = useRef(null);
@@ -32,18 +32,18 @@ const ActivateAccountPage = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setEmail(value);
+    setUserEmail(value);
     setEmailError({ ...emailError, isError: false });
   };
 
   const handleActivateButton = async () => {
     let isError = false;
 
-    if (email === "") {
+    if (userEmail === "") {
       setEmailError({ isError: true, message: "Please input email." });
       console.log("Error");
       isError = true;
-    } else if (!containsGmail(email)) {
+    } else if (!containsGmail(userEmail)) {
       setEmailError({
         isError: true,
         message: "Please input a valid email address",
@@ -56,9 +56,10 @@ const ActivateAccountPage = () => {
       activateButtonRef.current.disabled = true;
       setIsLoading(true);
       try {
-        if (email) {
-          const response = await notify(email);
+        if (userEmail) {
+          const response = await notify(userEmail);
           console.log("response", response);
+          setEmail(userEmail);
           setTimeout(() => {
             navigate(response.route);
           }, 1500);
