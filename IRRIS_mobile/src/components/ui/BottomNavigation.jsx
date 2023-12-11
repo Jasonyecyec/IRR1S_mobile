@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { QrCode, House, Eye } from "@phosphor-icons/react";
+import { QrCode, House, Eye, Gift } from "@phosphor-icons/react";
 
 const BottomNavigation = () => {
   const [currentPage, setCurrentPage] = useState("home");
@@ -27,7 +27,7 @@ const BottomNavigation = () => {
 
       <button>
         <Link
-          to="/student/report"
+          to="/report-history"
           className="text-center  flex flex-col items-center"
         >
           <Eye size={30} color="#9c9c9c" />
@@ -65,8 +65,7 @@ const BottomNavigation = () => {
           to="/student/redeem"
           className="text-center  flex flex-col items-center"
         >
-          <Eye size={30} color="#9c9c9c" />
-          Redeem
+          <Gift size={32} color="#9c9c9c" /> Redeem
         </Link>
       </button>
     </div>

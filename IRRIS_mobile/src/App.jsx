@@ -28,6 +28,9 @@ import RedeemPage from "./pages/student/RedeemPage";
 // import LoginPassword from "./pages/LoginPassword";
 import ScanFacilityPage from "./pages/ScanFacilityPage";
 import ReportIssuePage from "./pages/ReportIssuePage";
+import ReportSuccessPage from "./pages/ReportSuccessPage";
+import ReportErrorPage from "./pages/ReportErrorPage";
+import ReportHistoryPage from "./pages/ReportHistoryPage";
 import "./index.css";
 
 function App() {
@@ -120,6 +123,33 @@ function App() {
         />
 
         <Route
+          path="/report-success"
+          element={
+            <TransitionWrapper location={location}>
+              <ReportSuccessPage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/report-history"
+          element={
+            <TransitionWrapper location={location}>
+              <ReportHistoryPage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/report-error"
+          element={
+            <TransitionWrapper location={location}>
+              <ReportErrorPage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
           path="/student/more"
           element={
             <HomepageLayoutStudent>
@@ -131,9 +161,9 @@ function App() {
         <Route
           path="/student/redeem"
           element={
-            <HomepageLayoutStudent>
+            <TransitionWrapper location={location}>
               <RedeemPage />
-            </HomepageLayoutStudent>
+            </TransitionWrapper>
           }
         />
 

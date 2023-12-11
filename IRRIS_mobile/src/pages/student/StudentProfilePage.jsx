@@ -27,6 +27,8 @@ const StudentProfilePage = () => {
   const handleConfirmButton = () => {
     // To remove a specific cookie
     Cookies.remove("authToken");
+    Cookies.remove("user_id");
+    Cookies.remove("user_role");
 
     navigate("/login");
   };

@@ -104,9 +104,12 @@ const Login = () => {
           console.log("Login success", response);
           setEmail(response.user_email);
           setUser(response.user);
+          console.log("user", response.user);
           if (response.token) {
             //set token in cookies
             Cookies.set("authToken", response.token, { expires: 7 });
+            Cookies.set("user_id", response.user.id, { expires: 7 });
+            Cookies.set("user_role", response.user.user_role, { expires: 7 });
           }
 
           navigate(response.route);
