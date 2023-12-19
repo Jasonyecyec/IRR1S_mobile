@@ -102,7 +102,7 @@ const Login = () => {
         const response = await login(formFields.email, formFields.password);
         if (response) {
           console.log("Login success", response);
-          setEmail(response.user_email);
+          setEmail(response.user.email);
           setUser(response.user);
           console.log("user", response.user);
           if (response.token) {
@@ -110,6 +110,10 @@ const Login = () => {
             Cookies.set("authToken", response.token, { expires: 7 });
             Cookies.set("user_id", response.user.id, { expires: 7 });
             Cookies.set("user_role", response.user.user_role, { expires: 7 });
+            Cookies.set("first_name", response.user.first_name, { expires: 7 });
+            Cookies.set("last_name", response.user.last_name, { expires: 7 });
+            Cookies.set("email", response.user.email, { expires: 7 });
+
           }
 
           navigate(response.route);

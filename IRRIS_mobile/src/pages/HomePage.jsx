@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
 import NotificationIcon from "../assets/images/notification_icon.png";
-import RequestIcon from "../assets/images/request_icon.png";
-import ReportIcon from "../assets/images/report_icon.png";
-import ReserveIcon from "../assets/images/reserve_icon.png";
-import MoreIcon from "../assets/images/more_icon.png";
 import UserSample from "../assets/images/user_sample.jpg";
 import PointsIcon from "../assets/images/points_icon.png";
 import { Link } from "react-router-dom";
@@ -11,9 +7,22 @@ import HomeProcessButton from "../components/HomeProcessButton";
 import { useNavigate } from "react-router-dom";
 import QCULogo from "../assets/images/qcu_logo.png";
 import "../index.css";
+import Cookies from "js-cookie";
+import useUserStore from "../services/state/userStore";
 
 const HomePage = () => {
+  const { user, setUser } = useUserStore();
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userIdCookie = Cookies.get("user_id");
+    const first_nameCookie = Cookies.get("first_name");
+    const last_nameCookie = Cookies.get("last_name");
+    const emailCookie = Cookies.get("email");
+
+    setUser({id:userIdCookie, first_name: first_nameCookie, last_name: last_nameCookie,email:emailCookie })
+  }, [])
 
   const handleProfileButton = () => {
     navigate("/student/profile");
@@ -39,7 +48,7 @@ const HomePage = () => {
             </div>
             <div className="text-[#987700] font-bold">
               <p>Welcome</p>
-              <p className="text-2xl">John Doe</p>
+              <p className="text-2xl">{user?.first_name} {user?.last_name}</p>
             </div>
           </div>
 

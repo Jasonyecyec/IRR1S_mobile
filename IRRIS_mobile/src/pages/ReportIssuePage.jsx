@@ -139,6 +139,7 @@ const ReportIssuePage = () => {
       if (imageFile) {
         formData.append("image_before", imageFile);
       }
+      console.log("form",form,)
       const response = await reportFacility(formData);
       navigate(response.route);
     } catch (error) {
