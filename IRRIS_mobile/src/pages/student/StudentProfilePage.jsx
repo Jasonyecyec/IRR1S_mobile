@@ -23,12 +23,17 @@ const StudentProfilePage = () => {
 
   useEffect(() => {
     console.log("user", user);
+
   }, []);
   const handleConfirmButton = () => {
     // To remove a specific cookie
     Cookies.remove("authToken");
     Cookies.remove("user_id");
     Cookies.remove("user_role");
+    Cookies.remove("first_name");
+    Cookies.remove("last_name");
+    Cookies.remove("email");
+
 
     navigate("/login");
   };
@@ -83,7 +88,7 @@ const StudentProfilePage = () => {
             <p className="text-2xl font-semibold">
               {user?.first_name} {user?.last_name}
             </p>
-            <p className="">johndoesmith@gmail.com</p>
+            <p className="">{user?.email}</p>
             <p>Student : SBIT4A</p>
           </div>
         </div>
