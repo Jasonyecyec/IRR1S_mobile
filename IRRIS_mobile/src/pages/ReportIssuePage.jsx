@@ -410,11 +410,11 @@ const ReportIssuePage = () => {
                 </button>
 
                 {imageSrc && (
-                  <div className="bg-red-400 relative">
+                  <div className=" relative">
                     <img
                       src={imageSrc}
                       alt="Captured"
-                      className="w-32 h-full rounded-md" // Set your desired width and height
+                      className="w-24 h-24  rounded-md" // Set your desired width and height
                     />
 
                     <button
