@@ -64,7 +64,7 @@ const QRScannerPage = ({ onScan }) => {
 
           html5QrCode
             .start(
-              cameraId,
+              { facingMode: { exact: "environment" } },
               config,
               (decodedText, decodedResult) => {
                 onScan(decodedText);
