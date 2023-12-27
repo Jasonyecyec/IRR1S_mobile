@@ -39,9 +39,8 @@ const QRScannerPage = ({ onScan }) => {
     const config = {
       fps: 25,
       qrbox: { width: 250, height: 250 },
-      // Add the facingMode configuration here
       aspectRatio: 1.1,
-      // facingMode: { exact: "environment" },
+      facingMode: { exact: "environment" },
     };
 
     if (!html5QrCodeRef.current) {
