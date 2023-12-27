@@ -139,7 +139,7 @@ const ReportIssuePage = () => {
       if (imageFile) {
         formData.append("image_before", imageFile);
       }
-      console.log("form",form,)
+      console.log("form", form);
       const response = await reportFacility(formData);
       navigate(response.route);
     } catch (error) {
@@ -245,7 +245,7 @@ const ReportIssuePage = () => {
 
   useEffect(() => {
     if (!facility) {
-      navigate("/student/scan-facility");
+      navigate("/scan-facility");
     }
 
     // Get the cookie by its name

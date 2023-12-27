@@ -113,7 +113,6 @@ const Login = () => {
             Cookies.set("first_name", response.user.first_name, { expires: 7 });
             Cookies.set("last_name", response.user.last_name, { expires: 7 });
             Cookies.set("email", response.user.email, { expires: 7 });
-
           }
 
           navigate(response.route);

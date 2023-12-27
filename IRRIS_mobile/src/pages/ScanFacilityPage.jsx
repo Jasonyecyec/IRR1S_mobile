@@ -6,8 +6,11 @@ import FacilityInputModal from "../components/FacilityInputModal";
 import { findFacility } from "../services/api/sharedService";
 import PageTitle from "../components/PageTitle";
 import ScanImage from "../assets/images/scan_image.png";
+import { Link } from "react-router-dom";
+import useUserStore from "../services/state/userStore";
 
 const ScanFacilityPage = () => {
+  const { user } = useUserStore((state) => ({ user: state.user }));
   const [openModal, setOpenModal] = useState(false);
   const [qrCode, setQrCode] = useState("");
   const [qrCodeError, setQrCodeError] = useState({
@@ -43,7 +46,7 @@ const ScanFacilityPage = () => {
       setIsLoading(true);
       const response = await findFacility(qrCode);
       const facility = response.facility;
-      navigate("/student/report-issue", { state: { facility } });
+      navigate("/report-issue", { state: { facility } });
       console.log("response", response.facility);
     } catch (error) {
       setQrCodeError({ isError: true, message: "Facility doesn't exist" });
@@ -52,13 +55,19 @@ const ScanFacilityPage = () => {
     }
   };
 
+  const navigateToHome = () => {
+    navigate(`/${user.user_role}/home`);
+  };
+
   return (
     <div className="background h-screen w-screen relative ">
-      <PageTitle title="ENTER FACILITY ID" />
+      <PageTitle title="ENTER FACILITY ID" closeFunction={navigateToHome} />
 
       <div className=" h-full flex flex-col space-y-5  items-center w-full mt-32 p-10">
         <div className="bg-white p-3 rounded-lg">
-          <img src={ScanImage} alt="scan-image" className="w-60 bg-white" />
+          <Link to="/qr-scanner">
+            <img src={ScanImage} alt="scan-image" className="w-60 bg-white" />
+          </Link>
         </div>
         <p>OR</p>
 

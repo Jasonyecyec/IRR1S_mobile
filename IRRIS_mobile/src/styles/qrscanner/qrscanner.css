@@ -1,0 +1,7 @@
+#qr-box video {
+    width: 100%; /* Take the full width of the container */
+    height: 100%; /* Maintain the video's aspect ratio */
+    object-fit: contain; /* Ensure the full video is visible without cropping */
+  }
+
+  

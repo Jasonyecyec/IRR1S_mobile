@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import NotificationIcon from "../assets/images/notification_icon.png";
+import NotificationIcon from "../assets/images/bell_icon.png";
 import UserSample from "../assets/images/user_sample.jpg";
 import PointsIcon from "../assets/images/points_icon.png";
 import { Link } from "react-router-dom";
@@ -11,7 +11,10 @@ import Cookies from "js-cookie";
 import useUserStore from "../services/state/userStore";
 
 const HomePage = () => {
-  const { user, setUser } = useUserStore();
+  const { user, setUser } = useUserStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+  }));
 
   const navigate = useNavigate();
 
@@ -19,10 +22,17 @@ const HomePage = () => {
     const userIdCookie = Cookies.get("user_id");
     const first_nameCookie = Cookies.get("first_name");
     const last_nameCookie = Cookies.get("last_name");
+    const user_roleCookie = Cookies.get("user_role");
     const emailCookie = Cookies.get("email");
 
-    setUser({id:userIdCookie, first_name: first_nameCookie, last_name: last_nameCookie,email:emailCookie })
-  }, [])
+    setUser({
+      id: userIdCookie,
+      first_name: first_nameCookie,
+      last_name: last_nameCookie,
+      email: emailCookie,
+      user_role: user_roleCookie,
+    });
+  }, []);
 
   const handleProfileButton = () => {
     navigate("/student/profile");
@@ -38,6 +48,7 @@ const HomePage = () => {
           <img src={NotificationIcon} />
         </button>
       </div>
+
       <div className="bg-[#f11408] h-2"></div>
 
       <div className="p-3 bg-background h-full space-y-10">
@@ -48,7 +59,9 @@ const HomePage = () => {
             </div>
             <div className="text-[#987700] font-bold">
               <p>Welcome</p>
-              <p className="text-2xl">{user?.first_name} {user?.last_name}</p>
+              <p className="text-2xl">
+                {user?.first_name} {user?.last_name}
+              </p>
             </div>
           </div>
 
@@ -59,7 +72,7 @@ const HomePage = () => {
 
         <div className="bg-[#d4e3f9] border-2 border-white flex justify-center rounded-full">
           <button
-            onClick={() => navigate("/student/scan-facility")}
+            onClick={() => navigate("/scan-facility")}
             className="bg-[#def7fe] rounded-full p-4 border-[8px] border-[#87a2b1] flex items-center justify-center"
           >
             <svg

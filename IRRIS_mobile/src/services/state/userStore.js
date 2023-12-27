@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 const useUserStore = create((set) => ({
   email: null,
   user: null,
