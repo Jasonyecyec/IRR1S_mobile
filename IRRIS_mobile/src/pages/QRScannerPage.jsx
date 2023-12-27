@@ -43,40 +43,40 @@ const QRScannerPage = ({ onScan }) => {
       facingMode: { exact: "environment" },
     };
 
-    // if (!html5QrCodeRef.current) {
-    //   html5QrCodeRef.current = new Html5Qrcode(qrBoxId);
-    // }
-    const html5QrCode = new Html5Qrcode(qrBoxId); // Use the ID string here
+    if (!html5QrCodeRef.current) {
+      html5QrCodeRef.current = new Html5Qrcode(qrBoxId);
+    }
+    // const html5QrCode = new Html5Qrcode(qrBoxId); // Use the ID string here
 
-    Html5Qrcode.getCameras()
-      .then((cameras) => {
-        if (cameras && cameras.length) {
-          let cameraId = cameras[0].id;
-          for (let camera of cameras) {
-            console.log("camera", cameras);
-            console.log("facing mode", camera.facingMode);
-            console.log("camera id", camera.id);
-            if (camera.facingMode === "environment") {
-              cameraId = camera.id;
-              break;
-            }
-          }
+    // Html5Qrcode.getCameras()
+    //   .then((cameras) => {
+    //     if (cameras && cameras.length) {
+    //       let cameraId = cameras[0].id;
+    //       for (let camera of cameras) {
+    //         console.log("camera", cameras);
+    //         console.log("facing mode", camera.facingMode);
+    //         console.log("camera id", camera.id);
+    //         if (camera.facingMode === "environment") {
+    //           cameraId = camera.id;
+    //           break;
+    //         }
+    //       }
 
-          html5QrCode
-            .start(
-              { facingMode: { exact: "environment" } },
-              config,
-              (decodedText, decodedResult) => {
-                onScan(decodedText);
-              },
-              (errorMessage) => {
-                console.log(errorMessage);
-              }
-            )
-            .catch((err) => console.error(err));
-        }
-      })
-      .catch((err) => console.error(err));
+    //       html5QrCode
+    //         .start(
+    //           { facingMode: { exact: "environment" } },
+    //           config,
+    //           (decodedText, decodedResult) => {
+    //             onScan(decodedText);
+    //           },
+    //           (errorMessage) => {
+    //             console.log(errorMessage);
+    //           }
+    //         )
+    //         .catch((err) => console.error(err));
+    //     }
+    //   })
+    //   .catch((err) => console.error(err));
 
     // Html5Qrcode.getCameras().then(cameras => {
     //   if (cameras && cameras.length) {
@@ -98,53 +98,53 @@ const QRScannerPage = ({ onScan }) => {
     // });
 
     // Define a function to start the QR scanner
-    // const startScanner = async () => {
-    //   if (isScanning) return; // If already scanning, do not start again.
+    const startScanner = async () => {
+      if (isScanning) return; // If already scanning, do not start again.
 
-    //   const cameras = await Html5Qrcode.getCameras();
-    //   if (cameras && cameras.length) {
-    //     const cameraId =
-    //       cameras.find((camera) => camera.facingMode === "environment")?.id ||
-    //       cameras[0].id;
-    //     // Create an instance of Html5Qrcode
-    //     const html5QrCode = new Html5Qrcode(qrBoxId);
-    //     // Assign it to the ref
-    //     html5QrCodeRef.current = html5QrCode;
+      const cameras = await Html5Qrcode.getCameras();
+      if (cameras && cameras.length) {
+        const cameraId =
+          cameras.find((camera) => camera.facingMode === "environment")?.id ||
+          cameras[0].id;
+        // Create an instance of Html5Qrcode
+        const html5QrCode = new Html5Qrcode(qrBoxId);
+        // Assign it to the ref
+        html5QrCodeRef.current = html5QrCode;
 
-    //     // Start scanning
-    //     await html5QrCode.start(
-    //       cameraId,
-    //       config,
-    //       async (decodedText, decodedResult) => {
-    //         console.log(decodedText);
-    //         // You can call stop here if you want to stop scanning after a successful scan
-    //         setIsLoading(true);
-    //         try {
-    //           await html5QrCodeRef.current.stop(); // Stop the scanner immediately after a QR code is detected.
-    //           setIsScanning(false); // Update the scanning state.
-    //           setIsScanning(true);
-    //           // const data = await findFacilityByQrCode(decodedText); // Now you can use await here
-    //           const response = await findFacility(decodedText);
-    //           const facility = response.facility;
+        // Start scanning
+        await html5QrCode.start(
+          { facingMode: { exact: "environment" } },
+          config,
+          async (decodedText, decodedResult) => {
+            console.log(decodedText);
+            // You can call stop here if you want to stop scanning after a successful scan
+            setIsLoading(true);
+            try {
+              await html5QrCodeRef.current.stop(); // Stop the scanner immediately after a QR code is detected.
+              setIsScanning(false); // Update the scanning state.
+              setIsScanning(true);
+              // const data = await findFacilityByQrCode(decodedText); // Now you can use await here
+              const response = await findFacility(decodedText);
+              const facility = response.facility;
 
-    //           if (response) {
-    //             navigate("/report-issue", { state: { facility } });
-    //           }
-    //         } catch (error) {
-    //           console.log("cant find facility");
-    //           navigate("/facility-not-found");
-    //         } finally {
-    //           // await html5QrCodeRef.current.stop();
-    //           setIsLoading(false);
-    //         }
-    //       }
-    //     );
-    //   } else {
-    //     throw new Error("No cameras found.");
-    //   }
-    // };
+              if (response) {
+                navigate("/report-issue", { state: { facility } });
+              }
+            } catch (error) {
+              console.log("cant find facility");
+              navigate("/facility-not-found");
+            } finally {
+              // await html5QrCodeRef.current.stop();
+              setIsLoading(false);
+            }
+          }
+        );
+      } else {
+        throw new Error("No cameras found.");
+      }
+    };
 
-    // startScanner();
+    startScanner();
 
     // Cleanup function to stop the scanner
     return () => {
