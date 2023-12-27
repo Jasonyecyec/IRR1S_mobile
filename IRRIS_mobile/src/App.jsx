@@ -17,10 +17,10 @@ import ActivateAccountPage from "./pages/ActivateAccountPage";
 import OTPInputPage from "./pages/OTPInputPage";
 import ActivateSuccessPage from "./pages/ActivateSuccessPage";
 import CreatePasswordPage from "./pages/CreatePasswordPage";
-import HomepageLayoutStudent from "./components/ui/HomepageLayoutStudent";
+import HomepageLayout from "./components/ui/HomepageLayout";
 import HomePage from "./pages/HomePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
-import QRScannerPage from "./pages/student/QRScannerPage";
+import QRScannerPage from "./pages/QRScannerPage";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TransitionWrapper from "./components/ui/TransitionWrapper";
 import MorePage from "./pages/student/MorePage";
@@ -30,11 +30,16 @@ import ScanFacilityPage from "./pages/ScanFacilityPage";
 import ReportIssuePage from "./pages/ReportIssuePage";
 import ReportSuccessPage from "./pages/ReportSuccessPage";
 import ReportErrorPage from "./pages/ReportErrorPage";
+import FacilityNotFoundPage from "./pages/FacilityNotFoundPage";
 import ReportHistoryPage from "./pages/ReportHistoryPage";
+import ManpowerHomePage from "./pages/manpower/ManpowerHomePage";
+
+import ManpowerRoutes from "./routes/ManpowerRoutes";
 import "./index.css";
 
 function App() {
   const [scannedCode, setScannedCode] = useState("");
+  // const location = useLocation();
 
   const handleScan = (data) => {
     setScannedCode(data);
@@ -59,6 +64,8 @@ function App() {
             </TransitionWrapper>
           }
         />
+
+        {...ManpowerRoutes}
 
         <Route
           path="/activate"
@@ -94,18 +101,19 @@ function App() {
         />
 
         <Route
+          key="studentHome"
           path="/student/home"
           element={
             <TransitionWrapper location={location}>
-              <HomepageLayoutStudent>
+              <HomepageLayout>
                 <HomePage />
-              </HomepageLayoutStudent>
+              </HomepageLayout>
             </TransitionWrapper>
           }
         />
 
         <Route
-          path="/student/scan-facility"
+          path="/scan-facility"
           element={
             // <TransitionWrapper location={location}>
             <ScanFacilityPage />
@@ -114,10 +122,19 @@ function App() {
         />
 
         <Route
-          path="/student/report-issue"
+          path="/report-issue"
           element={
             <TransitionWrapper location={location}>
               <ReportIssuePage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/qr-scanner"
+          element={
+            <TransitionWrapper location={location}>
+              <QRScannerPage />
             </TransitionWrapper>
           }
         />
@@ -148,13 +165,21 @@ function App() {
             </TransitionWrapper>
           }
         />
+        <Route
+          path="/facility-not-found"
+          element={
+            <TransitionWrapper location={location}>
+              <FacilityNotFoundPage />
+            </TransitionWrapper>
+          }
+        />
 
         <Route
           path="/student/more"
           element={
-            <HomepageLayoutStudent>
+            <HomepageLayout>
               <MorePage />
-            </HomepageLayoutStudent>
+            </HomepageLayout>
           }
         />
 
@@ -164,15 +189,6 @@ function App() {
             <TransitionWrapper location={location}>
               <RedeemPage />
             </TransitionWrapper>
-          }
-        />
-
-        <Route
-          path="/home/qr-scanner"
-          element={
-            <HomepageLayoutStudent>
-              <QRScannerPage onScan={handleScan} />
-            </HomepageLayoutStudent>
           }
         />
 

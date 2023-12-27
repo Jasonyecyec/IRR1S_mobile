@@ -17,13 +17,15 @@ import { Button, Modal } from "flowbite-react";
 import ConfirmationModal from "@/src/components/ConfirmationModal";
 
 const StudentProfilePage = () => {
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+  }));
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     console.log("user", user);
-
   }, []);
   const handleConfirmButton = () => {
     // To remove a specific cookie
@@ -34,6 +36,8 @@ const StudentProfilePage = () => {
     Cookies.remove("last_name");
     Cookies.remove("email");
 
+    //clear user store
+    setUser("");
 
     navigate("/login");
   };

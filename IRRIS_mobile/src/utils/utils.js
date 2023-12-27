@@ -56,3 +56,15 @@ export const formatTime = (seconds) => {
   const remainingSeconds = seconds % 60;
   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
 };
+
+export const formatDate = (inputDate)=>{
+  const options = { day: 'numeric', month: 'short', year: 'numeric' };
+  const date = new Date(inputDate);
+  return date.toLocaleDateString('en-US', options);
+}
+
+export const addDays = (date,days)=>{
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
