@@ -9,6 +9,7 @@ import QCULogo from "../assets/images/qcu_logo.png";
 import "../index.css";
 import Cookies from "js-cookie";
 import useUserStore from "../services/state/userStore";
+import { fetchUserData } from "../services/api/sharedService";
 
 const HomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
