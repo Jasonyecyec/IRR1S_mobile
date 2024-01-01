@@ -37,12 +37,13 @@ const Login = () => {
   useEffect(() => {
     // Check for authToken cookie
     const authToken = Cookies.get("authToken");
+    const userRole = Cookies.get("user_role");
 
     console.log("authToken", authToken);
 
     // If authToken does  exist, redirect to home page
     if (authToken) {
-      navigate("/student/home");
+      navigate(`/${userRole}/home`);
     }
   }, [navigate]);
 
