@@ -33,7 +33,6 @@ import ReportErrorPage from "./pages/ReportErrorPage";
 import FacilityNotFoundPage from "./pages/FacilityNotFoundPage";
 import ReportHistoryPage from "./pages/ReportHistoryPage";
 import ManpowerHomePage from "./pages/manpower/ManpowerHomePage";
-
 import ManpowerRoutes from "./routes/ManpowerRoutes";
 import "./index.css";
 

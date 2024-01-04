@@ -2,8 +2,9 @@ importScripts("https://js.pusher.com/beams/service-worker.js");
 
 console.log("service worker public")
 
-PusherPushNotifications.onNotificationReceived = ({ pushEvent, payload }) => {
-  // console.log("Push notification received. Payload data: ",JSON.parse(payload.notification.data) );
+PusherPushNotifications.onNotificationReceived =  ({ pushEvent, payload }) => {
+  console.log("Push notification received. Payload data: ", JSON.parse(payload.data.content) );
+  console.log("Push notification received. Notification type: ",payload.data.type );
 
   // Log information about the event
   console.log("Push event:", pushEvent);
@@ -21,4 +22,5 @@ PusherPushNotifications.onNotificationReceived = ({ pushEvent, payload }) => {
       data: payload.data,
     })
   );
+
 };
