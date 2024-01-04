@@ -68,3 +68,9 @@ export const addDays = (date,days)=>{
   result.setDate(result.getDate() + days);
   return result;
 }
+
+export const getImageUrl = (imagePath) => {
+  // const baseUrl = 'http://127.0.0.1:8000/images'; // Base URL of your Laravel backend
+  const baseUrl = 'https://irris-sbit4a-api.com/images';
+  return `${baseUrl}/${imagePath}`;
+};

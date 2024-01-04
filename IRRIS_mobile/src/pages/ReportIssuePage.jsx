@@ -91,10 +91,6 @@ const ReportIssuePage = () => {
     }
   };
 
-  // const handleSubmit = async () => {
-
-  // };
-
   const logAvailableCameras = () => {
     navigator.mediaDevices
       .enumerateDevices()

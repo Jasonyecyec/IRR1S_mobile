@@ -26,7 +26,7 @@ const ManpowerBottomNavigation = () => {
 
       <button>
         <Link
-          to="/report-history"
+          to="/manpower/progress"
           className="text-center  flex flex-col items-center"
         >
           <ClockClockwise size={32} color="#f2f2f2" /> Progress

@@ -9,3 +9,61 @@ export const getJobOrder = async (userId) => {
       throw error;
     }
   };
+
+  export const getManpowerNotification = async (userId) => {
+    try {
+      const response = await api.get(`/manpower-notification/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Get Manpower notification error", error.response);
+      throw error;
+    }
+  };
+
+  export const getJobOrderDertails = async (id) => {
+    try {
+      const response = await api.get(`/job-order-details/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Get Manpower notification error", error.response);
+      throw error;
+    }
+  };
+
+  export const updateJobOrderImage = async (formData, id) => {
+    try {
+      // Set the appropriate headers for multipart/form-data
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+  
+      // Make an API call with the formData object and config
+      const response = await api.post(`/job-order-update-image/${id}`, formData);
+  
+      console.log('Update Job Order image response:', response);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Update Job Order image error:',
+        error.response || error.message,
+      );
+      throw error;
+    }
+  };
+
+  export const acceptJobOrder = async (formData, id) => {
+    try {
+  
+      // Make an API call with the formData object and id
+      const response = await api.patch(`/job-order-accept/${id}`, formData);
+  
+      console.log('Update Job Order response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Update Job Order error:', error.response || error.message);
+      throw error;
+    }
+  };
+

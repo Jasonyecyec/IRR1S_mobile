@@ -8,12 +8,14 @@ import beamsClient from "@/src/pushNotificationConfig";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { fetchUserData } from "@/src/services/api/sharedService";
+import "../../index.css";
 
 const ManpowerHomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
   }));
+
   const {
     isJobOrderNotif,
     jobOrderDetails,
@@ -54,11 +56,11 @@ const ManpowerHomePage = () => {
       console.log("Device interests:", interests);
 
       // Set up notification received event listener
-      client.onNotificationReceived = (data) => {
-        console.log("Push notification received:", data);
-        // Handle the received push notification data, update UI, etc.
-        // ...
-      };
+      // client.onNotificationReceived = (data) => {
+      //   console.log("Push notification received:", data);
+      //   // Handle the received push notification data, update UI, etc.
+      //   // ...
+      // };
     } catch (error) {
       console.error("Error initializing Pusher Beams:", error);
     }
@@ -135,14 +137,16 @@ const ManpowerHomePage = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col background">
       <div className="flex justify-between items-center bg-mainColor p-5">
         <button onClick={handleProfileButton}>
           <img src={UserSample} className="w-12 h-12 rounded-full " />
         </button>
 
         <button>
-          <img src={NotificationIcon} className="w-10 h-10 " />
+          <Link to={`/manpower/notification/${user?.id}`}>
+            <img src={NotificationIcon} className="w-10 h-10 " />
+          </Link>
         </button>
       </div>
 

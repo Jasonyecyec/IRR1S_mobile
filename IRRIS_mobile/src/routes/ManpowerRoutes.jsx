@@ -4,6 +4,8 @@ import { Route } from "react-router-dom";
 import TransitionWrapper from "../components/ui/TransitionWrapper";
 import HomepageLayout from "../components/ui/HomepageLayout";
 import TasksPage from "../pages/manpower/TasksPage";
+import ManpowerNotificationPage from "../pages/manpower/ManpowerNotificationPage";
+import ManpowerProgressPage from "../pages/manpower/ManpowerProgressPage";
 
 const ManpowerRoutes = [
   <Route
@@ -24,6 +26,39 @@ const ManpowerRoutes = [
       // <TransitionWrapper>
       <HomepageLayout>
         <TasksPage />
+      </HomepageLayout>
+      // </TransitionWrapper>
+    }
+  />,
+  <Route
+    key="manpowerRoute3"
+    path="/manpower/notification/:userId"
+    element={
+      // <TransitionWrapper>
+      <HomepageLayout>
+        <ManpowerNotificationPage />
+      </HomepageLayout>
+      // </TransitionWrapper>
+    }
+  />,
+  <Route
+    key="manpowerRoute4"
+    path="/manpower/progress/:task/:taskId"
+    element={
+      // <TransitionWrapper>
+      <HomepageLayout>
+        <ManpowerProgressPage />
+      </HomepageLayout>
+      // </TransitionWrapper>
+    }
+  />,
+  <Route
+    key="manpowerRoute5"
+    path="/manpower/progress"
+    element={
+      // <TransitionWrapper>
+      <HomepageLayout>
+        <ManpowerProgressPage />
       </HomepageLayout>
       // </TransitionWrapper>
     }
