@@ -6,6 +6,8 @@ import HomepageLayout from "../components/ui/HomepageLayout";
 import TasksPage from "../pages/manpower/TasksPage";
 import ManpowerNotificationPage from "../pages/manpower/ManpowerNotificationPage";
 import ManpowerProgressPage from "../pages/manpower/ManpowerProgressPage";
+import ManpowerRatingPage from "../pages/manpower/ManpowerRatingPage";
+import ManpowerProfilePage from "../pages/manpower/ManpowerProfilePage";
 
 const ManpowerRoutes = [
   <Route
@@ -63,7 +65,23 @@ const ManpowerRoutes = [
       // </TransitionWrapper>
     }
   />,
-  // Add more Route elements here
+
+  <Route
+    key="manpowerRoute6"
+    path="/manpower/rate/:jobOrderId"
+    element={
+      // <TransitionWrapper>
+      // <HomepageLayout>
+      <ManpowerRatingPage />
+      // </HomepageLayout>
+      // </TransitionWrapper>
+    }
+  />,
+  <Route
+    key="manpowerRoute7"
+    path="/manpower/profile"
+    element={<ManpowerProfilePage />}
+  />,
 ];
 
 export default ManpowerRoutes;

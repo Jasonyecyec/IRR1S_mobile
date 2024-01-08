@@ -6,7 +6,7 @@ import { formatDate, addDays } from "@/src/utils/utils";
 import { Link, useParams } from "react-router-dom";
 import { getJobOrderDertails } from "@/src/services/api/manpowerService";
 import toast, { Toaster } from "react-hot-toast";
-import { getImageUrl } from "@/src/utils/utils";
+import { getImageUrl, isTaskDurationValid } from "@/src/utils/utils";
 import {
   Camera,
   Clock,
@@ -19,12 +19,15 @@ import {
   Check,
   ArrowCounterClockwise,
 } from "@phosphor-icons/react";
+import TaskDoneModal from "@/src/components/TaskDoneModal";
 import ConfirmationModal from "@/src/components/ConfirmationModal";
 import {
   updateJobOrderImage,
   acceptJobOrder,
+  finishJobOrder,
 } from "@/src/services/api/manpowerService";
 import ImageModal from "@/src/components/ImageModal";
+import { useNavigate } from "react-router-dom";
 import "../../index.css";
 
 const ManpowerProgressPage = () => {
@@ -32,21 +35,30 @@ const ManpowerProgressPage = () => {
     user: state.user,
     setUser: state.setUser,
   }));
+  const navigate = useNavigate();
   const { taskId, task } = useParams();
   const [taskInProgress, setTaskInProgress] = useState(null);
   const [openImageReport, setOpenImageReport] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isToastActivated, setToastActivated] = useState(false);
   const [estimatedDuration, setEstimatedDuration] = useState(null);
+  const [finishFormData, setFinishFormData] = useState({
+    status: "completed",
+    comments: null,
+    due_date: null,
+  });
 
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [canvas, setCanvas] = useState(null);
 
   const [openModalImage, setOpenModalImage] = useState(false);
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
+  const [openModalTaskDone, setOpenModalTaskDone] = useState(false);
 
   const [imageFileBefore, setImageFileBefore] = useState(null);
   const [imageSrcBefore, setImageSrcBefore] = useState(null);
+
+  const [imageFileAfter, setImageFileAfter] = useState(null);
+  const [imageSrcAfter, setImageSrcAfter] = useState(null);
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -62,6 +74,14 @@ const ManpowerProgressPage = () => {
       duration: 2000,
     });
 
+  const handleFinishFormChange = (e) => {
+    const { name, value } = e.target;
+    setFinishFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   useEffect(() => {
     return () => {
       // Clear the toast with ID "error" when the component unmounts
@@ -71,6 +91,7 @@ const ManpowerProgressPage = () => {
 
   useEffect(() => {
     const fetchTaskDetails = async () => {
+      setIsLoading(true);
       console.log("has task id");
       // if (taskId) {
       try {
@@ -90,11 +111,14 @@ const ManpowerProgressPage = () => {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
       // }
     };
 
     const fetchTaskDetailsLocal = () => {
+      setIsLoading(true);
       console.log("no task id ");
       // Check local storage for task_inProgress
       const storedTaskInProgress = localStorage.getItem("task_inProgress");
@@ -104,6 +128,8 @@ const ManpowerProgressPage = () => {
         console.log("task local", taskInProgressLocal);
         setTaskInProgress(taskInProgressLocal);
       }
+
+      setIsLoading(false);
     };
 
     if (taskId) {
@@ -205,11 +231,21 @@ const ManpowerProgressPage = () => {
         // Create an object URL for the File object
         const objectURL = URL.createObjectURL(imageFile);
 
-        // Set the object URL as the source for the image
-        setImageSrcBefore(objectURL);
+        if (taskInProgress.status === "assigned") {
+          // Set the object URL as the source for the image
+          setImageSrcBefore(objectURL);
 
-        // Set the file in the state or do something with it (e.g., upload)
-        setImageFileBefore(imageFile);
+          // Set the file in the state or do something with it (e.g., upload)
+          setImageFileBefore(imageFile);
+        }
+
+        if (taskInProgress.status === "ongoing") {
+          // Set the object URL as the source for the image
+          setImageSrcAfter(objectURL);
+
+          // Set the file in the state or do something with it (e.g., upload)
+          setImageFileAfter(imageFile);
+        }
 
         // Example: Log the file size to see if the file was created successfully
         console.log("Size of the new File:", imageFile.size);
@@ -268,60 +304,107 @@ const ManpowerProgressPage = () => {
   };
 
   const handleConfirmButtonImage = () => {
-    setImageFileBefore(null);
-    setImageSrcBefore(null);
+    if (taskInProgress.status === "assigned") {
+      setImageFileBefore(null);
+      setImageSrcBefore(null);
+    }
+
+    if (taskInProgress.status === "ongoing") {
+      setImageFileAfter(null);
+      setImageSrcAfter(null);
+    }
+
     onCloseModalImage();
   };
 
   const handleConfirmButton = async () => {
-    if (estimatedDuration && estimatedDuration <= 2) {
-      notify("Should be 3min or longer");
-      return;
-    }
+    if (taskInProgress.status === "assigned") {
+      //proceed to submitting
+      setIsLoading(true);
+      try {
+        //update image_before first
+        if (imageFileBefore) {
+          const formData = new FormData();
+          formData.append("_method", "PATCH");
+          formData.append("image_before", imageFileBefore);
 
-    //proceed to submitting
-    setIsLoading(true);
-    try {
-      //update image_before first
-      if (imageFileBefore) {
-        const formData = new FormData();
-        formData.append("_method", "PATCH");
-        formData.append("image_before", imageFileBefore);
+          const response = await updateJobOrderImage(
+            formData,
+            taskInProgress.id
+          );
+          console.log("response update image", response);
+        }
 
-        const response = await updateJobOrderImage(formData, taskInProgress.id);
-        console.log("response update image", response);
+        //UPDATE JOB ORDER STATUS AND OTHERS
+        const formObjectData = {
+          status: "ongoing",
+          report_id: taskInProgress.report_id,
+          job_type: taskInProgress.job_type,
+        };
+
+        // Add estimated duration to the formObjectData if available
+        if (estimatedDuration !== null) {
+          formObjectData.estimated_duration_minutes = estimatedDuration;
+        }
+
+        const { job_order } = await acceptJobOrder(
+          formObjectData,
+          taskInProgress.id
+        );
+
+        //replace the task_inProgress in localStorage with job_order
+        localStorage.setItem("task_inProgress", JSON.stringify(job_order));
+
+        //update task in progress
+        setTaskInProgress(job_order);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+        onCloseModalConfirm();
       }
 
-      //UPDATE JOB ORDER STATUS AND OTHERS
-      const formObjectData = {
-        status: "ongoing",
-        report_id: taskInProgress.report_id,
-        job_type: taskInProgress.job_type,
-      };
-
-      // Add estimated duration to the formObjectData if available
-      if (estimatedDuration !== null) {
-        formObjectData.estimated_duration_minutes = estimatedDuration;
-      }
-
-      const { job_order } = await acceptJobOrder(
-        formObjectData,
-        taskInProgress.id
-      );
-
-      //replace the task_inProgress in localStorage with job_order
-      localStorage.setItem("task_inProgress", JSON.stringify(job_order));
-
-      //update task in progress
-      setTaskInProgress(job_order);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-      onCloseModalConfirm();
+      console.log("submit");
     }
 
-    console.log("submit");
+    if (taskInProgress.status === "ongoing") {
+      //proceed to submitting
+      setIsLoading(true);
+      try {
+        //update image_before first
+        if (imageFileAfter) {
+          const formData = new FormData();
+          formData.append("_method", "PATCH");
+          formData.append("image_after", imageFileAfter);
+
+          const response = await updateJobOrderImage(
+            formData,
+            taskInProgress.id
+          );
+          console.log("response update image", response);
+        }
+
+        //if taskInProgress.due_date is not null pass it to finishFormData object
+        if (taskInProgress.due_date !== null) {
+          finishFormData.due_date = taskInProgress.due_date;
+        }
+
+        //UPDATE JOB ORDER STATUS AND OTHERS
+        const { job_order } = await finishJobOrder(
+          finishFormData,
+          taskInProgress.id
+        );
+
+        setOpenModalTaskDone(true);
+
+        console.log("finish task", job_order);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+        onCloseModalConfirm();
+      }
+    }
   };
 
   const handleEstimatedDuration = (e) => {
@@ -335,13 +418,43 @@ const ManpowerProgressPage = () => {
     }
   };
 
+  const handleDoneModal = () => {
+    //set the taskInProgress local to null
+    localStorage.setItem("task_inProgress", JSON.stringify(null));
+
+    navigate(`/manpower/rate/${taskInProgress?.id}`);
+
+    //update task in progress
+    setTaskInProgress(null);
+  };
+
   const handleButton = () => {
     // setToastActivated(true);
 
     // check first if imageSrcFileBefore has value
-    if (!imageFileBefore) {
-      notify("Image required");
-      return;
+    if (taskInProgress.status === "assigned") {
+      if (estimatedDuration && estimatedDuration <= 2) {
+        notify("Should be 3min or longer");
+        return;
+      }
+
+      if (!imageFileBefore) {
+        notify("Image required");
+        return;
+      }
+    }
+
+    if (taskInProgress.status === "ongoing") {
+      if (!imageFileAfter) {
+        notify("Image required");
+        return;
+      }
+
+      // check  time of taskInProgress.date_started and time now, if its less than 3min return
+      if (!isTaskDurationValid(taskInProgress.date_started)) {
+        notify("Task should be at least 3 minutes long");
+        return;
+      }
     }
 
     setOpenModalConfirm(true);
@@ -355,6 +468,8 @@ const ManpowerProgressPage = () => {
     <div className="h-full flex flex-col background">
       {/* {isToastActivated && <Toaster />} */}
       <Toaster />
+
+      {openModalTaskDone && <TaskDoneModal handleDone={handleDoneModal} />}
 
       {openModalImage && (
         <ConfirmationModal
@@ -459,13 +574,16 @@ const ManpowerProgressPage = () => {
                     Date Assigned: {formatDate(taskInProgress?.created_at)}
                   </span>
                 </p>
-                <p className="flex items-center space-x-1">
-                  <CalendarBlank size={20} color="#121212" />
-                  <span>
-                    Due date:{" "}
-                    {formatDate(addDays(taskInProgress?.created_at, 1))}
-                  </span>
-                </p>
+
+                {taskInProgress?.due_date && (
+                  <p className="flex items-center space-x-1">
+                    <CalendarBlank size={20} color="#121212" />
+                    <span>
+                      Due date: {formatDate(taskInProgress?.due_date)}
+                    </span>
+                  </p>
+                )}
+
                 <p className="flex items-center space-x-1">
                   <Hash size={20} color="#121212" />
                   <span>Task No. {taskInProgress?.id}</span>
@@ -574,10 +692,10 @@ const ManpowerProgressPage = () => {
                       <p> Take Picture</p>
                     </button>
 
-                    {imageSrcBefore && (
+                    {imageSrcAfter && (
                       <div className="relative shadow-md">
                         <img
-                          src={imageSrcBefore}
+                          src={imageSrcAfter}
                           alt="Captured"
                           className="w-24 h-24  rounded-md" // Set your desired width and height
                         />
@@ -595,9 +713,10 @@ const ManpowerProgressPage = () => {
                   <div className="flex items-center justify-center space-x-5">
                     <label>Select:</label>
                     <select
+                      name="status"
                       className="block appearance-none w-[50%] bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      // value={status}
-                      // onChange={(e) => setStatus(e.target.value)}
+                      value={finishFormData.status || ""}
+                      onChange={handleFinishFormChange}
                     >
                       <option value="completed">Completed</option>
                       <option value="incomplete">Incomplete</option>
@@ -607,11 +726,12 @@ const ManpowerProgressPage = () => {
                   <div>
                     {" "}
                     <textarea
+                      name="comments"
                       className="form-textarea mt-1 block w-full border rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                       rows="4"
                       placeholder="Write comment for your tasks"
-                      // value={comment}
-                      // onChange={(e) => setComment(e.target.value)}
+                      value={finishFormData.comments || ""}
+                      onChange={handleFinishFormChange}
                     ></textarea>
                   </div>
 
@@ -625,7 +745,9 @@ const ManpowerProgressPage = () => {
               )}
             </div>
           ) : (
-            <p>No Task started</p>
+            <p className="text-center font-bold text-2xl p-5">
+              No Task started
+            </p>
           )}
         </div>
       </div>
