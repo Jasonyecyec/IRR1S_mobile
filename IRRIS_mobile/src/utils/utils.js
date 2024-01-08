@@ -60,6 +60,19 @@ export const formatTime = (seconds) => {
 export const formatDate = (inputDate)=>{
   const options = { day: 'numeric', month: 'short', year: 'numeric' };
   const date = new Date(inputDate);
+
+    // Get the current date
+    const currentDate = new Date();
+
+    // Check if the date is today
+    if (
+      date.getDate() === currentDate.getDate() &&
+      date.getMonth() === currentDate.getMonth() &&
+      date.getFullYear() === currentDate.getFullYear()
+    ) {
+      return 'Today';
+    }
+
   return date.toLocaleDateString('en-US', options);
 }
 
@@ -73,4 +86,18 @@ export const getImageUrl = (imagePath) => {
   // const baseUrl = 'http://127.0.0.1:8000/images'; // Base URL of your Laravel backend
   const baseUrl = 'https://irris-sbit4a-api.com/images';
   return `${baseUrl}/${imagePath}`;
+};
+
+export const isTaskDurationValid = (dateStarted) => {
+  // Parse the dateStarted string into a Date object
+  const startDate = new Date(dateStarted);
+
+  // Calculate the current time
+  const currentTime = new Date();
+
+  // Calculate the time difference in milliseconds
+  const timeDifference = currentTime - startDate;
+
+  // Check if the time difference is greater than or equal to 3 minutes (180,000 milliseconds)
+  return timeDifference >= 180000;
 };

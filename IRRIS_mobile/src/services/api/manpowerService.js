@@ -32,13 +32,7 @@ export const getJobOrder = async (userId) => {
 
   export const updateJobOrderImage = async (formData, id) => {
     try {
-      // Set the appropriate headers for multipart/form-data
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-  
+     
       // Make an API call with the formData object and config
       const response = await api.post(`/job-order-update-image/${id}`, formData);
   
@@ -67,3 +61,34 @@ export const getJobOrder = async (userId) => {
     }
   };
 
+
+  export const finishJobOrder = async (finishFormData, id) => {
+    try {
+  
+      // Make an API call with the formData object and id
+      const response = await api.patch(`/job-order-finish/${id}`, finishFormData);
+  
+      console.log('Finish Job Order response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Finish Job Order error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+  export const rateJobOrder = async (formData) => {
+    try {
+     
+      // Make an API call with the formData object and config
+      const response = await api.post(`/job-order-rate`, formData);
+  
+      console.log('Rate Job Order image response:', response);
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Rate Job Order  error:',
+        error.response || error.message,
+      );
+      throw error;
+    }
+  };
