@@ -17,6 +17,27 @@ import Cookies from "js-cookie";
 import { reportFacility } from "../services/api/sharedService";
 import { useNavigate } from "react-router-dom";
 
+// Your maintenance categories data
+const issueCategories = {
+  "Maintenance and Repairs": {
+    "Roof Leaks": "Carpentry",
+    "Window Breaks": "Carpentry",
+    "Electrical Issues": "Electrical",
+    "Plumbing Problems": "Plumbing",
+  },
+  "Cleanliness and Sanitation": {
+    "Restroom Cleanliness": "Maintenance",
+    "Garbage Disposal": "Maintenance",
+    "Pest Control": "Maintenance",
+    "Area Cleaning": "Maintenance",
+  },
+  "Temperature and Ventilation": {
+    "HVAC Problems": "Electrical",
+    "Heating/Cooling": "Electrical",
+    "Ventilation Issues": "Electrical",
+  },
+};
+
 const ReportIssuePage = () => {
   const location = useLocation();
   const facility = location.state?.facility;
@@ -27,6 +48,10 @@ const ReportIssuePage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openModalSubmit, setOpenModalSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // Step 1: Add state for search term
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const timeoutIdRef = useRef(null);
+
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -34,12 +59,67 @@ const ReportIssuePage = () => {
     facility_id: "",
     image_before: null,
     issue_type: "",
+    issues: "",
     description: "",
     status: "pending",
   });
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+
+  // Function to filter categories based on search term
+  const filteredCategories = () => {
+    const result = [];
+
+    for (const mainCategory in issueCategories) {
+      for (const subCategory in issueCategories[mainCategory]) {
+        if (
+          mainCategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          subCategory.toLowerCase().includes(searchTerm.toLowerCase())
+        ) {
+          result.push({
+            mainCategory,
+            subCategory,
+            subCategoryType: issueCategories[mainCategory][subCategory],
+          });
+        }
+      }
+    }
+
+    return result;
+  };
+
+  const handleSearchInputChange = (e) => {
+    // Get the current value of the search input
+    const value = e.target.value;
+
+    // Update the searchTerm state variable
+    setSearchTerm(value);
+  };
+
+  const handleSelectIssue = (issueType, issuesSelect) => {
+    //set form value
+    setForm((prevForm) => ({
+      ...prevForm,
+      issue_type: issueType,
+      issues: issuesSelect,
+    }));
+
+    //SET FORM VALUE
+    setSearchTerm(issuesSelect);
+  };
+
+  const handleIssueOnBlur = () => {
+    // Clear any existing timeouts to avoid multiple dropdown hide calls
+    if (timeoutIdRef.current) {
+      clearTimeout(timeoutIdRef.current);
+    }
+
+    // Set a new timeout
+    timeoutIdRef.current = setTimeout(() => {
+      setIsDropdownOpen(false);
+    }, 100); // Adjust timeout as needed
+  };
 
   const handleChange = (e) => {
     const { name, value } = event.target;
@@ -128,6 +208,7 @@ const ReportIssuePage = () => {
       formData.append("user_id", form.user_id);
       formData.append("facility_id", form.facility_id);
       formData.append("issue_type", form.issue_type);
+      formData.append("issues", form.issues);
       formData.append("description", form.description);
       formData.append("status", form.status);
 
@@ -345,7 +426,7 @@ const ReportIssuePage = () => {
               disabled={true}
             />
 
-            <div className="">
+            <div className=" relative">
               <label
                 htmlFor="issue-type"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -353,7 +434,7 @@ const ReportIssuePage = () => {
                 Issue Type
               </label>
 
-              <div className="relative">
+              {/* <div className="relative">
                 <select
                   id="issue-type"
                   className="rounded-md w-40 "
@@ -369,7 +450,36 @@ const ReportIssuePage = () => {
                   <option value="plumbing">Plumbing</option>
                   <option value="carpentry">Carpentry</option>
                 </select>
-              </div>
+              </div> */}
+
+              <input
+                type="text"
+                placeholder="Search issue"
+                className="w-full rounded-md"
+                value={searchTerm}
+                onChange={handleSearchInputChange}
+                onBlur={handleIssueOnBlur}
+                onFocus={() => setIsDropdownOpen(true)}
+              />
+
+              {isDropdownOpen && (
+                <div className="bg-white space-y-4 shadow-lg absolute bottom-[-8.3rem] rounded-b-md px-2 py-3 left-0 w-full h-32 overflow-auto">
+                  {filteredCategories().map((category, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-100 p-2 rounded-md"
+                      onClick={(e) =>
+                        handleSelectIssue(
+                          category.subCategoryType,
+                          category.subCategory
+                        )
+                      }
+                    >
+                      {category.subCategory}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div>
