@@ -43,7 +43,7 @@ const ManpowerHomePage = () => {
     try {
       const { job_order } = await getJobOrder(user?.id);
       console.log("fetch recent job order response", job_order);
-      setRecentJobOrder(job_order.slice(0, 7));
+      setRecentJobOrder(job_order);
     } catch (error) {
       console.log(error);
     } finally {
@@ -74,9 +74,6 @@ const ManpowerHomePage = () => {
   const listenToJobOrder = () => {
     const jobOrderChannel = window.Echo.channel("job-order-channel");
     const userIdCookie = Cookies.get("user_id");
-    console.log("listen order user cookie", userIdCookie);
-    console.log("Subscribed", jobOrderChannel);
-    console.log("Echo instance:", window.Echo);
 
     jobOrderChannel.listen("JobOrderNotification", (notification) => {
       console.log(
@@ -84,9 +81,16 @@ const ManpowerHomePage = () => {
         notification.jobOrder
       );
 
-      notification.jobOrder.map((job) => {
+      notification.jobOrder.forEach((job) => {
+        console.log("user id cookie ", userIdCookie);
         console.log("job data", job);
-        if (job.assigned_manpower == userIdCookie) {
+        console.log(typeof job.assigned_manpower, typeof userIdCookie);
+        console.log(
+          "Is Equal:",
+          job.assigned_manpower === parseInt(userIdCookie, 10)
+        );
+
+        if (job.assigned_manpower === parseInt(userIdCookie, 10)) {
           console.log("setting job order");
           setjobOrderNotif(true);
           setJobOrderDetails(job);
@@ -207,9 +211,7 @@ const ManpowerHomePage = () => {
               {recentJobOrder?.map((item, index) => (
                 <div key={index} className="space-y-3 bg-white py-2 border-t-2">
                   <div className="flex justify-between">
-                    <p className="font-bold text-lg">
-                      {item.report.description}
-                    </p>
+                    <p className="font-bold text-lg">{item.description}</p>
                     <p className="text-md flex items-center space-x-2">
                       <Circle size={24} color="#3cd008" weight="fill" />
                       <span>

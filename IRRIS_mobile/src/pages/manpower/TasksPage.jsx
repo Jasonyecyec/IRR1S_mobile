@@ -23,34 +23,32 @@ const TasksPage = () => {
   const fetchJobOrder = async () => {
     setIsLoading(true);
     try {
-      const response = await getJobOrder(user.id);
+      const { job_order } = await getJobOrder(user.id);
 
-      console.log("job order response", response);
-
-      if (response) {
-        // Check if there's an existing job order in localStorage
-        const storedJobOrders = localStorage.getItem("jobOrders");
-
-        if (storedJobOrders) {
-          // Compare with the new job order
-          const isNewData =
-            JSON.stringify(response.job_order) !== storedJobOrders;
-
-          if (isNewData) {
-            // Update localStorage with the new job order
-            localStorage.setItem(
-              "jobOrders",
-              JSON.stringify(response.job_order)
-            );
-          } else {
-            // Use the value from localStorage
-            setJobOrders(JSON.parse(storedJobOrders));
-          }
-        } else {
-          // No existing data, store the new job order in localStorage
-          localStorage.setItem("jobOrders", JSON.stringify(response.job_order));
-        }
-      }
+      console.log("job order response", job_order);
+      setJobOrders(job_order);
+      // if (response) {
+      // Check if there's an existing job order in localStorage
+      // const storedJobOrders = localStorage.getItem("jobOrders");
+      // if (storedJobOrders) {
+      //   // Compare with the new job order
+      //   const isNewData =
+      //     JSON.stringify(response.job_order) !== storedJobOrders;
+      //   if (isNewData) {
+      //     // Update localStorage with the new job order
+      //     localStorage.setItem(
+      //       "jobOrders",
+      //       JSON.stringify(response.job_order)
+      //     );
+      //   } else {
+      //     // Use the value from localStorage
+      //     setJobOrders(JSON.parse(storedJobOrders));
+      //   }
+      // } else {
+      //   // No existing data, store the new job order in localStorage
+      //   localStorage.setItem("jobOrders", JSON.stringify(response.job_order));
+      // }
+      // }
     } catch (error) {
       console.error(error);
     } finally {

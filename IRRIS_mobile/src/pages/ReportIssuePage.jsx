@@ -20,21 +20,26 @@ import { useNavigate } from "react-router-dom";
 // Your maintenance categories data
 const issueCategories = {
   "Maintenance and Repairs": {
-    "Roof Leaks": "Carpentry",
-    "Window Breaks": "Carpentry",
-    "Electrical Issues": "Electrical",
-    "Plumbing Problems": "Plumbing",
+    "Roof Leaks": "carpentry",
+    "Window Breaks": "carpentry",
+    "Electrical Issues": "electrical",
+    "Plumbing Problems": "plumbing",
+    "Broken Chairs/Tables": "carpentry",
+    "Elevator Malfunction": "electrical",
+    "Pathway Repairs": "carpentry",
+    "Outdoor Lighting": "electrical",
   },
   "Cleanliness and Sanitation": {
-    "Restroom Cleanliness": "Maintenance",
-    "Garbage Disposal": "Maintenance",
-    "Pest Control": "Maintenance",
-    "Area Cleaning": "Maintenance",
+    "Restroom Cleanliness": "maintenance",
+    "Garbage Disposal": "maintenance",
+    "Pest Control": "maintenance",
+    "Area Cleaning": "maintenance",
+    "Garden Maintenance": "maintenance",
   },
   "Temperature and Ventilation": {
-    "HVAC Problems": "Electrical",
-    "Heating/Cooling": "Electrical",
-    "Ventilation Issues": "Electrical",
+    "HVAC Problems": "electrical",
+    "Heating/Cooling": "electrical",
+    "Ventilation Issues": "electrical",
   },
 };
 

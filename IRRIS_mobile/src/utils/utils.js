@@ -99,5 +99,5 @@ export const isTaskDurationValid = (dateStarted) => {
   const timeDifference = currentTime - startDate;
 
   // Check if the time difference is greater than or equal to 3 minutes (180,000 milliseconds)
-  return timeDifference >= 180000;
+  return timeDifference >= 120000;
 };

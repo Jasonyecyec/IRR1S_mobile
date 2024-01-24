@@ -22,3 +22,15 @@ export const getStudent = async () => {
     throw error;
   }
 };
+
+
+export const registerStudent = async (form) => {
+  try {
+    const response  = await api.post('/register-student',form)
+    console.log("Register student response",response)
+    return response.data
+  } catch (error) {
+    console.error("Login error", error.response);
+    throw error;
+  }
+}

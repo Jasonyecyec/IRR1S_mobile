@@ -3,7 +3,13 @@ import OtpInput from "react-otp-input";
 import OTPLogo from "../assets/images/activate_account/otp_image.png";
 import useUserStore from "../services/state/userStore";
 import { maskEmail, formatTime } from "../utils/utils";
-import { verifyOTP, resendOTP } from "../services/api/StudentService";
+import Cookies from "js-cookie";
+
+import {
+  verifyOTP,
+  resendOTP,
+  activateStudent,
+} from "../services/api/StudentService";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "flowbite-react";
@@ -13,9 +19,11 @@ const OTPInputPage = () => {
   const [otp, setOtp] = useState("");
   const [seconds, setSeconds] = useState(0);
   const [isError, setIsError] = useState(false);
+  const [isSendCode, setIsSendCode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const submitButtonRef = useRef(null);
+  const sendCodeRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -42,6 +50,14 @@ const OTPInputPage = () => {
     });
   };
 
+  const notifySendEmail = (email) => {
+    return toast.promise(activateStudent(email), {
+      loading: "Sending email...",
+      success: <b>Email sent!</b>,
+      error: (error) => <b>{error.response.data.message}</b>,
+    });
+  };
+
   const handleSubmit = async () => {
     //check of otp input is complete
     if (otp.length !== 4) {
@@ -54,6 +70,15 @@ const OTPInputPage = () => {
     try {
       console.log("email", email);
       const response = await notifyVerifyOTP(email, otp);
+
+      //set cookies from response.token
+      Cookies.set("authToken", response.token, { expires: 7 });
+      Cookies.set("user_id", response.user.id, { expires: 7 });
+      Cookies.set("user_role", response.user.user_role, { expires: 7 });
+      Cookies.set("first_name", response.user.first_name, { expires: 7 });
+      Cookies.set("last_name", response.user.last_name, { expires: 7 });
+      Cookies.set("email", response.user.email, { expires: 7 });
+
       setTimeout(() => {
         navigate(response.route);
       }, 1500);
@@ -64,6 +89,23 @@ const OTPInputPage = () => {
       // Re-enable the button after the asynchronous operation
       submitButtonRef.current.disabled = false;
       setIsLoading(false);
+    }
+  };
+
+  const handleSendCode = async () => {
+    setIsLoading(true);
+    //disable the button
+    sendCodeRef.current.disabled = true;
+    try {
+      const response = await notifySendEmail(email);
+      setIsSendCode(true);
+      console.log("response", response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      //disable the button
+      sendCodeRef.current.disabled = false;
     }
   };
 
@@ -118,20 +160,43 @@ const OTPInputPage = () => {
         )}
       </div>
 
-      <button
-        ref={submitButtonRef}
-        onClick={handleSubmit}
-        className="w-4/5 py-3 bg-mainColor rounded-lg text-white font-semibold text-xl  inline-block"
-      >
-        SUBMIT
-      </button>
-      {seconds !== 0 && (
+      {!isSendCode ? (
+        <button
+          ref={sendCodeRef}
+          onClick={handleSendCode}
+          className={`w-4/5 py-3 bg-mainColor rounded-lg text-white font-semibold text-xl inline-block ${
+            isLoading ? "cursor-wait" : ""
+          }`}
+        >
+          {isLoading ? (
+            <Spinner aria-label="Medium sized spinner example" size="md" />
+          ) : (
+            "SEND CODE"
+          )}
+        </button>
+      ) : (
+        <button
+          ref={submitButtonRef}
+          onClick={handleSubmit}
+          className={`w-4/5 py-3 bg-mainColor rounded-lg text-white font-semibold text-xl inline-block ${
+            isLoading ? "cursor-wait" : ""
+          }`}
+        >
+          {isLoading ? (
+            <Spinner aria-label="Medium sized spinner example" size="md" />
+          ) : (
+            "SUBMIT"
+          )}
+        </button>
+      )}
+
+      {seconds !== 0 && isSendCode && (
         <p className="text-mainColor font-semibold text-xl">
           Resend OTP in {formatTime(seconds)}
         </p>
       )}
 
-      {seconds === 0 && (
+      {seconds === 0 && isSendCode && (
         <p>
           Didn't recieve the code ?{" "}
           <button
