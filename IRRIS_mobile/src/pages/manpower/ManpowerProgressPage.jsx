@@ -389,6 +389,8 @@ const ManpowerProgressPage = () => {
           finishFormData.due_date = taskInProgress.due_date;
         }
 
+        finishFormData.user_id = taskInProgress.assigned_manpower;
+
         //UPDATE JOB ORDER STATUS AND OTHERS
         const { job_order } = await finishJobOrder(
           finishFormData,
@@ -452,7 +454,7 @@ const ManpowerProgressPage = () => {
 
       // check  time of taskInProgress.date_started and time now, if its less than 3min return
       if (!isTaskDurationValid(taskInProgress.date_started)) {
-        notify("Task should be at least 3 minutes long");
+        notify("Task should be at least 2 minutes long");
         return;
       }
     }
