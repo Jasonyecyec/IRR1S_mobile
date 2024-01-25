@@ -1,8 +1,9 @@
 import api from "./api";
 
-export const getJobOrder = async (userId) => {
+export const getJobOrder = async (userId,status = null) => {
     try {
-      const response = await api.get(`/job-order/${userId}`);
+      const params = status !== null ? { status } : {};
+      const response = await api.get(`/job-order/${userId}`,{params});
       return response.data;
     } catch (error) {
       console.error("Get Job Order error", error.response);
