@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ManpowerHeaderNavigation from "@/src/components/ManpowerHeaderNavigation";
 import { getJobOrder } from "@/src/services/api/manpowerService";
 import { formatDate, addDays } from "@/src/utils/utils";
@@ -12,17 +12,23 @@ import {
   WarningCircle,
 } from "@phosphor-icons/react";
 import { Spinner } from "flowbite-react";
+import TaskFilter from "@/src/components/manpower/TaskFilter";
 
 const TasksPage = () => {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
   const [jobOrders, setJobOrders] = useState(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState("all");
 
   const fetchJobOrder = async () => {
     setIsLoading(true);
     try {
+      const params = {
+        status: null,
+      };
       const { job_order } = await getJobOrder(user.id);
 
       console.log("job order response", job_order);
@@ -64,13 +70,36 @@ const TasksPage = () => {
   return (
     <div className="h-full flex flex-col">
       <ManpowerHeaderNavigation navigateTo={"home"} />
-
       <div className="p-5 space-y-3  flex flex-col flex-1">
-        <h1 className="text-xl  ">
-          Hello, <span className="capitalize">{fullname} </span>
-        </h1>
+        <div className="flex justify-between items-center">
+          <div className="space-y-3">
+            <h1 className="text-xl  ">
+              Hello, <span className="capitalize">{fullname} </span>
+            </h1>
 
-        <p className="font-bold text-3xl">Job Orders</p>
+            <p className="font-bold text-3xl">Job Orders</p>
+          </div>
+
+          <div className=" relative">
+            <button
+              onClick={() => setIsFilterOpen(true)}
+              className="border-2 px-2 py-1 rounded-md  bg-gray-100 font-semibold capitalize"
+            >
+              {currentFilter === "all" ? "Select filter" : currentFilter}
+            </button>
+            {isFilterOpen && (
+              <TaskFilter
+                user={user}
+                isFilterOpen={isFilterOpen}
+                setIsFilterOpen={setIsFilterOpen}
+                setCurrentFilter={setCurrentFilter}
+                currentFilter={currentFilter}
+                setIsLoading={setIsLoading}
+                setJobOrders={setJobOrders}
+              />
+            )}
+          </div>
+        </div>
 
         <div className="  flex-1 flex justify-center">
           {isLoading ? (
@@ -95,8 +124,13 @@ const TasksPage = () => {
                         </span>
                       )}
                       {job.status === "ongoing" && (
-                        <span className="bg-green-500 py-1 px-2 rounded-md text-white">
+                        <span className="bg-blue-500 py-1 px-2 rounded-md text-white">
                           Ongoing
+                        </span>
+                      )}
+                      {job.status === "completed" && (
+                        <span className="bg-green-500 py-1 px-2 rounded-md text-white">
+                          Completed
                         </span>
                       )}
                     </p>
