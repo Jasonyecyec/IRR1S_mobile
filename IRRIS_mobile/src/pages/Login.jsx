@@ -190,9 +190,9 @@ const Login = () => {
             </p>
           </div>
 
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={isShowPassword ? "text" : "password"}
               name="password"
               value={formFields.password}
               onChange={handleChange}
@@ -207,6 +207,20 @@ const Login = () => {
               </span>
               {passwordError.isError && `*${passwordError.message}`}
             </p>
+
+            <button
+              className="absolute right-2 top-3"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowPassword(!isShowPassword);
+              }}
+            >
+              {isShowPassword ? (
+                <EyeSlash size="30" color="#969696" weight="light" />
+              ) : (
+                <Eye size="30" color="#969696" weight="light" />
+              )}
+            </button>
           </div>
         </div>
 
@@ -225,10 +239,10 @@ const Login = () => {
             )}
           </button>
 
-          <p className="mt-5 text-sm text-slate-700">
-            Didn't activate account yet?{" "}
+          <p className="mt-5 text-sm text-end text-slate-700">
+            Doesn't have an account?{" "}
             <Link to="/activate">
-              <span className="font-bold text-mainColor">Click here</span>
+              <span className="font-bold text-mainColor">Register</span>
             </Link>
           </p>
         </div>

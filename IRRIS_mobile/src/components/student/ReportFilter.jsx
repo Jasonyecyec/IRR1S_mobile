@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { getJobOrder } from "@/src/services/api/manpowerService";
+import { getReportStudent } from "@/src/services/api/StudentService";
 
 const filterItem = [
   { label: "All", value: null },
@@ -8,13 +8,13 @@ const filterItem = [
   { label: "Pending", value: "assigned" },
 ];
 
-const TaskFilter = ({
+const ReportFilter = ({
   isFilterOpen,
   setIsFilterOpen,
   currentFilter,
   setCurrentFilter,
   setIsLoading,
-  setJobOrders,
+  setReport,
   user,
 }) => {
   const filterRef = useRef(null);
@@ -39,8 +39,8 @@ const TaskFilter = ({
 
     try {
       setIsLoading(true);
-      const { job_order } = await getJobOrder(user.id, item.value);
-      setJobOrders(job_order);
+      const { report } = await getReportStudent(user.id, item.value);
+      setReport(report);
     } catch (error) {
       console.log(error);
     } finally {
@@ -73,4 +73,4 @@ const TaskFilter = ({
   );
 };
 
-export default TaskFilter;
+export default ReportFilter;

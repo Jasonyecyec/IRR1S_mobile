@@ -76,6 +76,32 @@ export const formatDate = (inputDate)=>{
   return date.toLocaleDateString('en-US', options);
 }
 
+export const formatDateTime = (inputDateTime) => {
+  const options = {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  };
+
+  const dateTime = new Date(inputDateTime);
+
+  // Get the current date and time
+  const currentDateTime = new Date();
+
+  // Check if the date is today
+  if (
+    dateTime.getDate() === currentDateTime.getDate() &&
+    dateTime.getMonth() === currentDateTime.getMonth() &&
+    dateTime.getFullYear() === currentDateTime.getFullYear()
+  ) {
+    return 'Today ' + dateTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' });
+  }
+
+  return dateTime.toLocaleDateString('en-US', options);
+};
+
 export const addDays = (date,days)=>{
   const result = new Date(date);
   result.setDate(result.getDate() + days);
@@ -86,6 +112,34 @@ export const getImageUrl = (imagePath) => {
   // const baseUrl = 'http://127.0.0.1:8000/images'; // Base URL of your Laravel backend
   const baseUrl = 'https://irris-sbit4a-api.com/images';
   return `${baseUrl}/${imagePath}`;
+};
+
+
+export const getStatusColor = (status) => {
+  switch (status) {
+    case 'ongoing':
+      return 'yellow';
+    case 'completed':
+      return 'green';
+    case 'assigned':
+      return 'red';
+    default:
+      return 'gray'; // You can set a default color or handle other cases as needed
+  }
+};
+
+
+export const getStatusText = (status) => {
+  switch (status) {
+    case 'ongoing':
+      return 'In Progress';
+    case 'completed':
+      return 'Fixed';
+    case 'assigned':
+      return 'Pending';
+    default:
+      return 'Unknown';
+  }
 };
 
 export const isTaskDurationValid = (dateStarted) => {
