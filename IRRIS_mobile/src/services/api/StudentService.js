@@ -20,6 +20,20 @@ export const verifyOTP = async (email, otp) => {
   }
 };
 
+export const getReportStudent = async (userId,status = null) => {
+  try {
+    const params = status !== null ? { status } : {};
+    const response = await api.get(`/report-student/${userId}`,{params});
+    console.log("Report response",response)
+    return response.data;
+  } catch (error) {
+    console.error("Get Report  error", error.response);
+    throw error;
+  }
+};
+
+
+
 // export const getUser = async (email, otp) => {
 //   try {
 //     const response = await api.post(`/verify-otp`, { email, otp });

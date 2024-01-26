@@ -40,7 +40,7 @@ const HomePage = () => {
   };
   return (
     <div className="h-full ">
-      <div className="flex justify-between bg-mainColor p-5">
+      <div className="flex justify-between bg-mainColor p-5 border-b-8 border-red-500">
         <button onClick={handleProfileButton}>
           <img src={UserSample} className="w-12 h-12 rounded-full " />
         </button>
@@ -50,7 +50,7 @@ const HomePage = () => {
         </button>
       </div>
 
-      <div className="bg-[#f11408] h-2"></div>
+      {/* <div className="bg-[#f11408] h-2"></div> */}
 
       <div className="p-3 bg-background h-full space-y-10">
         <div className="flex justify-between items-center">
@@ -60,7 +60,7 @@ const HomePage = () => {
             </div>
             <div className="text-[#987700] font-bold">
               <p>Welcome</p>
-              <p className="text-2xl">
+              <p className="text-2xl capitalize">
                 {user?.first_name} {user?.last_name}
               </p>
             </div>

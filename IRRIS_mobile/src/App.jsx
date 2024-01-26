@@ -34,6 +34,7 @@ import FacilityNotFoundPage from "./pages/FacilityNotFoundPage";
 import ReportHistoryPage from "./pages/ReportHistoryPage";
 import ManpowerHomePage from "./pages/manpower/ManpowerHomePage";
 import ManpowerRoutes from "./routes/ManpowerRoutes";
+import RateReportPage from "./pages/student/RateReportPage";
 import "./index.css";
 
 function App() {
@@ -63,9 +64,7 @@ function App() {
             </TransitionWrapper>
           }
         />
-
         {...ManpowerRoutes}
-
         <Route
           path="/activate"
           element={
@@ -98,7 +97,6 @@ function App() {
             </TransitionWrapper>
           }
         />
-
         <Route
           key="studentHome"
           path="/student/home"
@@ -112,6 +110,17 @@ function App() {
         />
 
         <Route
+          path="/student/more"
+          element={
+            // <TransitionWrapper location={location}>
+            <HomepageLayout>
+              <MorePage />
+            </HomepageLayout>
+            // </TransitionWrapper>
+          }
+        />
+
+        <Route
           path="/scan-facility"
           element={
             // <TransitionWrapper location={location}>
@@ -119,7 +128,6 @@ function App() {
             // </TransitionWrapper>
           }
         />
-
         <Route
           path="/report-issue"
           element={
@@ -128,7 +136,6 @@ function App() {
             </TransitionWrapper>
           }
         />
-
         <Route
           path="/qr-scanner"
           element={
@@ -137,7 +144,6 @@ function App() {
             </TransitionWrapper>
           }
         />
-
         <Route
           path="/report-success"
           element={
@@ -146,12 +152,20 @@ function App() {
             </TransitionWrapper>
           }
         />
-
         <Route
           path="/report-history"
           element={
             <TransitionWrapper location={location}>
               <ReportHistoryPage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/student/rate-report/:reportId"
+          element={
+            <TransitionWrapper location={location}>
+              <RateReportPage />
             </TransitionWrapper>
           }
         />
@@ -172,7 +186,6 @@ function App() {
             </TransitionWrapper>
           }
         />
-
         <Route
           path="/student/more"
           element={
@@ -181,7 +194,6 @@ function App() {
             </HomepageLayout>
           }
         />
-
         <Route
           path="/student/redeem"
           element={
@@ -190,7 +202,6 @@ function App() {
             </TransitionWrapper>
           }
         />
-
         <Route
           path="/student/profile"
           element={
