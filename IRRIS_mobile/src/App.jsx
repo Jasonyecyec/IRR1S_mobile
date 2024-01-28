@@ -35,6 +35,9 @@ import ReportHistoryPage from "./pages/ReportHistoryPage";
 import ManpowerHomePage from "./pages/manpower/ManpowerHomePage";
 import ManpowerRoutes from "./routes/ManpowerRoutes";
 import RateReportPage from "./pages/student/RateReportPage";
+import SearchFacilityPage from "./pages/SearchFacilityPage";
+import ReviewFacilityPage from "./pages/ReviewFacilityPage";
+import RateFacilityPage from "./pages/RateFacilityPage";
 import "./index.css";
 
 function App() {
@@ -101,22 +104,23 @@ function App() {
           key="studentHome"
           path="/student/home"
           element={
-            <TransitionWrapper location={location}>
-              <HomepageLayout>
-                <HomePage />
-              </HomepageLayout>
-            </TransitionWrapper>
+            // <TransitionWrapper location={location}>
+            <HomepageLayout>
+              <HomePage />
+            </HomepageLayout>
+            // </TransitionWrapper>
           }
         />
 
         <Route
+          key="studentMore"
           path="/student/more"
           element={
-            // <TransitionWrapper location={location}>
-            <HomepageLayout>
-              <MorePage />
-            </HomepageLayout>
-            // </TransitionWrapper>
+            <TransitionWrapper location={location}>
+              <HomepageLayout>
+                <MorePage />
+              </HomepageLayout>
+            </TransitionWrapper>
           }
         />
 
@@ -178,6 +182,35 @@ function App() {
             </TransitionWrapper>
           }
         />
+
+        <Route
+          key="searchFacility"
+          path="/search-facility"
+          element={
+            <TransitionWrapper location={location}>
+              <SearchFacilityPage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/review-facility/:facilityId"
+          element={
+            <TransitionWrapper location={location}>
+              <ReviewFacilityPage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/rate-facility/:facilityId"
+          element={
+            <TransitionWrapper location={location}>
+              <RateFacilityPage />
+            </TransitionWrapper>
+          }
+        />
+
         <Route
           path="/facility-not-found"
           element={

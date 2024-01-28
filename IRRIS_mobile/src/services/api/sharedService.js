@@ -12,6 +12,84 @@
     }
   };
 
+  export const viewFacility = async (id) => {
+    try {
+      // Correctly construct the URL with the query parameter
+      const response = await api.get(`/facilities/${id}`);
+  
+      console.log('View facilities response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('View facilities error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+  export const viewFacilityAndRatings = async (id) => {
+    try {
+      // Correctly construct the URL with the query parameter
+      const response = await api.get(`/view-facility-ratings/${id}`);
+  
+      console.log('View facilities response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('View facilities error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+  export const rateFacility= async (id,form) => {
+    try {
+      // Correctly construct the URL with the query parameter
+      const response = await api.post(`/rate-facility/${id}`,form);
+  
+      console.log('Rate facilities response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Rate facilities error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+  export const getAllUsersFacilityReview = async (id) => {
+    try {
+      // Correctly construct the URL with the query parameter
+      const response = await api.get(`/facility-users-rating/${id}`);
+  
+      console.log('Users facilities review response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Users facilities review  error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+
+  export const searchFacility = async (query) => {
+    try {
+      // Correctly construct the URL with the query parameter
+      const response = await api.get(`/facilities-search?search=${query}`);
+  
+      console.log('Search facilities response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Search facilities error:', error.response || error.message);
+      throw error;
+    }
+  };
+  
+  export const fetchFacility = async () => {
+    try {
+      const response = await api.get('/facilities');
+  
+      console.log('Fetch facilities response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch facilities error:', error.response || error.message);
+      throw error;
+    }
+  };
+
   export const reportFacility = async (formData) => {
     try {
       // Set the appropriate headers for multipart/form-data

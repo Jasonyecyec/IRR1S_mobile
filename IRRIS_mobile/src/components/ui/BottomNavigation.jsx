@@ -47,7 +47,7 @@ const BottomNavigation = () => {
             className="rounded-full flex flex-col justify-center bg-mainColor content-center  w-20 h-20 items-center p-3"
             to={"/student/more"}
           >
-            <img src={MoreIcon} className="w-9 h-9" />
+            <img src={MoreIcon} className="w-7 h-7" />
             <p className="text-white">More</p>
           </Link>
         ) : (
