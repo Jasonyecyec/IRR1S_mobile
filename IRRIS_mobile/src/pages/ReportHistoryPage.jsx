@@ -6,7 +6,12 @@ import { getReportStudent } from "../services/api/StudentService";
 import useUserStore from "@/src/services/state/userStore";
 import { Spinner } from "flowbite-react";
 import ReportFilter from "../components/student/ReportFilter";
-import { getStatusText, getStatusColor, formatDateTime } from "../utils/utils";
+import {
+  getStatusText,
+  getStatusColor,
+  formatDateTime,
+  getImageUrl,
+} from "../utils/utils";
 
 const ReportHistoryPage = () => {
   const { user } = useUserStore((state) => ({
@@ -81,7 +86,7 @@ const ReportHistoryPage = () => {
                 <span
                   className={`bg-${getStatusColor(
                     item.status
-                  )}-500 w-16 h-3 absolute top-0 left-5`}
+                  )}-500 w-16 h-2 absolute top-0 left-5`}
                 ></span>
 
                 <div className="flex justify-between ">
@@ -97,7 +102,10 @@ const ReportHistoryPage = () => {
 
                 <div className="flex space-x-8">
                   <div>
-                    <img className="w-20 h-20 rounded-full bg-gray-200" />
+                    <img
+                      className="w-20 h-20 rounded-full bg-gray-200"
+                      src={getImageUrl(item.image_before)}
+                    />
                   </div>
 
                   <div>
@@ -109,12 +117,13 @@ const ReportHistoryPage = () => {
                     </p>
                   </div>
                 </div>
-
-                <p className="text-center w-full font-bold text-gray-500 underline">
-                  <Link to={`/student/rate-report/${item.id}`}>
-                    Review to claim rewards
-                  </Link>
-                </p>
+                {item.status === "completed" && (
+                  <p className="text-center w-full font-bold text-gray-500 underline">
+                    <Link to={`/student/rate-report/${item.id}`}>
+                      Review to claim rewards
+                    </Link>
+                  </p>
+                )}
               </div>
             ))
           )}
