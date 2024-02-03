@@ -123,6 +123,8 @@ export const getStatusColor = (status) => {
       return 'green';
     case 'assigned':
       return 'red';
+    case 'pending':
+        return 'red';
     default:
       return 'gray'; // You can set a default color or handle other cases as needed
   }
@@ -140,6 +142,8 @@ export const getStatusText = (status) => {
       return 'Fixed';
     case 'assigned':
       return 'Pending';
+    case 'pending':
+        return 'Pending';
     default:
       return 'Unknown';
   }

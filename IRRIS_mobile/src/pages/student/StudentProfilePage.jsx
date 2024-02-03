@@ -71,17 +71,17 @@ const StudentProfilePage = () => {
           </button>
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex space-x-5">
           {/* User Image */}
           <div className="relative">
             <img
               src={UserSample}
               alt="user-sample"
-              className="rounded-full w-36 h-36 "
+              className="rounded-full w-24 h-24 "
             />
             <button
               onClick={() => console.log("camera click")}
-              className="rounded-full p-1.5 absolute bottom-0 right-1 bg-white border border-[2px] border-gray"
+              className="rounded-full p-1.5 absolute bottom-0 right-1 bg-white  border-[2px] border-gray"
             >
               <Camera size={48} color="#121212" className="w-6 h-6" />
             </button>

@@ -132,3 +132,15 @@
       console.error("Error fetching user data:", error);
     }
   }
+
+  export const getRewards = async () => {
+    try {
+      const response = await api.get('/rewards');
+  
+      console.log('Fetch rewards response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch rewards error:', error.response || error.message);
+      throw error;
+    }
+  };

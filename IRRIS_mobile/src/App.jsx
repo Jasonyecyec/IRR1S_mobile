@@ -38,6 +38,7 @@ import RateReportPage from "./pages/student/RateReportPage";
 import SearchFacilityPage from "./pages/SearchFacilityPage";
 import ReviewFacilityPage from "./pages/ReviewFacilityPage";
 import RateFacilityPage from "./pages/RateFacilityPage";
+import RewardsPage from "./pages/student/RewardsPage";
 import "./index.css";
 
 function App() {
@@ -120,6 +121,17 @@ function App() {
               <HomepageLayout>
                 <MorePage />
               </HomepageLayout>
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/student/rewards"
+          element={
+            <TransitionWrapper location={location}>
+              {/* <HomepageLayout> */}
+              <RewardsPage />
+              {/* </HomepageLayout> */}
             </TransitionWrapper>
           }
         />

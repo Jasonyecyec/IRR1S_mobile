@@ -65,7 +65,7 @@ const BottomNavigation = () => {
 
       <button>
         <Link
-          to="/student/redeem"
+          to="/student/rewards"
           className="text-center  flex flex-col items-center"
         >
           <Gift size={32} color="#9c9c9c" /> Redeem
