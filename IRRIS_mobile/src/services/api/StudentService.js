@@ -67,3 +67,27 @@ export const createPassword = async (email, password, confirmPassword) => {
     throw error;
   }
 };
+
+export const rateReport = async (id,form) => {
+  try {
+    const response = await api.post(`/rate-report-student/${id}`,form);
+    console.log("Rate report successfully",response)
+    return response.data;
+  } catch (error) {
+    console.error("Rate report  error", error.response);
+    throw error;
+  }
+};
+
+
+export const getStudentPoints = async (id) => {
+  try {
+    const response = await api.get(`/student-points/${id}`);
+    console.log("Student  points",response)
+    return response.data;
+  } catch (error) {
+    console.error("Get Report  error", error.response);
+    throw error;
+  }
+};
+

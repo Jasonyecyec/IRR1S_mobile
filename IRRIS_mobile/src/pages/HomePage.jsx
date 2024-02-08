@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import NotificationIcon from "../assets/images/bell_icon.png";
 import UserSample from "../assets/images/user_sample.jpg";
 import PointsIcon from "../assets/images/points_icon.png";
@@ -10,6 +10,7 @@ import "../index.css";
 import Cookies from "js-cookie";
 import useUserStore from "../services/state/userStore";
 import { fetchUserData } from "../services/api/sharedService";
+import { getStudentPoints } from "../services/api/StudentService";
 
 const HomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -18,7 +19,16 @@ const HomePage = () => {
   }));
 
   const navigate = useNavigate();
+  const [points, setPoints] = useState(null);
 
+  const fetchStudentPoints = async () => {
+    try {
+      const { points } = await getStudentPoints(user?.id);
+      setPoints(points);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const userIdCookie = Cookies.get("user_id");
     const first_nameCookie = Cookies.get("first_name");
@@ -33,6 +43,8 @@ const HomePage = () => {
       email: emailCookie,
       user_role: user_roleCookie,
     });
+
+    fetchStudentPoints();
   }, []);
 
   const handleProfileButton = () => {
@@ -66,8 +78,8 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="bg-[#987700] text-white p-3 rounded-full">
-            20 points
+          <div className="bg-[#987700] text-white p-3 rounded-full font-semibold">
+            <p> {points && points} points</p>
           </div>
         </div>
 

@@ -26,6 +26,7 @@ const ReviewFacilityPage = () => {
   const { facilityId } = useParams();
   const [facility, setFacility] = useState(null);
   const [ratingsSummary, setRatingsSummary] = useState([]);
+  const [facilityRating, setFacilityRating] = useState(null);
   const [usersReview, setUsersReview] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +34,8 @@ const ReviewFacilityPage = () => {
   const fetchFacility = async () => {
     setIsLoading(true);
     try {
-      const { facility, ratings } = await viewFacilityAndRatings(facilityId);
+      const { facility, ratings, facilityRating } =
+        await viewFacilityAndRatings(facilityId);
       const { user_ratings } = await getAllUsersFacilityReview(facilityId);
 
       //convert object into array
@@ -45,8 +47,8 @@ const ReviewFacilityPage = () => {
         }));
       setFacility(facility);
       setRatingsSummary(ratingsArray); // Set ratings_summary from the API response
-      console.log("user_rating", user_ratings);
       setUsersReview(user_ratings);
+      setFacilityRating(facilityRating);
     } catch (error) {
       console.error("Error fetching facility:", error);
     } finally {
@@ -134,6 +136,14 @@ const ReviewFacilityPage = () => {
                     <p className="font-bold">Building: {facility.location}</p>
                     <p>{facility.facilities_name}</p>
                     <p>{facility.description}</p>
+                    {facilityRating && (
+                      <p className="space-x-3 flex">
+                        <StarRating rating={Math.floor(facilityRating)} />
+                        <span className="font-semibold">
+                          {facilityRating}/5
+                        </span>
+                      </p>
+                    )}
                   </div>
                 </div>
               )
@@ -198,7 +208,7 @@ const ReviewFacilityPage = () => {
                           {item.user?.last_name.slice(0, 1)}.
                         </p>
                         <p>
-                          <StarRating rating={item.rating} />
+                          <StarRating rating={Math.floor(item.rating)} />
                         </p>
                         <p>{formatDate(item.created_at)}</p>
                       </div>
