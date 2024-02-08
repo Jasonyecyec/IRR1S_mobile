@@ -6,6 +6,7 @@ import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Spinner } from "flowbite-react";
 import { getImageUrl } from "../utils/utils";
 import { Link } from "react-router-dom";
+import StarRating from "../components/StarRating";
 import "../index.css";
 
 const SearchFacilityPage = () => {
@@ -18,6 +19,7 @@ const SearchFacilityPage = () => {
       setIsLoading(true);
       try {
         const { facilities } = await searchFacility(query);
+        console.log("facilites", facilities);
         setFacilities(facilities);
       } catch (error) {
         console.error(error);
@@ -85,7 +87,11 @@ const SearchFacilityPage = () => {
 
             <div className="bg-white h-[33rem] overflow-y-auto space-y-8 flex flex-col items-center shadow-md rounded-lg">
               {isLoading ? (
-                <Spinner aria-label="Large spinner example" size="lg" />
+                <Spinner
+                  aria-label="Large spinner example"
+                  size="lg"
+                  className="mt-10"
+                />
               ) : facilities.length === 0 ? (
                 <p className="font-bold mt-10 text-xl">No Facility found</p>
               ) : (
@@ -106,6 +112,16 @@ const SearchFacilityPage = () => {
                       <div className="pl-5">
                         <p>Building: {facility.location}</p>
                         <p>{facility.facilities_name}</p>
+                        <p className="flex space-x-2">
+                          <StarRating
+                            rating={Math.floor(facility.averageRating)}
+                            // rating={facility.averageRating}
+                          />
+                          <span className="font-semibold">
+                            {" "}
+                            {facility.averageRating}/5
+                          </span>
+                        </p>
                       </div>
                     </div>
                   </Link>

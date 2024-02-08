@@ -144,3 +144,17 @@
       throw error;
     }
   };
+
+  
+  export const getReportById = async (id) => {
+    try {
+      const response = await api.get(`/get-report/${id}`);
+  
+      console.log('Fetch report response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch report error:', error.response || error.message);
+      throw error;
+    }
+  };
+

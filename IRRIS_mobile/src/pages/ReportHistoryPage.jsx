@@ -117,11 +117,17 @@ const ReportHistoryPage = () => {
                     </p>
                   </div>
                 </div>
-                {item.status === "completed" && (
+                {item.status === "completed" && !item.isRated && (
                   <p className="text-center w-full font-bold text-gray-500 underline">
                     <Link to={`/student/rate-report/${item.id}`}>
                       Review to claim rewards
                     </Link>
+                  </p>
+                )}
+
+                {item.status === "completed" && item.isRated && (
+                  <p className="text-center w-full font-bold text-gray-500">
+                    Already claimed!
                   </p>
                 )}
               </div>

@@ -5,6 +5,8 @@ import Rewards from "@/src/components/student/Rewards";
 import { getRewards } from "@/src/services/api/sharedService";
 import { getImageUrl } from "@/src/utils/utils";
 import { Spinner } from "flowbite-react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "../../index.css";
 
 const RewardsPage = () => {
@@ -40,17 +42,37 @@ const RewardsPage = () => {
           {/* <p className="ml-8 font-semibold text-sm">AVAILABLE POINTS</p> */}
         </div>
 
-        <div className="relative bg-white shadow-md rounded-xl p-5 py-14 ">
+        <div className="relative bg-white shadow-md rounded-xl p-5 py-12 ">
           <span className="bg-mainColor z-30 text-white shadow-md rounded-full  font-bold py-3 px-4  text-lg absolute top-[-1.5rem] text-center  left-1/2  transform -translate-x-1/2">
             Available Rewards
           </span>
 
           {isLoading ? (
-            <div className="flex justify-center h-[30rem]  w-full">
-              <Spinner aria-label="Loading spinner" size="lg" />
+            <div className=" h-[30rem]  w-full grid grid-cols-2 grid-rows-2 justify-center gap-8 py-10">
+              {/* <Spinner aria-label="Loading spinner" size="lg" /> */}
+              <Skeleton
+                width={"100%"}
+                height={"11rem"}
+                className="rounded-3xl"
+              />
+              <Skeleton
+                width={"100%"}
+                height={"11rem"}
+                className="rounded-3xl"
+              />
+              <Skeleton
+                width={"100%"}
+                height={"11rem"}
+                className="rounded-3xl"
+              />
+              <Skeleton
+                width={"100%"}
+                height={"11rem"}
+                className="rounded-3xl"
+              />
             </div>
           ) : (
-            <div className="h-[30rem] overflow-y-auto w-full grid grid-cols-2 justify-center gap-10 py-10">
+            <div className="h-[30rem] overflow-y-auto w-full grid grid-cols-2 grid-rows-2 justify-center gap-8 py-10">
               {rewards &&
                 rewards.map((item) => (
                   <Rewards
