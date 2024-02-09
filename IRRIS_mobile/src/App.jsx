@@ -20,6 +20,8 @@ import CreatePasswordPage from "./pages/CreatePasswordPage";
 import HomepageLayout from "./components/ui/HomepageLayout";
 import HomePage from "./pages/HomePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
+import StudentAccountSettingPage from "./pages/student/StudentAccountSettingPage";
+import StudentAboutUs from "./pages/student/StudentAboutUs";
 import QRScannerPage from "./pages/QRScannerPage";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TransitionWrapper from "./components/ui/TransitionWrapper";
@@ -247,11 +249,28 @@ function App() {
             </TransitionWrapper>
           }
         />
+        
         <Route
           path="/student/profile"
           element={
             <TransitionWrapper location={location}>
               <StudentProfilePage />
+            </TransitionWrapper>
+          }
+        />
+        <Route
+          path="/student/account-setting"
+          element={
+            <TransitionWrapper location={location}>
+              <StudentAccountSettingPage />
+            </TransitionWrapper>
+          }
+        />
+        <Route
+          path="/student/about"
+          element={
+            <TransitionWrapper location={location}>
+              <StudentAboutUs />
             </TransitionWrapper>
           }
         />
