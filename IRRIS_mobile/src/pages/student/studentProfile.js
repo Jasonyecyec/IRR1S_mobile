@@ -1,4 +1,4 @@
-import { User, LockKey, GearSix } from "@phosphor-icons/react";
+import { User, UsersThree, GearSix } from "@phosphor-icons/react";
 
 const studentProfile = [
   {
@@ -7,14 +7,14 @@ const studentProfile = [
     icon: User,
   },
   {
-    title: "Account Security",
-    route: "/student/account-security",
-    icon: LockKey,
+    title: "Account Setting",
+    route: "/student/account-setting",
+    icon: GearSix,
   },
   {
-    title: "Settings",
-    route: "/student/settings",
-    icon: GearSix,
+    title: "About Us",
+    route: "/student/about",
+    icon: UsersThree,
   },
 ];
 
