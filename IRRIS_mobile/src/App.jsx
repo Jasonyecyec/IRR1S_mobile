@@ -22,6 +22,7 @@ import HomePage from "./pages/HomePage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import StudentAccountSettingPage from "./pages/student/StudentAccountSettingPage";
 import StudentAboutUs from "./pages/student/StudentAboutUs";
+import SuggestionBoxPage from "./pages/SuggestionBoxPage";
 import QRScannerPage from "./pages/QRScannerPage";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import TransitionWrapper from "./components/ui/TransitionWrapper";
@@ -271,6 +272,14 @@ function App() {
           element={
             <TransitionWrapper location={location}>
               <StudentAboutUs />
+            </TransitionWrapper>
+          }
+        />
+        <Route
+          path="/suggestion-box"
+          element={
+            <TransitionWrapper location={location}>
+              <SuggestionBoxPage />
             </TransitionWrapper>
           }
         />
