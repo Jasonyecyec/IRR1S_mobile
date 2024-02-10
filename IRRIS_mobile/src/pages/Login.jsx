@@ -245,6 +245,11 @@ const Login = () => {
               <span className="font-bold text-mainColor">Register</span>
             </Link>
           </p>
+          <div className="flex justify-end mt-5 ">
+          <Link to="/suggestion-box">
+              <span className="font-bold text-mainColor">Suggestion Box</span>
+            </Link>
+          </div>
         </div>
       </div>
 
