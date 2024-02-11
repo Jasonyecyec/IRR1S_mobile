@@ -54,13 +54,15 @@ const ManpowerHomePage = () => {
   const initializePusherBeams = async () => {
     try {
       const client = await beamsClient.start();
+      const userIdCookie = Cookies.get("user_id");
+
       console.log("Pusher Beams initialized successfully", client);
 
       // Set user ID if needed
       // await client.setUserId("USER_ID");
 
       // Subscribe to push notifications
-      await client.setDeviceInterests(["job-order"]);
+      await client.setDeviceInterests([`job-order-${userIdCookie}`]);
       console.log("Device interests have been set");
 
       // Get and log device interests
@@ -72,24 +74,19 @@ const ManpowerHomePage = () => {
   };
 
   const listenToJobOrder = () => {
-    const jobOrderChannel = window.Echo.channel("job-order-channel");
     const userIdCookie = Cookies.get("user_id");
+
+    const jobOrderChannel = window.Echo.channel(
+      `job-order-channel-${userIdCookie}`
+    );
 
     jobOrderChannel.listen("JobOrderNotification", (notification) => {
       console.log(
         "Successfully subscribed to job-order-channel:",
-        notification.jobOrder
+        notification
       );
 
       notification.jobOrder.forEach((job) => {
-        console.log("user id cookie ", userIdCookie);
-        console.log("job data", job);
-        console.log(typeof job.assigned_manpower, typeof userIdCookie);
-        console.log(
-          "Is Equal:",
-          job.assigned_manpower === parseInt(userIdCookie, 10)
-        );
-
         if (job.assigned_manpower === parseInt(userIdCookie, 10)) {
           console.log("setting job order");
           setjobOrderNotif(true);
@@ -179,7 +176,13 @@ const ManpowerHomePage = () => {
               <img src={ReportIcon} className="w-10 h-10 " />
               Report
               {isJobOrderNotif && (
-                <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
+                <span class="absolute top-[-5px] right-[-5px] flex h-6 w-6 ">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-xs justify-center items-center text-white">
+                    1
+                  </span>
+                </span>
+                // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
               )}
             </button>
 

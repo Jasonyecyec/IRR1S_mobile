@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BottomNavigation from "./BottomNavigation";
 import ManpowerBottomNavigation from "./ManpowerBottomNavigation";
+import StaffBottomNavigation from "./StaffBottomNavigation";
 import Cookies from "js-cookie";
 import useUserStore from "@/src/services/state/userStore";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +32,9 @@ const HomepageLayout = ({ children }) => {
       break;
     case "manpower":
       bottomNavigationComponent = <ManpowerBottomNavigation />;
+      break;
+    case "staff":
+      bottomNavigationComponent = <StaffBottomNavigation />;
       break;
     // Add more cases for other user roles if needed
     default:

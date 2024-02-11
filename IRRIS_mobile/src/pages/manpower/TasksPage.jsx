@@ -106,76 +106,83 @@ const TasksPage = () => {
             <Spinner aria-label="Extra large spinner example" size="xl" />
           ) : (
             <div className=" flex flex-col space-y-7 w-full h-[35rem] overflow-y-scroll">
-              {jobOrders?.map((job) => (
-                <div
-                  key={job.id}
-                  className="border-b-2 pb-2.5 shadow-md rounded-lg bg-white p-5"
-                >
-                  <div className="flex justify-between border-b-2 pb-3">
-                    {" "}
-                    <p className="font-bold text-lg ">
-                      Job Order:{" "}
-                      <span className="bg-yellow-300 py-1 px-2 rounded-md mr-2">
-                        {job.issue_type ? "Report" : "Request"}
-                      </span>
-                      {job.status === "assigned" && (
-                        <span className="bg-red-500 py-1 px-2 rounded-md text-white">
-                          Pending
-                        </span>
-                      )}
-                      {job.status === "ongoing" && (
-                        <span className="bg-blue-500 py-1 px-2 rounded-md text-white">
-                          Ongoing
-                        </span>
-                      )}
-                      {job.status === "completed" && (
-                        <span className="bg-green-500 py-1 px-2 rounded-md text-white">
-                          Completed
-                        </span>
-                      )}
-                    </p>
-                    <Link
-                      className="text-mainColor font-bold"
-                      to={`/manpower/progress/${
-                        job.issue_type ? "report" : "request"
-                      }/${job?.id}`}
-                    >
+              {jobOrders && jobOrders.length > 0 ? (
+                jobOrders?.map((job) => (
+                  <div
+                    key={job.id}
+                    className="border-b-2 pb-2.5 shadow-md rounded-lg bg-white p-5"
+                  >
+                    <div className="flex justify-between border-b-2 pb-3">
                       {" "}
-                      View
-                    </Link>
+                      <p className="font-bold text-lg ">
+                        Job Order:{" "}
+                        <span className="bg-yellow-300 py-1 px-2 rounded-md mr-2">
+                          {job.issue_type ? "Report" : "Request"}
+                        </span>
+                        {job.status === "assigned" && (
+                          <span className="bg-red-500 py-1 px-2 rounded-md text-white">
+                            Pending
+                          </span>
+                        )}
+                        {job.status === "ongoing" && (
+                          <span className="bg-blue-500 py-1 px-2 rounded-md text-white">
+                            Ongoing
+                          </span>
+                        )}
+                        {job.status === "completed" && (
+                          <span className="bg-green-500 py-1 px-2 rounded-md text-white">
+                            Completed
+                          </span>
+                        )}
+                      </p>
+                      <Link
+                        className="text-mainColor font-bold"
+                        to={`/manpower/progress/${
+                          job.issue_type ? "report" : "request"
+                        }/${job?.id}`}
+                      >
+                        {" "}
+                        View
+                      </Link>
+                    </div>
+
+                    <p className="flex items-center space-x-1 pt-2">
+                      <Clock size={20} color="#121212" />
+                      <span> Date Assigned: {formatDate(job.created_at)}</span>
+                    </p>
+
+                    <p className="flex items-center space-x-1">
+                      <CalendarBlank size={20} color="#121212" />
+                      <span>
+                        Due date: {formatDate(addDays(job.created_at, 1))}
+                      </span>
+                    </p>
+
+                    <p className="flex items-center space-x-1">
+                      <Hash size={20} color="#121212" />
+                      <span>Task No. {job.id}</span>
+                    </p>
+
+                    <p className="flex items-center space-x-1">
+                      <MapPin size={20} color="#121212" />
+                      <span>
+                        Location: {job.report?.facility?.facilities_name}
+                      </span>
+                    </p>
+
+                    <p className="flex items-center space-x-1">
+                      <WarningCircle size={20} color="#121212" />
+
+                      <span>Issue: {job.report?.description}</span>
+                    </p>
                   </div>
-
-                  <p className="flex items-center space-x-1 pt-2">
-                    <Clock size={20} color="#121212" />
-                    <span> Date Assigned: {formatDate(job.created_at)}</span>
-                  </p>
-
-                  <p className="flex items-center space-x-1">
-                    <CalendarBlank size={20} color="#121212" />
-                    <span>
-                      Due date: {formatDate(addDays(job.created_at, 1))}
-                    </span>
-                  </p>
-
-                  <p className="flex items-center space-x-1">
-                    <Hash size={20} color="#121212" />
-                    <span>Task No. {job.id}</span>
-                  </p>
-
-                  <p className="flex items-center space-x-1">
-                    <MapPin size={20} color="#121212" />
-                    <span>
-                      Location: {job.report?.facility?.facilities_name}
-                    </span>
-                  </p>
-
-                  <p className="flex items-center space-x-1">
-                    <WarningCircle size={20} color="#121212" />
-
-                    <span>Issue: {job.report?.description}</span>
-                  </p>
-                </div>
-              ))}
+                ))
+              ) : (
+                // If jobOrders is empty, display a message
+                <p className="text-center text-gray-500 text-lg mt-10">
+                  No {currentFilter} job orders available.
+                </p>
+              )}
             </div>
           )}
         </div>

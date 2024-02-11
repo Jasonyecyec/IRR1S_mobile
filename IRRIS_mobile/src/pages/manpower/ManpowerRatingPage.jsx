@@ -69,7 +69,7 @@ const ManpowerRatingPage = () => {
   };
 
   const handleDone = () => {
-    navigate("/manpower/home");
+    navigate("/manpower/tasks");
   };
 
   console.log("params", jobOrderId);

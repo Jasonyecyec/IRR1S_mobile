@@ -42,6 +42,7 @@ import SearchFacilityPage from "./pages/SearchFacilityPage";
 import ReviewFacilityPage from "./pages/ReviewFacilityPage";
 import RateFacilityPage from "./pages/RateFacilityPage";
 import RewardsPage from "./pages/student/RewardsPage";
+import StaffRoutes from "./routes/StaffRoutes";
 import "./index.css";
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
           }
         />
         {...ManpowerRoutes}
+        {...StaffRoutes}
         <Route
           path="/activate"
           element={
@@ -250,7 +252,7 @@ function App() {
             </TransitionWrapper>
           }
         />
-        
+
         <Route
           path="/student/profile"
           element={
