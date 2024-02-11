@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.10",
+    "@fullcalendar/daygrid": "^6.1.10",
+    "@fullcalendar/react": "^6.1.10",
+    "@fullcalendar/scrollgrid": "^6.1.10",
     "@phosphor-icons/react": "^2.0.14",
     "@pusher/push-notifications-web": "^1.1.0",
     "@radix-ui/react-slot": "^1.0.2",
@@ -26,9 +30,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
+    "react-loading-skeleton": "^3.3.1",
     "react-otp-input": "^3.1.0",
     "react-router-dom": "^6.17.0",
-    "react-loading-skeleton": "^3.3.1",
     "react-simple-star-rating": "^5.1.7",
     "react-transition-group": "^4.4.5",
     "recharts": "^2.10.4",

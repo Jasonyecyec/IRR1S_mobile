@@ -28,7 +28,7 @@ const ReportHistoryPage = () => {
       const params = {
         status: null,
       };
-      const { report } = await getReportStudent(user.id);
+      const { report } = await getReportStudent(user.id, null);
       setReport(report);
       console.log("report response", report);
     } catch (error) {
@@ -75,7 +75,8 @@ const ReportHistoryPage = () => {
               size="xl"
               className="mt-20"
             />
-          ) : (
+          ) : report && report.length > 0 ? (
+            // If jobOrders is not empty, map through the array
             report?.map((item, index) => (
               <div
                 key={index}
@@ -132,6 +133,11 @@ const ReportHistoryPage = () => {
                 )}
               </div>
             ))
+          ) : (
+            // If jobOrders is empty, display a message
+            <p className="text-center text-gray-500 text-lg mt-10">
+              No {currentFilter} report available.
+            </p>
           )}
         </div>
       </div>

@@ -13,8 +13,8 @@ import "../../index.css";
 import useUserStore from "@/src/services/state/userStore";
 
 const moreItems = [
-  { to: "", label: "Report", icon: ReportIcon },
-  { to: "", label: "Scan", icon: ScanIcon },
+  // { to: "", label: "Report", icon: ReportIcon },
+  // { to: "", label: "Scan", icon: ScanIcon },
   { to: "", label: "View Details", icon: ViewDetailsIcon },
   {
     to: "/search-facility",
