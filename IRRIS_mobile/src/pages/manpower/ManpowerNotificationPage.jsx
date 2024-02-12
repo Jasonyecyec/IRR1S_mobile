@@ -30,7 +30,8 @@ const ManpowerNotificationPage = () => {
 
       const filteredData = data
         .map((item) => item.content[0])
-        .filter((job) => job.assigned_manpower === userIdCookie); // Filter where assigned_manpower matches userIdCookie
+        .filter((job) => job.assigned_manpower === userIdCookie)
+        .reverse(); // Filter where assigned_manpower matches userIdCookie
 
       setNotification(filteredData);
     } catch (error) {

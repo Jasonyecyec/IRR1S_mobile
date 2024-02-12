@@ -7,6 +7,7 @@ import CalendarPage from "../pages/staff/CalendarPage";
 import TransitionWrapper from "../components/ui/TransitionWrapper";
 import AvailableFacility from "../pages/staff/AvailableFacility";
 import PencilBookPage from "../pages/staff/PencilBookPage";
+import StaffProfilePage from "../pages/staff/StaffProfilePage";
 
 const StaffRoutes = [
   <Route
@@ -57,6 +58,15 @@ const StaffRoutes = [
     element={
       <TransitionWrapper location={location}>
         <PencilBookPage />
+      </TransitionWrapper>
+    }
+  />,
+  <Route
+    key="staffRoute6"
+    path="/staff/profile"
+    element={
+      <TransitionWrapper location={location}>
+        <StaffProfilePage />
       </TransitionWrapper>
     }
   />,

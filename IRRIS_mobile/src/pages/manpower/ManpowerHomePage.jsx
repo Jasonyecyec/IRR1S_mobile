@@ -90,10 +90,18 @@ const ManpowerHomePage = () => {
         if (job.assigned_manpower === parseInt(userIdCookie, 10)) {
           console.log("setting job order");
           setjobOrderNotif(true);
-          setJobOrderDetails(job);
 
-          //set the job order to local storage
-          localStorage.setItem("job_order", JSON.stringify(job));
+          setJobOrderDetails((prev) => {
+            const updatedJobOrderDetails = { ...prev, job };
+            console.log("updatedJobOrderDetails", updatedJobOrderDetails);
+
+            // set the job order to local storage
+            localStorage.setItem(
+              "job_order",
+              JSON.stringify(updatedJobOrderDetails)
+            );
+            return updatedJobOrderDetails;
+          });
         }
       });
     });
@@ -137,7 +145,10 @@ const ManpowerHomePage = () => {
     // Clear the value in localStorage for the key "job_order"
     localStorage.removeItem("job_order");
     setjobOrderNotif(false);
-    console.log("jobOrderDetails", jobOrderDetails);
+    setJobOrderDetails(null);
+
+    //redirect to task page
+    navigate("/manpower/tasks");
   };
 
   const handleProfileButton = () => {
@@ -176,10 +187,11 @@ const ManpowerHomePage = () => {
               <img src={ReportIcon} className="w-10 h-10 " />
               Report
               {isJobOrderNotif && (
-                <span class="absolute top-[-5px] right-[-5px] flex h-6 w-6 ">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-xs justify-center items-center text-white">
-                    1
+                <span className="absolute top-[-5px] right-[-5px] flex h-6 w-6 ">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-xs justify-center items-center text-white">
+                    {jobOrderDetails && <p> {jobOrderDetails.length}</p>}
+                    {console.log(jobOrderDetails)}
                   </span>
                 </span>
                 // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
@@ -235,6 +247,8 @@ const ManpowerHomePage = () => {
             </div>
           )}
         </div>
+
+        <div className="p-5">asdasd</div>
       </div>
     </div>
   );
