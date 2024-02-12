@@ -26,6 +26,7 @@ const PencilBookPage = () => {
     dateStart: null,
     dateEnd: null,
     status: "pending",
+    event_name: null,
   });
 
   const fetchFacility = async () => {
@@ -139,13 +140,6 @@ const PencilBookPage = () => {
             disabled={true}
           />
 
-          <TextInput
-            placeholder="Facility"
-            label="Facility"
-            value={facility?.facilities_name}
-            disabled={true}
-          />
-
           <div>
             <label for="meeting-time">Date start</label>
 
@@ -178,6 +172,18 @@ const PencilBookPage = () => {
               // }
 
               //   max="2018-06-14T00:00"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label>Event name</label>
+            <input
+              type="text"
+              id="event_name"
+              name="event_name"
+              value={form.event_name}
+              required
+              onChange={handleChange}
             />
           </div>
 

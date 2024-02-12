@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useUserStore from "@/src/services/state/userStore";
 import {
   XCircle,
@@ -8,20 +8,23 @@ import {
   SignOut,
 } from "@phosphor-icons/react";
 import UserSample from "../../assets/images/user_sample.jpg";
-import { useNavigate } from "react-router-dom";
-import ConfirmationModal from "@/src/components/ConfirmationModal";
-import "../../index.css";
-import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import "../../index.css";
+import ConfirmationModal from "@/src/components/ConfirmationModal";
+import { useNavigate } from "react-router-dom";
 
-const ManpowerProfilePage = () => {
+const StaffProfilePage = () => {
   const { user, setUser } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
   }));
+  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
 
-  const navigate = useNavigate();
+  const handleCloseProfile = () => {
+    navigate(-1);
+  };
 
   const handleConfirmButton = () => {
     // To remove a specific cookie
@@ -36,10 +39,6 @@ const ManpowerProfilePage = () => {
     setUser("");
 
     navigate("/login");
-  };
-
-  const handleCloseProfile = () => {
-    navigate(-1);
   };
 
   const onCloseModal = () => {
@@ -67,7 +66,7 @@ const ManpowerProfilePage = () => {
           </button>
         </div>
 
-        <div className="flex space-x-5">
+        <div className="flex space-x-3">
           {/* User Image */}
           <div className="relative">
             <img
@@ -89,11 +88,10 @@ const ManpowerProfilePage = () => {
               {user?.first_name} {user?.last_name}
             </p>
             <p className="">{user?.email}</p>
-            <p>Manpower</p>
+            <p>Staff</p>
           </div>
         </div>
       </div>
-
       <div className="flex-1 p-5 flex flex-col justify-between ">
         <div className="space-y-5">
           <Link
@@ -103,7 +101,7 @@ const ManpowerProfilePage = () => {
           >
             <span className="flex items-center">
               <User size={24} color="#000001" weight="fill" />
-              Profile
+              Personal Information
             </span>
 
             <CaretRight size={18} color="#121212" />
@@ -116,20 +114,7 @@ const ManpowerProfilePage = () => {
           >
             <span className="flex items-center">
               <User size={24} color="#000001" weight="fill" />
-              Terms and Agreement
-            </span>
-
-            <CaretRight size={18} color="#121212" />
-          </Link>
-
-          <Link
-            // key={index}
-            // to={item.route}
-            className="flex items-center justify-between bg-white px-2 py-4 rounded-3xl"
-          >
-            <span className="flex items-center">
-              <User size={24} color="#000001" weight="fill" />
-              Feedback
+              Account Settings
             </span>
 
             <CaretRight size={18} color="#121212" />
@@ -147,4 +132,4 @@ const ManpowerProfilePage = () => {
   );
 };
 
-export default ManpowerProfilePage;
+export default StaffProfilePage;
