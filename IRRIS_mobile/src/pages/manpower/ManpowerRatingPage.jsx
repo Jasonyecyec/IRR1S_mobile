@@ -6,6 +6,8 @@ import { rateJobOrder } from "@/src/services/api/manpowerService";
 import Loading from "@/src/components/Loading";
 import { CheckCircle } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
+import { Checkbox, Label } from "flowbite-react";
+import ConfirmationModal from "@/src/components/ConfirmationModal";
 import "../../index.css";
 
 const ManpowerRatingPage = () => {
@@ -13,10 +15,12 @@ const ManpowerRatingPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isConfirmModal, setIsConfirmModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    rating: null,
-    comment: null,
+    checkbox1: null,
+    checkbox2: null,
+    checkbox3: null,
   });
 
   const notify = (message) =>
@@ -30,11 +34,14 @@ const ManpowerRatingPage = () => {
       duration: 2000,
     });
 
-  const handleRatingChange = (ratingValue) => {
+  const handleCheckboxChange = (e) => {
     setError(false);
+    console.log(e.target.value);
+    const checkboxId = e.target.id;
+    const checkBoxValue = e.target.checked;
     setFormData({
       ...formData,
-      rating: ratingValue, // Store the numeric value of the rating
+      [checkboxId]: checkBoxValue,
     });
   };
 
@@ -46,12 +53,9 @@ const ManpowerRatingPage = () => {
     });
   };
 
-  const handleSubmit = async () => {
-    if (!formData.rating) {
-      setError(true);
-      return;
-    }
+  const handleConfirmButton = async () => {
     setIsLoading(true);
+    setIsConfirmModal(false);
     try {
       if (jobOrderId) {
         formData.job_order_id = jobOrderId;
@@ -68,6 +72,16 @@ const ManpowerRatingPage = () => {
     console.log("formData", formData);
   };
 
+  const handleSubmit = async () => {
+    setIsConfirmModal(true);
+    console.log("form", formData);
+
+    // if (!formData.rating) {
+    //   setError(true);
+    //   return;
+    // }
+  };
+
   const handleDone = () => {
     navigate("/manpower/tasks");
   };
@@ -76,6 +90,14 @@ const ManpowerRatingPage = () => {
   return (
     <div className="h-screen w-screen background ">
       <Toaster />
+      {isConfirmModal && (
+        <ConfirmationModal
+          isLoading={isLoading}
+          onCloseModal={() => setIsConfirmModal(false)}
+          content="Are you sure you want to submit?"
+          handleConfirmButton={handleConfirmButton}
+        />
+      )}
       {isLoading && <Loading />}
 
       {showModal && (
@@ -88,7 +110,7 @@ const ManpowerRatingPage = () => {
               <CheckCircle size={100} color="#2ead3d" weight="fill" />
 
               <p className="text-2xl text-center bg-green-100 p-3 rounded-lg mt-5">
-                You accomplishment is submitted!
+                Feedback is submitted!
               </p>
 
               <button
@@ -106,10 +128,42 @@ const ManpowerRatingPage = () => {
 
         <div className="flex-1 flex flex-col space-y-10">
           <div className=" space-y-5">
-            <p className="font-bold">Rate your experience</p>
+            <p className="font-bold">Check the appropriate experience</p>
 
-            <div className="flex justify-between items-center">
-              {ratingValues.map((rating) => (
+            <div className="space-y-10">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="checkbox1"
+                  className="h-6 w-6"
+                  onChange={handleCheckboxChange}
+                />
+                <Label htmlFor="checkbox1" className="text-lg">
+                  I want to get promotional offers8
+                </Label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="checkbox2"
+                  className="h-6 w-6"
+                  onChange={handleCheckboxChange}
+                />
+                <Label htmlFor="checkbox2" className="text-lg">
+                  I want to get promotional offers
+                </Label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="checkbox3"
+                  className="h-6 w-6"
+                  onChange={handleCheckboxChange}
+                />
+                <Label htmlFor="checkbox3" className="text-lg">
+                  I want to get promotional offers
+                </Label>
+              </div>
+              {/* {ratingValues.map((rating) => (
                 <button
                   key={rating.value}
                   onClick={() => handleRatingChange(rating.value)}
@@ -134,16 +188,16 @@ const ManpowerRatingPage = () => {
                     {rating.label}
                   </p>
                 </button>
-              ))}
+              ))} */}
             </div>
             {error && (
               <span className="text-red-500 font-bold italic ">
-                *Rate experience first
+                *Ch experience first
               </span>
             )}
           </div>
 
-          <div>
+          {/* <div>
             <p className="font-bold text-xl mb-3">Comment</p>
             <textarea
               name="comment"
@@ -153,7 +207,7 @@ const ManpowerRatingPage = () => {
               value={formData?.comment || ""}
               onChange={handleChange}
             ></textarea>
-          </div>
+          </div> */}
 
           <button
             className="bg-mainColor text-white font-bold rounded-md py-2 text-2xl"

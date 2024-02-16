@@ -10,23 +10,30 @@ import "../index.css";
 import Cookies from "js-cookie";
 import useUserStore from "../services/state/userStore";
 import { fetchUserData } from "../services/api/sharedService";
+import { Bell } from "@phosphor-icons/react";
 import { getStudentPoints } from "../services/api/StudentService";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const HomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
   }));
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const [points, setPoints] = useState(null);
 
   const fetchStudentPoints = async () => {
+    setIsLoading(true);
     try {
       const { points } = await getStudentPoints(user?.id);
       setPoints(points);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -50,6 +57,10 @@ const HomePage = () => {
   const handleProfileButton = () => {
     navigate("/student/profile");
   };
+
+  const handleNotificationButton = () => {
+    navigate(`/notification/${user?.id}`);
+  };
   return (
     <div className="h-full ">
       <div className="flex justify-between bg-mainColor p-5 border-b-8 border-red-500">
@@ -57,8 +68,8 @@ const HomePage = () => {
           <img src={UserSample} className="w-12 h-12 rounded-full " />
         </button>
 
-        <button>
-          <img src={NotificationIcon} />
+        <button onClick={handleNotificationButton}>
+          <Bell size={"2.5rem"} color="#FFFFFF" />
         </button>
       </div>
 
@@ -78,9 +89,19 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="bg-[#987700] text-white p-3 rounded-full font-semibold">
-            <p> {points && points} points</p>
-          </div>
+          {isLoading ? (
+            <Skeleton
+              width={"6rem"}
+              height={"2rem"}
+              className="p-3 rounded-full"
+            />
+          ) : (
+            points && (
+              <div className="bg-[#987700] text-white p-3 rounded-full font-semibold">
+                <p> {points} points</p>
+              </div>
+            )
+          )}
         </div>
 
         <div className="bg-[#d4e3f9] border-2 border-white flex justify-center rounded-full">

@@ -158,3 +158,16 @@
     }
   };
 
+  export const getNotification = async (id) => {
+    try {
+      const response = await api.get(`/notification/${id}`);
+  
+      console.log('Fetch notification response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch notification error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+
