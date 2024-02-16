@@ -43,6 +43,7 @@ import ReviewFacilityPage from "./pages/ReviewFacilityPage";
 import RateFacilityPage from "./pages/RateFacilityPage";
 import RewardsPage from "./pages/student/RewardsPage";
 import StaffRoutes from "./routes/StaffRoutes";
+import NotificationPage from "./pages/NotificationPage";
 import "./index.css";
 
 function App() {
@@ -137,6 +138,17 @@ function App() {
               {/* <HomepageLayout> */}
               <RewardsPage />
               {/* </HomepageLayout> */}
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/notification/:userId"
+          element={
+            <TransitionWrapper location={location}>
+              <HomepageLayout>
+                <NotificationPage />
+              </HomepageLayout>
             </TransitionWrapper>
           }
         />

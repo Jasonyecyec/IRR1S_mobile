@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../index.css";
 import PageTitle from "../components/PageTitle";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getReportStudent } from "../services/api/StudentService";
 import useUserStore from "@/src/services/state/userStore";
 import { Spinner } from "flowbite-react";
@@ -17,6 +17,7 @@ const ReportHistoryPage = () => {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
+  const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [currentFilter, setCurrentFilter] = useState("all");
@@ -41,10 +42,12 @@ const ReportHistoryPage = () => {
   useEffect(() => {
     fetchReport();
   }, []);
-
   return (
     <div className="h-screen w-screen background flex flex-col ">
-      <PageTitle title="REPORT HISTORY" />
+      <PageTitle
+        title="REPORT HISTORY"
+        closeFunction={() => navigate(`/${user?.user_role}/home`)}
+      />
 
       <div className=" p-5 flex-1 pt-10 space-y-3">
         <div className=" text-right">
