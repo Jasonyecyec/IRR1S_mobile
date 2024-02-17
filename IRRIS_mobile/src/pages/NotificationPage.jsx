@@ -63,7 +63,7 @@ const NotificationPage = () => {
                 />
               </SkeletonTheme>
             </div>
-          ) : notification ? (
+          ) : notification && notification.length !== 0 ? (
             notification.map((item) => (
               <div className="shadow-md bg-white rounded-lg p-5" key={item.id}>
                 <div className="flex justify-between border-b-2 pb-3">
@@ -74,7 +74,11 @@ const NotificationPage = () => {
               </div>
             ))
           ) : (
-            <p>no data</p>
+            notification && (
+              <p className="font-semibold text-center mt-10 text-lg">
+                No notifications
+              </p>
+            )
           )}
         </div>
       </div>
