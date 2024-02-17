@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NotificationIcon from "../assets/images/bell_icon.png";
 import UserSample from "../assets/images/user_sample.jpg";
 import PointsIcon from "../assets/images/points_icon.png";
+import Echo from "laravel-echo";
 import { Link } from "react-router-dom";
 import HomeProcessButton from "../components/HomeProcessButton";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ import QCULogo from "../assets/images/qcu_logo.png";
 import "../index.css";
 import Cookies from "js-cookie";
 import useUserStore from "../services/state/userStore";
+import useNotificationStore from "../services/state/notificationStore";
 import { fetchUserData } from "../services/api/sharedService";
 import { Bell } from "@phosphor-icons/react";
 import { getStudentPoints } from "../services/api/StudentService";
@@ -20,6 +22,12 @@ const HomePage = () => {
     user: state.user,
     setUser: state.setUser,
   }));
+  const { notification, setNotification, setNotificationDetails } =
+    useNotificationStore((state) => ({
+      notification: state.notification,
+      setNotification: state.setNotification,
+      setNotificationDetails: state.setNotificationDetails,
+    }));
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -36,6 +44,42 @@ const HomePage = () => {
       setIsLoading(false);
     }
   };
+
+  const listenToNotification = () => {
+    const userIdCookie = Cookies.get("user_id");
+
+    const notificationChannel = window.Echo.channel(
+      `notification-channel-${userIdCookie}`
+    );
+
+    notificationChannel.listen("UserNotification", (notification) => {
+      console.log(
+        "Successfully subscribed to notification-channel:",
+        notification
+      );
+
+      if (notification) {
+        setNotification(true);
+        // Check if there is a notification in local storage
+        const storedNotification = JSON.parse(
+          localStorage.getItem("notification")
+        );
+
+        if (!storedNotification) {
+          // If there is no stored notification, store the received notification
+          setNotificationDetails(notification);
+
+          // Store the notification in local storage
+          localStorage.setItem("notification", JSON.stringify(notification));
+        }
+      } else {
+        // Update the state and store the updated notification in local storage
+        setNotificationDetails(notification);
+        localStorage.setItem("notification", JSON.stringify(notification));
+      }
+    });
+  };
+
   useEffect(() => {
     const userIdCookie = Cookies.get("user_id");
     const first_nameCookie = Cookies.get("first_name");
@@ -51,6 +95,8 @@ const HomePage = () => {
       user_role: user_roleCookie,
     });
 
+    listenToNotification();
+
     fetchStudentPoints();
   }, []);
 
@@ -59,6 +105,8 @@ const HomePage = () => {
   };
 
   const handleNotificationButton = () => {
+    setNotification(false);
+    setNotificationDetails(null);
     navigate(`/notification/${user?.id}`);
   };
   return (
@@ -68,7 +116,17 @@ const HomePage = () => {
           <img src={UserSample} className="w-12 h-12 rounded-full " />
         </button>
 
-        <button onClick={handleNotificationButton}>
+        <button onClick={handleNotificationButton} className="relative">
+          {notification && (
+            <span className="absolute top-[2px] right-[3px] flex h-3 w-3 ">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 text-xs justify-center items-center text-white">
+                {/* {jobOrderDetails && <p> {jobOrderDetails.length}</p>} */}
+              </span>
+            </span>
+            // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
+          )}
+
           <Bell size={"2.5rem"} color="#FFFFFF" />
         </button>
       </div>
