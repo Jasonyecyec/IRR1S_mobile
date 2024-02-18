@@ -86,7 +86,7 @@ export const getStudentPoints = async (id) => {
     console.log("Student  points",response)
     return response.data;
   } catch (error) {
-    console.error("Get Report  error", error.response);
+    console.error("Get Student  error", error.response);
     throw error;
   }
 };

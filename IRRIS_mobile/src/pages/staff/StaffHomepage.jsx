@@ -3,15 +3,83 @@ import UserSample from "../../assets/images/user_sample.jpg";
 import NotificationIcon from "../../assets/images/bell_icon.png";
 import useUserStore from "@/src/services/state/userStore";
 import Cookies from "js-cookie";
+import { Bell } from "@phosphor-icons/react";
 import "../../index.css";
 import { useNavigate } from "react-router-dom";
+import useNotificationStore from "@/src/services/state/notificationStore";
+import beamsClient from "@/src/pushNotificationConfig";
 
 const StaffHomepage = () => {
   const { user, setUser } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
   }));
+
+  const { notification, setNotification, setNotificationDetails } =
+    useNotificationStore((state) => ({
+      notification: state.notification,
+      setNotification: state.setNotification,
+      setNotificationDetails: state.setNotificationDetails,
+    }));
+
   const navigate = useNavigate();
+
+  const initializePusherBeams = async () => {
+    try {
+      const client = await beamsClient.start();
+      const userIdCookie = Cookies.get("user_id");
+
+      console.log("Pusher Beams initialized successfully", client);
+
+      // Set user ID if needed
+      // await client.setUserId("USER_ID");
+
+      // Subscribe to push notifications
+      await client.setDeviceInterests([`notification-channel-${userIdCookie}`]);
+      console.log("Device interests have been set");
+
+      // Get and log device interests
+      const interests = await client.getDeviceInterests();
+      console.log("Device interests:", interests);
+    } catch (error) {
+      console.error("Error initializing Pusher Beams:", error);
+    }
+  };
+
+  const listenToNotification = () => {
+    const userIdCookie = Cookies.get("user_id");
+
+    const notificationChannel = window.Echo.channel(
+      `notification-channel-${userIdCookie}`
+    );
+
+    notificationChannel.listen("UserNotification", (notification) => {
+      console.log(
+        "Successfully subscribed to notification-channel:",
+        notification
+      );
+
+      if (notification) {
+        setNotification(true);
+        // Check if there is a notification in local storage
+        const storedNotification = JSON.parse(
+          localStorage.getItem("notification")
+        );
+
+        if (!storedNotification) {
+          // If there is no stored notification, store the received notification
+          setNotificationDetails(notification);
+
+          // Store the notification in local storage
+          localStorage.setItem("notification", JSON.stringify(notification));
+        }
+      } else {
+        // Update the state and store the updated notification in local storage
+        setNotificationDetails(notification);
+        localStorage.setItem("notification", JSON.stringify(notification));
+      }
+    });
+  };
 
   useEffect(() => {
     if (user === null) {
@@ -30,10 +98,20 @@ const StaffHomepage = () => {
         user_role: user_roleCookie,
       });
     }
+    initializePusherBeams();
+
+    listenToNotification();
   }, []);
   const handleProfileButton = () => {
     navigate("/staff/profile");
   };
+
+  const handleNotificationButton = () => {
+    setNotification(false);
+    setNotificationDetails(null);
+    navigate(`/notification/${user?.id}`);
+  };
+
   return (
     <div className="h-full background">
       <div className="flex justify-between bg-mainColor p-5 border-b-8 border-red-500">
@@ -41,8 +119,18 @@ const StaffHomepage = () => {
           <img src={UserSample} className="w-12 h-12 rounded-full " />
         </button>
 
-        <button>
-          <img src={NotificationIcon} />
+        <button onClick={handleNotificationButton} className="relative">
+          {notification && (
+            <span className="absolute top-[2px] right-[3px] flex h-3 w-3 ">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 text-xs justify-center items-center text-white">
+                {/* {jobOrderDetails && <p> {jobOrderDetails.length}</p>} */}
+              </span>
+            </span>
+            // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
+          )}
+
+          <Bell size={"2.5rem"} color="#FFFFFF" />
         </button>
       </div>
 

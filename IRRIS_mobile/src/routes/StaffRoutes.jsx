@@ -26,11 +26,11 @@ const StaffRoutes = [
     key="staffRoute2"
     path="/staff/more"
     element={
-      // <TransitionWrapper>
-      <HomepageLayout>
-        <StaffMorePage />
-      </HomepageLayout>
-      // </TransitionWrapper>
+      <TransitionWrapper location={location}>
+        <HomepageLayout>
+          <StaffMorePage />
+        </HomepageLayout>
+      </TransitionWrapper>
     }
   />,
   <Route

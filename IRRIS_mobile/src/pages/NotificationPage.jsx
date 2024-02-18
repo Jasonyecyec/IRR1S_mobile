@@ -5,7 +5,7 @@ import "../index.css";
 import { getNotification } from "../services/api/sharedService";
 import Cookies from "js-cookie";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { formatDate } from "../utils/utils";
+import { formatDate, formatDateTime } from "../utils/utils";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const NotificationPage = () => {
@@ -31,7 +31,7 @@ const NotificationPage = () => {
   }, []);
   return (
     <div className="h-full flex flex-col">
-      <div className="p-3 bg-mainColor flex items-center ">
+      <div className="p-4 bg-mainColor flex items-center ">
         <button onClick={() => navigate(-1)}>
           <ArrowLeft size={32} color="#ffffff" weight="bold" />
         </button>
@@ -67,8 +67,8 @@ const NotificationPage = () => {
             notification.map((item) => (
               <div className="shadow-md bg-white rounded-lg p-5" key={item.id}>
                 <div className="flex justify-between border-b-2 pb-3">
-                  <p className="mt-1">Notif No: </p>
-                  <p>{formatDate(item.created_at)}</p>
+                  <p className="mt-1">Notif No: {item.id} </p>
+                  <p>{formatDateTime(item.created_at)}</p>
                 </div>
                 <p className="font-bold mt-2">{item.message}</p>
               </div>

@@ -3,15 +3,23 @@ import PageTitle from "@/src/components/PageTitle";
 import { Coins } from "@phosphor-icons/react";
 import Rewards from "@/src/components/student/Rewards";
 import { getRewards } from "@/src/services/api/sharedService";
+import { getStudentPoints } from "@/src/services/api/StudentService";
 import { getImageUrl } from "@/src/utils/utils";
 import { Spinner } from "flowbite-react";
+import useUserStore from "@/src/services/state/userStore";
+import CountUp from "react-countup";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../../index.css";
 
 const RewardsPage = () => {
+  const { user, setUser } = useUserStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+  }));
   const [isLoading, setIsLoading] = useState(false);
   const [rewards, setRewards] = useState(null);
+  const [points, setPoints] = useState(null);
 
   const fetchRewards = async () => {
     try {
@@ -24,8 +32,22 @@ const RewardsPage = () => {
       setIsLoading(false);
     }
   };
+
+  const fetchStudentPoints = async () => {
+    setIsLoading(true);
+    try {
+      const { points } = await getStudentPoints(user?.id);
+      setPoints(points);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchRewards();
+    fetchStudentPoints();
   }, []);
 
   return (
@@ -35,9 +57,16 @@ const RewardsPage = () => {
       <div className="flex-1  p-5 pt-10 space-y-9">
         <div className="flex justify-end">
           {" "}
-          <div className="rounded-full bg-white px-3 py-2 flex flex-col items-center justify-center font-semibold  border-2">
+          {/* <div className="rounded-full bg-white px-3 py-2 flex flex-col items-center justify-center font-semibold  border-2">
             <Coins size={32} color="#FFB800" />
             <p>24 points</p>
+          </div> */}
+          <div className="bg-[#987700] mt-2 text-white p-2 w-[8.5rem] justify-center rounded-full font-semibold flex space-x-2 items-center">
+            <Coins size={25} />
+            <p className=" ">
+              <CountUp end={points} start={0} />{" "}
+              <span className="text-sm">points </span>
+            </p>
           </div>
           {/* <p className="ml-8 font-semibold text-sm">AVAILABLE POINTS</p> */}
         </div>

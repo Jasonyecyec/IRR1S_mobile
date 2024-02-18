@@ -57,7 +57,7 @@ const AvailableFacility = () => {
     fetchAvailableFacilityToReserve();
   }, []);
   return (
-    <div className="w-screen h-screen background flex flex-col">
+    <div className="w-screen h-screen   flex flex-col">
       <PageTitle title="AVAILABLE FACILITY" />
 
       <div className="p-5 pt-14">
@@ -79,12 +79,12 @@ const AvailableFacility = () => {
           </div>
 
           <div className="rounded-md">
-            <div className="font-bold flex bg-gray-200 p-2 items-center">
-              <p className="w-24 border-2 text-center ">Facility</p>
+            <div className="font-bold flex p-2 items-center bg-mainColor text-white rounded-t-md">
+              <p className="w-24  text-center ">Facility</p>
               <p className="px-5">Description</p>
             </div>
 
-            <div className="bg-white h-[33rem] overflow-y-auto space-y-8 flex flex-col items-center shadow-md rounded-lg">
+            <div className=" h-[33rem] overflow-y-auto space-y-8 flex flex-col items-center  rounded-lg py-2">
               {isLoading ? (
                 <Spinner
                   aria-label="Large spinner example"
@@ -101,7 +101,7 @@ const AvailableFacility = () => {
                     to={`/staff/pencil-book/${facility.qr_code}`}
                     className="w-full"
                   >
-                    <div className="shadow-md bg-white border-2 p-3 flex w-full">
+                    <div className=" shadow-md border  p-3 flex w-full">
                       <div>
                         <img
                           src={getImageUrl(facility.facilities_image)}
@@ -110,7 +110,9 @@ const AvailableFacility = () => {
                         />
                       </div>
                       <div className="pl-5">
-                        <p>{facility.facilities_name}</p>
+                        <p className="font-semibold">
+                          {facility.facilities_name}
+                        </p>
                         <p>Building: {facility.location}</p>
 
                         <p>

@@ -14,6 +14,8 @@ import useNotificationStore from "../services/state/notificationStore";
 import { fetchUserData } from "../services/api/sharedService";
 import { Bell } from "@phosphor-icons/react";
 import { getStudentPoints } from "../services/api/StudentService";
+import { Coins } from "@phosphor-icons/react";
+import CountUp from "react-countup";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -22,12 +24,14 @@ const HomePage = () => {
     user: state.user,
     setUser: state.setUser,
   }));
+
   const { notification, setNotification, setNotificationDetails } =
     useNotificationStore((state) => ({
       notification: state.notification,
       setNotification: state.setNotification,
       setNotificationDetails: state.setNotificationDetails,
     }));
+
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -109,6 +113,7 @@ const HomePage = () => {
     setNotificationDetails(null);
     navigate(`/notification/${user?.id}`);
   };
+
   return (
     <div className="h-full ">
       <div className="flex justify-between bg-mainColor p-5 border-b-8 border-red-500">
@@ -135,7 +140,7 @@ const HomePage = () => {
 
       <div className="p-3 bg-background h-full space-y-10">
         <div className="flex justify-between items-center">
-          <div className="flex space-x-3">
+          <div className="flex space-x-3  max-w-[15rem]">
             <div>
               <img src={QCULogo} alt="qcu-logo" className="w-16 h-16" />
             </div>
@@ -147,19 +152,27 @@ const HomePage = () => {
             </div>
           </div>
 
-          {isLoading ? (
+          <div className="bg-[#987700] text-white p-2 w-[8.5rem] justify-center rounded-full font-semibold flex space-x-2 items-center">
+            <Coins size={25} />
+            <p className=" ">
+              <CountUp end={points} start={0} />{" "}
+              <span className="text-sm">points </span>
+            </p>
+          </div>
+          {/* {isLoading ? (
             <Skeleton
               width={"6rem"}
               height={"2rem"}
               className="p-3 rounded-full"
             />
           ) : (
-            points && (
-              <div className="bg-[#987700] text-white p-3 rounded-full font-semibold">
-                <p> {points} points</p>
+            points !== null && (
+              <div className="bg-[#987700] text-white p-3 rounded-full font-semibold flex space-x-2 items-center">
+                <Coins size={25} />
+                <p className=" ">{points} points</p>
               </div>
             )
-          )}
+          )} */}
         </div>
 
         <div className="bg-[#d4e3f9] border-2 border-white flex justify-center rounded-full">

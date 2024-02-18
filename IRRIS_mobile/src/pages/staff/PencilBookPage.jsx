@@ -132,20 +132,24 @@ const PencilBookPage = () => {
 
       <PageTitle title="PENCIL BOOK" />
       <div className="flex-1  p-5 pt-14">
-        <form className="" onSubmit={handleSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <TextInput
             placeholder="Facility ID"
             label="Facility ID"
+            className="font-semibold"
             value={facility?.qr_code}
             disabled={true}
           />
 
-          <div>
-            <label for="meeting-time">Date start</label>
+          <div className="flex flex-col space-y-2">
+            <label for="date-start" className="font-semibold">
+              Date start
+            </label>
 
             <input
               type="datetime-local"
               id="date-start"
+              className="rounded-md"
               name="dateStart"
               //   value="2018-06-12T19:30"
               min={minDate}
@@ -154,13 +158,16 @@ const PencilBookPage = () => {
             />
           </div>
 
-          <div>
-            <label for="meeting-time">Date end</label>
+          <div className="flex flex-col space-y-2">
+            <label for="date-end" className="font-semibold">
+              Date end
+            </label>
 
             <input
               type="datetime-local"
               id="date-end"
               name="dateEnd"
+              className="rounded-md"
               min={minDate}
               onChange={handleChange}
               required
@@ -175,23 +182,21 @@ const PencilBookPage = () => {
             />
           </div>
 
-          <div className="flex flex-col">
-            <label>Event name</label>
+          <div className="flex flex-col space-y-2">
+            <label className="font-semibold">Event name</label>
             <input
               type="text"
               id="event_name"
               name="event_name"
               value={form.event_name}
               required
+              className="rounded-md"
               onChange={handleChange}
             />
           </div>
 
-          <div>
-            <label
-              for="message"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
+          <div className="space-y-2">
+            <label for="message" className="font-semibold">
               Description
             </label>
             <textarea
@@ -206,7 +211,7 @@ const PencilBookPage = () => {
             ></textarea>
           </div>
 
-          <div className="flex space-x-3 ">
+          <div className="flex space-x-3 font-semibold text-lg">
             <button
               className="flex-1 bg-mainColor text-white rounded-md"
               onClick={(e) => {
@@ -214,13 +219,13 @@ const PencilBookPage = () => {
                 navigate(-1);
               }}
             >
-              Cancel
+              CANCEL
             </button>
             <button
               type="submit"
               className="bg-mainColor text-white rounded-md px-3 py-2 flex-1"
             >
-              submit
+              SUBMIT
             </button>
           </div>
         </form>
