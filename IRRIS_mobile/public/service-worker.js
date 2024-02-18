@@ -32,7 +32,7 @@ async function openDatabase() {
 }
 
 PusherPushNotifications.onNotificationReceived = async ({ pushEvent, payload }) => {
-  console.log("Push notification received. Payload data: ", JSON.parse(payload.data.content));
+  // console.log("Push notification received. Payload data: ", JSON.parse(payload.data.content));
   console.log("Push notification received. Notification type: ", payload.data.type);
 
   // Log information about the event

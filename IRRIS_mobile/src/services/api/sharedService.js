@@ -170,4 +170,32 @@
     }
   };
 
+  export const getAllEvents = async () => {
+    try {
+      // Correctly construct the URL with the query parameter
+      const response = await api.get(`/events`);
+  
+      console.log('Get events response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Get events error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+  export const getPencilBook = async (status = null) => {
+    try {
+      const params = status !== null ? { status } : {};
+  
+      // Correctly construct the URL with the query parameter
+      const response = await api.get(`/pencil-book`,{params});
+  
+      console.log('Get pending pencil book response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Get pending pencil book  error:', error.response || error.message);
+      throw error;
+    }
+  };
+
 
