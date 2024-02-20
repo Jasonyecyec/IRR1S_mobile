@@ -45,7 +45,10 @@ const StaffBottomNavigation = () => {
       <div className="w-8 h-14"></div>
 
       <button>
-        <Link to="" className="text-center  flex flex-col items-center">
+        <Link
+          to="/staff/request-history"
+          className="text-center  flex flex-col items-center"
+        >
           <Note size={32} color="#9c9c9c" /> Request
         </Link>
       </button>
