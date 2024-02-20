@@ -40,3 +40,14 @@ import api from "./api";
       throw error;
     }
   };
+
+  export const requestService = async (form) => {
+    try {
+      const response = await api.post(`/request`,form);
+      console.log("Request successfully",response)
+      return response.data;
+    } catch (error) {
+      console.error("Request error", error.response);
+      throw error;
+    }
+  };

@@ -8,6 +8,8 @@ import TransitionWrapper from "../components/ui/TransitionWrapper";
 import AvailableFacility from "../pages/staff/AvailableFacility";
 import PencilBookPage from "../pages/staff/PencilBookPage";
 import StaffProfilePage from "../pages/staff/StaffProfilePage";
+import RequestHistoryPage from "../pages/staff/RequestHistoryPage";
+import RequestPage from "../pages/staff/RequestPage";
 
 const StaffRoutes = [
   <Route
@@ -67,6 +69,24 @@ const StaffRoutes = [
     element={
       <TransitionWrapper location={location}>
         <StaffProfilePage />
+      </TransitionWrapper>
+    }
+  />,
+  <Route
+    key="staffRoute7"
+    path="/staff/request-history"
+    element={
+      <TransitionWrapper location={location}>
+        <RequestHistoryPage />
+      </TransitionWrapper>
+    }
+  />,
+  <Route
+    key="staffRoute8"
+    path="/staff/request"
+    element={
+      <TransitionWrapper location={location}>
+        <RequestPage />
       </TransitionWrapper>
     }
   />,

@@ -5,7 +5,7 @@ import NotificationIcon from "../../assets/images/bell_icon.png";
 import CalendarIcon from "../../assets/images/calendar_icon.png";
 import RateIcon from "../../assets/images/rate_icon.png";
 import { Link } from "react-router-dom";
-import { NotePencil } from "@phosphor-icons/react";
+import { NotePencil, Note } from "@phosphor-icons/react";
 
 const moreItems = [
   // { to: "", label: "Report", icon: ReportIcon },
@@ -21,6 +21,12 @@ const moreItems = [
     to: "/staff/pencil-book-facility",
     label: "Pencil Book",
     icon: NotePencil,
+  },
+
+  {
+    to: "/staff/request",
+    label: "Request",
+    icon: Note,
   },
 ];
 
@@ -44,7 +50,7 @@ const StaffMorePage = () => {
           {moreItems.map((item, index) => (
             <Link className="" key={index} to={item.to}>
               <div className="bg-white shadow-md rounded-lg  h-28 text-center font-semibold flex flex-col justify-center items-center">
-                {item.label === "Pencil Book" ? (
+                {item.label === "Pencil Book" || item.label === "Request" ? (
                   <item.icon size="3.5rem" color="#2e39ac" />
                 ) : (
                   <img src={item.icon} className="w-14 h-14" />

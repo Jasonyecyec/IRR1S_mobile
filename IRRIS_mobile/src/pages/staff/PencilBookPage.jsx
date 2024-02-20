@@ -78,6 +78,7 @@ const PencilBookPage = () => {
     e.preventDefault();
     if (disabledDates.includes(form.dateStart)) {
       console.log("yes");
+      return;
     }
 
     setIsLoading(true);
