@@ -28,6 +28,11 @@ const moreItems = [
     label: "Request",
     icon: Note,
   },
+  {
+    to: "/staff/pencil-book-history",
+    label: "Pencil Book History",
+    icon: Note,
+  },
 ];
 
 const StaffMorePage = () => {
@@ -49,13 +54,17 @@ const StaffMorePage = () => {
           {" "}
           {moreItems.map((item, index) => (
             <Link className="" key={index} to={item.to}>
-              <div className="bg-white shadow-md rounded-lg  h-28 text-center font-semibold flex flex-col justify-center items-center">
-                {item.label === "Pencil Book" || item.label === "Request" ? (
+              <div className="bg-white shadow-md space-y-2 rounded-lg  h-32 text-center font-semibold flex flex-col justify-center items-center">
+                {item.label === "Pencil Book" ||
+                item.label === "Request" ||
+                item.label === "Pencil Book History" ? (
                   <item.icon size="3.5rem" color="#2e39ac" />
                 ) : (
                   <img src={item.icon} className="w-14 h-14" />
                 )}
-                <p className="text-sm">{item.label}</p>
+                <p className="text-sm max-w-[80%] font-semibold">
+                  {item.label}
+                </p>
               </div>
             </Link>
           ))}

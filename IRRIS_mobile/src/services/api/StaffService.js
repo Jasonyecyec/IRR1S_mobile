@@ -51,3 +51,15 @@ import api from "./api";
       throw error;
     }
   };
+
+  export const getStaffRequest = async (userId,status = null) => {
+    try {
+      const params = status !== null ? { status } : {};
+      const response = await api.get(`/request-history/${userId}`,{params});
+      console.log("Request history response",response)
+      return response.data;
+    } catch (error) {
+      console.error("Get Request history  error", error.response);
+      throw error;
+    }
+  };
