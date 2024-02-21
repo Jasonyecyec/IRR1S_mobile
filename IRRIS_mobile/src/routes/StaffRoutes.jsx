@@ -10,6 +10,7 @@ import PencilBookPage from "../pages/staff/PencilBookPage";
 import StaffProfilePage from "../pages/staff/StaffProfilePage";
 import RequestHistoryPage from "../pages/staff/RequestHistoryPage";
 import RequestPage from "../pages/staff/RequestPage";
+import PencilBookHistory from "../pages/staff/PencilBookHistory";
 
 const StaffRoutes = [
   <Route
@@ -63,6 +64,7 @@ const StaffRoutes = [
       </TransitionWrapper>
     }
   />,
+
   <Route
     key="staffRoute6"
     path="/staff/profile"
@@ -87,6 +89,16 @@ const StaffRoutes = [
     element={
       <TransitionWrapper location={location}>
         <RequestPage />
+      </TransitionWrapper>
+    }
+  />,
+
+  <Route
+    key="staffRoute9"
+    path="/staff/pencil-book-history"
+    element={
+      <TransitionWrapper location={location}>
+        <PencilBookHistory />
       </TransitionWrapper>
     }
   />,
