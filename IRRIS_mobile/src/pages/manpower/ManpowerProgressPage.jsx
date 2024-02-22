@@ -25,6 +25,7 @@ import {
   updateJobOrderImage,
   acceptJobOrder,
   finishJobOrder,
+  notValidJobOrder,
 } from "@/src/services/api/manpowerService";
 import ImageModal from "@/src/components/ImageModal";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +41,8 @@ const ManpowerProgressPage = () => {
   const [taskInProgress, setTaskInProgress] = useState(null);
   const [openImageReport, setOpenImageReport] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [reportStatus, setReportStatus] = useState(null);
+  const [isNotValidOrDelayModal, setIsNotValidOrDelayModal] = useState(false);
   const [estimatedDuration, setEstimatedDuration] = useState(null);
   const [finishFormData, setFinishFormData] = useState({
     status: "completed",
@@ -145,6 +148,10 @@ const ManpowerProgressPage = () => {
 
   const onCloseImageModal = () => {
     setOpenImageReport(false);
+  };
+
+  const handleReportStatus = (e) => {
+    setReportStatus(e.target.value);
   };
 
   const initializeCamera = async (e) => {
@@ -420,6 +427,21 @@ const ManpowerProgressPage = () => {
     }
   };
 
+  const handleDelayOrNotValidConfirm = async () => {
+    try {
+      setIsLoading(true);
+
+      const response = await notValidJobOrder(taskInProgress?.id);
+      console.log("response not valid", response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      setIsNotValidOrDelayModal(false);
+      navigate("/manpower/tasks");
+    }
+  };
+
   const handleDoneModal = () => {
     //set the taskInProgress local to null
     localStorage.setItem("task_inProgress", JSON.stringify(null));
@@ -432,6 +454,17 @@ const ManpowerProgressPage = () => {
 
   const handleButton = () => {
     // setToastActivated(true);
+    if (!reportStatus) {
+      console.log("report status", reportStatus);
+      notify("Please select status");
+      return;
+    }
+
+    if (reportStatus === "not-valid" || reportStatus === "delay") {
+      setIsNotValidOrDelayModal(true);
+      console.log("are you sure you want to submit");
+      return;
+    }
 
     // check first if imageSrcFileBefore has value
     if (taskInProgress.status === "assigned") {
@@ -488,6 +521,15 @@ const ManpowerProgressPage = () => {
           onCloseModal={onCloseModalConfirm}
           handleConfirmButton={handleConfirmButton}
           content="Are you sure you want to start the task now?"
+        />
+      )}
+
+      {isNotValidOrDelayModal && (
+        <ConfirmationModal
+          isLoading={isLoading}
+          onCloseModal={() => setIsNotValidOrDelayModal(false)}
+          handleConfirmButton={handleDelayOrNotValidConfirm}
+          content="Are you sure you want to submit?"
         />
       )}
 
@@ -569,45 +611,48 @@ const ManpowerProgressPage = () => {
             <div className="bg-white rounded-lg p-3 shadow-md">
               <p className="font-bold pb-2">Job Order</p>
 
-              <div className="border-y-2 pb-5 text-base">
-                <p className="flex items-center space-x-1 pt-2">
-                  <Clock size={20} color="#121212" />
-                  <span>
-                    Date Assigned: {formatDate(taskInProgress?.created_at)}
-                  </span>
-                </p>
-
-                {taskInProgress?.due_date && (
-                  <p className="flex items-center space-x-1">
-                    <CalendarBlank size={20} color="#121212" />
+              <div className="border-y-2  flex pb-5 text-sm space-y-1">
+                <div className="flex-1 ">
+                  <p className="flex items-center space-x-1 pt-2">
+                    <Clock size={20} color="#121212" />
                     <span>
-                      Due date: {formatDate(taskInProgress?.due_date)}
+                      Date Assigned: {formatDate(taskInProgress?.created_at)}
                     </span>
                   </p>
-                )}
 
-                <p className="flex items-center space-x-1">
-                  <Hash size={20} color="#121212" />
-                  <span>Task No. {taskInProgress?.id}</span>
-                </p>
-                <p className="flex items-center space-x-1">
-                  <MapPin size={20} color="#121212" />
-                  <span>
-                    Location:{" "}
-                    {taskInProgress?.report?.facility?.facilities_name}
-                  </span>
-                </p>
-                <p className="flex items-center space-x-1">
-                  <WarningCircle size={20} color="#121212" />
-                  <span>Issue: {taskInProgress?.report?.description}</span>
-                </p>
+                  {taskInProgress?.due_date && (
+                    <p className="flex items-center space-x-1">
+                      <CalendarBlank size={20} color="#121212" />
+                      <span>
+                        Due date: {formatDate(taskInProgress?.due_date)}
+                      </span>
+                    </p>
+                  )}
+
+                  <p className="flex items-center space-x-1">
+                    <Hash size={20} color="#121212" />
+                    <span>Task No. {taskInProgress?.id}</span>
+                  </p>
+                  <p className="flex items-center space-x-1">
+                    <MapPin size={20} color="#121212" />
+                    <span>
+                      Location:{" "}
+                      {taskInProgress?.report?.facility?.facilities_name}
+                    </span>
+                  </p>
+                  <p className="flex items-center space-x-1">
+                    <WarningCircle size={20} color="#121212" />
+                    <span>Issue: {taskInProgress?.report?.description}</span>
+                  </p>
+                </div>
+
                 {taskInProgress.status === "assigned" &&
                   taskInProgress?.image_before && (
-                    <div className="flex justify-center mt-2">
+                    <div className="flex flex-1 justify-center mt-2">
                       <img
                         src={getImageUrl(taskInProgress?.report?.image_before)}
                         alt="report-image"
-                        className="w-32 h-24 rounded-lg"
+                        className="w-20 h-20 rounded-lg"
                         onClick={() => setOpenImageReport(true)}
                       />
 
@@ -623,7 +668,7 @@ const ManpowerProgressPage = () => {
 
               {taskInProgress.status === "assigned" && (
                 <div className="space-y-5">
-                  <p className="text-center font-bold text-2xl">
+                  <p className="text-center font-bold text-lg">
                     Task{" "}
                     {task === "report"
                       ? "Report"
@@ -631,7 +676,7 @@ const ManpowerProgressPage = () => {
                       ? "Request"
                       : "Daily"}
                   </p>
-                  <div className="flex justify-center space-x-5">
+                  <div className="flex justify-center space-x-5 ">
                     <button
                       className="shadow-md rounded-md flex flex-col items-center justify-center p-2"
                       onClick={initializeCamera}
@@ -657,6 +702,23 @@ const ManpowerProgressPage = () => {
                       </div>
                     )}
                   </div>
+
+                  <div className="space-y-2 items-center">
+                    <label for="validity">Status of report:</label>
+
+                    <select
+                      name="validity"
+                      id="validity"
+                      className="w-full rounded-md"
+                      value={reportStatus}
+                      onChange={handleReportStatus}
+                    >
+                      <option value="">Please choose an option</option>
+                      <option value="valid">Valid</option>
+                      <option value="not-valid">Not Valid</option>
+                      <option value="delay">Delay</option>
+                    </select>
+                  </div>
                   <div className="space-y-2 items-center">
                     <p>Estimated time to finish</p>
                     <input
@@ -670,7 +732,10 @@ const ManpowerProgressPage = () => {
                     className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-xl"
                     onClick={handleButton}
                   >
-                    Start Task
+                    {reportStatus === "not-valid" || reportStatus === "delay"
+                      ? "Submit"
+                      : "Start Task"}
+                    {/* Start Task */}
                   </button>
                 </div>
               )}
