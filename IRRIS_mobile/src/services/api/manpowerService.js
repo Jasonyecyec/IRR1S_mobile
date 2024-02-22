@@ -48,6 +48,21 @@ export const getJobOrder = async (userId,status = null) => {
     }
   };
 
+
+  export const notValidJobOrder = async (id) => {
+    try {
+  
+      // Make an API call with the formData object and id
+      const response = await api.patch(`/job-order-not-valid/${id}`);
+  
+      console.log('Update Job Order Not Valid response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Update Job Order Not Valid  error:', error.response || error.message);
+      throw error;
+    }
+  };
+
   export const acceptJobOrder = async (formData, id) => {
     try {
   

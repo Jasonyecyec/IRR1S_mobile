@@ -134,6 +134,11 @@ const TasksPage = () => {
                             Completed
                           </span>
                         )}
+                        {job.status === "not-valid" && (
+                          <span className="bg-gray-400 py-1 px-2 rounded-md text-white">
+                            Not Valid
+                          </span>
+                        )}
                       </p>
                       <Link
                         className="text-mainColor font-bold"

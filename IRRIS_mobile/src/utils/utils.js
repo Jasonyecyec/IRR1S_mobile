@@ -125,13 +125,12 @@ export const getStatusColor = (status) => {
       return 'red';
     case 'pending':
         return 'red';
+    case 'not-valid':
+          return 'gray';
     default:
       return 'gray'; // You can set a default color or handle other cases as needed
   }
 };
-
-
-
 
 
 export const getStatusText = (status) => {
@@ -144,6 +143,8 @@ export const getStatusText = (status) => {
       return 'Pending';
     case 'pending':
         return 'Pending';
+    case 'not-valid':
+        return 'Not Valid';
     default:
       return 'Unknown';
   }

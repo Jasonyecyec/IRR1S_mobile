@@ -6,6 +6,7 @@ const filterItem = [
   { label: "Completed", value: "completed" },
   { label: "Ongoing", value: "ongoing" },
   { label: "Pending", value: "assigned" },
+  { label: "Not Valid", value: "not-valid" },
 ];
 
 const TaskFilter = ({
