@@ -116,8 +116,8 @@ const TasksPage = () => {
                       {" "}
                       <p className="font-bold text-lg ">
                         Job Order:{" "}
-                        <span className="bg-yellow-300 py-1 px-2 rounded-md mr-2">
-                          {job.issue_type ? "Report" : "Request"}
+                        <span className="bg-yellow-300 py-1 px-2 rounded-md mr-2 capitalize">
+                          {job.process_type}
                         </span>
                         {job.status === "assigned" && (
                           <span className="bg-red-500 py-1 px-2 rounded-md text-white">
@@ -142,9 +142,7 @@ const TasksPage = () => {
                       </p>
                       <Link
                         className="text-mainColor font-bold"
-                        to={`/manpower/progress/${
-                          job.issue_type ? "report" : "request"
-                        }/${job?.id}`}
+                        to={`/manpower/progress/${job.process_type}/${job?.id}`}
                       >
                         {" "}
                         View

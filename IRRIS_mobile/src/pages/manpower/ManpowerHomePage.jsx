@@ -223,27 +223,31 @@ const ManpowerHomePage = () => {
             </div>
           ) : (
             <div className="h-[16.5rem]  overflow-y-scroll">
-              {recentJobOrder?.map((item, index) => (
-                <div key={index} className="space-y-3 bg-white py-2 border-t-2">
-                  <div className="flex justify-between">
-                    <p className="font-bold text-lg">{item.description}</p>
-                    <p className="text-md flex items-center space-x-2">
-                      <Circle size={24} color="#3cd008" weight="fill" />
-                      <span>
-                        {item.status === "assigned" ? "Pending" : "Ongoing"}
-                      </span>
+              {recentJobOrder &&
+                recentJobOrder?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="space-y-3 bg-white py-2 border-t-2"
+                  >
+                    <div className="flex justify-between">
+                      <p className="font-bold text-lg">{item.description}</p>
+                      <p className="text-md flex items-center space-x-2">
+                        <Circle size={24} color="#3cd008" weight="fill" />
+                        <span>
+                          {item.status === "assigned" ? "Pending" : "Ongoing"}
+                        </span>
+                      </p>
+                    </div>
+                    <p className="flex items-center space-x-2">
+                      <Clock size={24} color="#121212" />
+                      <span> {formatDate(item.created_at)} </span>
+                    </p>
+                    <p className="flex items-center space-x-2">
+                      <MapPin size={24} color="#121212" />
+                      <span> {item.report?.facility?.facilities_name}</span>
                     </p>
                   </div>
-                  <p className="flex items-center space-x-2">
-                    <Clock size={24} color="#121212" />
-                    <span> {formatDate(item.created_at)} </span>
-                  </p>
-                  <p className="flex items-center space-x-2">
-                    <MapPin size={24} color="#121212" />
-                    <span> {item.report.facility.facilities_name}</span>
-                  </p>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </div>
