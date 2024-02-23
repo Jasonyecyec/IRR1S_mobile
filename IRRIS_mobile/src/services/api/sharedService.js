@@ -108,6 +108,24 @@
     }
   };
 
+  export const reportSuggestion = async (formDataReport) => {
+    try {
+      // Set the appropriate headers for multipart/form-data
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      const response = await api.post("/reports-suggestion", formDataReport, config);
+      console.log("Suggestion Report  response:", response);
+
+      return response.data;
+    } catch (error) {
+      console.error("Suggestion Report  error", error.response);
+      throw error;
+    }
+  };
+
   export const fetchUserData  = async ()=>{
     try {
       const userIdCookie = Cookies.get("user_id");

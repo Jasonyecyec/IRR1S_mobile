@@ -1,29 +1,482 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import PageTitle from "../components/PageTitle";
+import "../index.css";
+import { Label, FileInput } from "flowbite-react";
+import TextInput from "../components/TextInput";
+import ConfirmationModalSuggestion from "../components/ConfirmationModal";
+import useUserStore from "../services/state/userStore";
+import Cookies from "js-cookie";
+import { reportSuggestion } from "../services/api/sharedService";
 
-import { SkipBack, Camera } from "@phosphor-icons/react";
+import {
+  ArrowLeft,
+  Aperture,
+  Camera,
+  X,
+  Check,
+  ArrowCounterClockwise,
+} from "@phosphor-icons/react";
 
-function SuggestionBoxPage() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+function IssueCategoryDropdown({ onSelect, issueCategoriesData }) {
+  const issueCategories = Object.keys(issueCategoriesData);
 
-  const buttonRef = useRef(null);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleItemClick = (item) => {
-    setSelectedItem(item);
-    toggleDropdown();
+  const handleChange = (e) => {
+    const selectedCategory = e.target.value;
+    onSelect(selectedCategory);
   };
 
   return (
+    <select
+      onChange={handleChange}
+      className="block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    >
+      <option value="">Select Category</option>
+      {issueCategories.map((category, index) => (
+        <option key={index} value={category}>
+          {category}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+function SuggestionBoxPage() {
+  //reportissue
+  const location = useLocation();
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [canvas, setCanvas] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalSubmit, setOpenModalSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [issueType, setIssueType] = useState(""); // Combined issue type
+
+  // clear the form inputs when the form is submitted or canceled
+
+  const facilityIdInputRef = useRef(null);
+  const roomInputRef = useRef(null);
+  const locationInputRef = useRef(null);
+  const descriptionInputRef = useRef(null);
+
+  const [form, setForm] = useState({
+    facility_id: "",
+    image_before: null,
+    room: "",
+    location: "",
+    description: "",
+    issue_type: "",
+    status: "pending",
+  });
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedIssue, setSelectedIssue] = useState("");
+
+  const issueCategoriesData = {
+    "Maintenance and Repairs": {
+      "Roof Leaks": "carpentry",
+      "Window Breaks": "carpentry",
+      // other issues...
+    },
+    "Cleanliness and Sanitation": {
+      "Restroom Cleanliness": "maintenance",
+      "Garbage Disposal": "maintenance",
+      // other issues...
+    },
+    "Temperature and Ventilation": {
+      "HVAC Problems": "electrical",
+      "Heating/Cooling": "electrical",
+      // other issues...
+    },
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    setSelectedIssue(""); // Reset selected issue when category changes
+  };
+
+  const handleIssueSelect = (issue) => {
+    console.log("Selected issue:", issue);
+    setSelectedIssue(issue);
+
+    // Combine selected category and issue to form the issue type
+    const newIssueType = selectedCategory
+      ? `${selectedCategory} - ${issue}`
+      : issue;
+
+    // Update the form state with the new issue type
+    setForm((prevForm) => ({
+      ...prevForm,
+      issue_type: newIssueType,
+    }));
+  };
+
+  // Update issue type whenever selected category or issue changes
+  useEffect(() => {
+    let newIssueType = "";
+
+    if (selectedCategory && selectedIssue) {
+      newIssueType = `${selectedCategory} - ${selectedIssue}`;
+    } else if (selectedCategory) {
+      newIssueType = selectedCategory;
+    }
+
+    // Update the issueType state with the new value
+    setIssueType(newIssueType);
+
+    // Log the input value for the useEffect hook
+    console.log("Input for useEffect:", selectedCategory, selectedIssue);
+  }, [selectedCategory, selectedIssue]);
+
+  const navigate = useNavigate();
+
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+
+  // Function to filter categories based on search term
+
+  const handleRemoveImage = (e) => {
+    e.preventDefault();
+    setOpenModal(true);
+    setImageFile(null); // Reset the image file state
+  };
+
+  const initializeCamera = async (e) => {
+    e.preventDefault();
+    //log available camera here
+    logAvailableCameras();
+    setIsCameraOpen(true);
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      try {
+        const constraints = {
+          video: { facingMode: "environment" }, // Default to back camera
+        };
+
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log("environment", stream);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+        }
+      } catch (err) {
+        console.error("Error accessing the camera: ", err);
+        try {
+          // Fallback to any available camera if the back camera is not accessible
+          const fallbackConstraints = { video: true };
+          const fallbackStream = await navigator.mediaDevices.getUserMedia(
+            fallbackConstraints
+          );
+          console.log("user ");
+
+          if (videoRef.current) {
+            videoRef.current.srcObject = fallbackStream;
+            videoRef.current.play();
+          }
+        } catch (fallbackErr) {
+          console.error("Error accessing any camera: ", fallbackErr);
+        }
+      }
+    }
+  };
+
+  const logAvailableCameras = () => {
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((devices) => {
+        const videoDevices = devices.filter(
+          (device) => device.kind === "videoinput"
+        );
+        console.log("Available camera devices:", videoDevices);
+      })
+      .catch((err) => {
+        console.error("Error listing devices:", err);
+      });
+  };
+
+  const onCloseModal = () => {
+    // Clear the form data
+    setForm({
+      facility_id: "",
+      image_before: null,
+      issue_type: "",
+      room: "",
+      location: "",
+      issues: "",
+      description: "",
+      status: "pending",
+    });
+    // Clear input values
+    facilityIdInputRef.current.value = "";
+    roomInputRef.current.value = "";
+    locationInputRef.current.value = "";
+    descriptionInputRef.current.value = "";
+    // Clear selected issue type
+    setSelectedIssue("");
+
+    // Clear image file
+    setImageFile(null);
+
+    setOpenModal(false);
+  };
+
+  const onCloseModalSubmit = () => {
+    setOpenModalSubmit(false);
+  };
+
+  const handleConfirmButton = () => {
+    setImageFile(null);
+    setImageSrc(null);
+    onCloseModal();
+
+    // Clear the form data
+    setForm({
+      facility_id: "",
+      image_before: null,
+      issue_type: "",
+      room: "",
+      location: "",
+      issues: "",
+      description: "",
+      status: "pending",
+    });
+    // Clear input values
+    facilityIdInputRef.current.value = "";
+    roomInputRef.current.value = "";
+    locationInputRef.current.value = "";
+    descriptionInputRef.current.value = "";
+    // Clear selected issue type
+    setSelectedIssue("");
+
+    // Clear image file
+    setImageFile(null);
+    // Close the modal
+    setOpenModal(false);
+  };
+
+  const handleConfirmButtonSubmit = async () => {
+    setIsLoading(true);
+
+    try {
+      const formDataReport = new FormData();
+
+      formDataReport.append("facility_id", form.facility_id);
+      formDataReport.append("room", form.room);
+      formDataReport.append("location", form.location);
+      formDataReport.append("issue_type", form.issueType);
+      formDataReport.append("description", form.description);
+      formDataReport.append("status", form.status);
+
+      // Append the file if it exists
+      if (imageFile) {
+        formDataReport.append("image_before", imageFile); // Append image file to form data
+
+        // Log the appended image file
+        console.log("Appended image file:", imageFile);
+      }
+
+      setOpenModalSubmit(false);
+
+      console.log("form", form);
+      const response = await reportSuggestion(formDataReport);
+      navigate(response.route);
+    } catch (error) {
+      console.error(error);
+      navigate(error.response.data.route, {
+        state: { errorMessage: error.response.data.error },
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmitButton = (e) => {
+    e.preventDefault();
+    console.log("Form data:", form); // Check if issue_type is included in form data
+    setOpenModalSubmit(true);
+  };
+
+  const captureImage = () => {
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+
+    console.log(video.videoWidth);
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext("2d");
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // You can then save the image from the canvas as needed
+
+    // Add date and time to the canvas
+    const dateTime = new Date().toLocaleString();
+    const fontSize = 20; // Choose an appropriate font size
+    context.font = `${fontSize}px Arial`; // Set font on context, not canvas
+
+    // Align text in the center horizontally
+    context.textAlign = "center";
+
+    // Align text in the middle vertically
+    context.textBaseline = "middle";
+
+    // Text color that contrasts with the background
+    context.fillStyle = "white";
+
+    // Position the text in the center of the canvas
+    // The x-coordinate is half the canvas width
+    // The y-coordinate is a certain distance from the bottom, for example, 30 pixels
+    context.fillText(dateTime, canvas.width / 2, canvas.height - 50);
+
+    //set to state
+    setCanvas(canvas); // Convert canvas to base64 URL and set it as state
+    console.log(canvas);
+  };
+
+  const savedImage = () => {
+    if (canvasRef.current) {
+      // Convert the canvas to a data URL and then to a Blob
+      canvasRef.current.toBlob((blob) => {
+        // Format the current date and time to use as the file name
+        const date = new Date();
+        const fileName = `image_${date
+          .toISOString()
+          .replace(/:|\./g, "-")}.jpg`;
+
+        // Create a file from the blob
+        const imageFile = new File([blob], fileName, {
+          type: "image/jpeg",
+          lastModified: date.getTime(),
+        });
+
+        // Create an object URL for the File object
+        const objectURL = URL.createObjectURL(imageFile);
+
+        // Set the object URL as the source for the image
+        setImageSrc(objectURL);
+
+        // Log the image file to check if it's correctly created
+        console.log("Image File:", imageFile);
+        // Set the file in the state or do something with it (e.g., upload)
+        setImageFile(imageFile);
+
+        // Log the updated imageFile state
+        console.log("Updated Image File State:", imageFile);
+        // Example: Log the file size to see if the file was created successfully
+        console.log("Size of the new File:", imageFile.size);
+      }, "image/jpeg");
+    }
+
+    stopCameraStream();
+  };
+
+  const stopCameraStream = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      // Get the stream from the video element
+      const stream = videoRef.current.srcObject;
+      // Stop all tracks in the stream
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      // Clear the video source
+      videoRef.current.srcObject = null;
+      setIsCameraOpen(false); // Close the camera view/modal
+      setCanvas(null);
+    }
+  };
+
+  const retakeImage = () => {
+    setCanvas(null); // Reset the canvas
+    setImageFile(null); // Reset the image file
+    setImageSrc(null); // Reset the image source
+  };
+
+  //------------------------------------------------------------------------------------------------------------------
+
+  //camera open functions
+
+  return (
+    // content of the page
     <div className="">
+      {openModal && (
+        <ConfirmationModalSuggestion
+          isLoading={false}
+          onCloseModal={onCloseModal}
+          handleConfirmButton={handleConfirmButton}
+          content="Remove image?"
+        />
+      )}
+
+      {openModalSubmit && (
+        <ConfirmationModalSuggestion
+          isLoading={isLoading}
+          onCloseModal={onCloseModalSubmit}
+          handleConfirmButton={handleConfirmButtonSubmit}
+          content="Do you confirm that the details are correct?"
+        />
+      )}
+
+      {isCameraOpen && (
+        <div className="absolute top-0  left-0 bg-gray-700 bg-opacity-70 z-10 w-full h-full ">
+          <div className="relative space-y-10  h-full">
+            <video
+              ref={videoRef}
+              className={`h-full w-full z-10 object-cover object-center	 ${
+                canvas ? "hidden" : ""
+              }`} // Hide the video if the image is captured
+            />
+
+            <canvas
+              ref={canvasRef}
+              className={`h-full w-full z-10 object-cover object-center absolute top-[-40px] left-0  ${
+                canvas ? "" : "hidden"
+              }`} // Show the canvas only if the image is captured
+            />
+
+            {/* <div className="flex justify-center space-x-5 absolute bottom-0 left-0"> */}
+            <button
+              className=" text-white mt-0 p-3 w-12 h-12 rounded-full text-xl absolute top-1  right-2 z-20"
+              onClick={stopCameraStream}
+            >
+              <X size={35} color="#ffffff" weight="bold" />{" "}
+            </button>
+            {canvas ? (
+              <div className="absolute bottom-32 left-0  w-full flex justify-center space-x-16 z-20">
+                <button
+                  onClick={retakeImage}
+                  className="bg-mainColor text-white p-3  rounded-full text-xl"
+                >
+                  <ArrowCounterClockwise
+                    size={32}
+                    color="#ffffff"
+                    weight="bold"
+                  />
+                </button>
+                <button
+                  className="bg-mainColor text-white p-3  rounded-full text-xl"
+                  onClick={savedImage}
+                >
+                  <Check size={32} color="#ffffff" weight="bold" />
+                </button>
+              </div>
+            ) : (
+              <button
+                className="bg-mainColor text-white p-3 w-20 shadow-2xl rounded-full flex flex-col items-center absolute bottom-28 left-1/2 transform -translate-x-1/2"
+                onClick={captureImage}
+              >
+                <Aperture size={40} color="#ffffff  " />
+              </button>
+            )}
+            {/* </div> */}
+          </div>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------------------------------------------------------------ */}
       <header className="fixed z-[-1] top-0 left-0 right-0 bg-blue-900 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
         <div className="backbutton  w-[2rem] ml-2 mt-1">
           <Link to="/" className="text-white  ">
-            <SkipBack size={32} />
+            <ArrowLeft size={32} />
           </Link>
         </div>
       </header>
@@ -31,7 +484,7 @@ function SuggestionBoxPage() {
       <div className="flex justify-center mt-[5rem] z-1">
         <div className="banner w-[17rem] h-[4rem] rounded-full bg-blue-100 flex justify-center align-items-center pt-2 pb-2 mt-[-2rem]">
           {" "}
-          <p class="text-3xl font-medium text-gray-900 dark:text-white">
+          <p className="text-3xl font-medium text-gray-900 dark:text-white">
             Suggestion Box
           </p>
         </div>
@@ -40,29 +493,37 @@ function SuggestionBoxPage() {
       {/* SUGGESTION BOX FORM */}
 
       <div className="form-container max-w-sm mx-auto h-[85vh]  overflow-y-auto">
-        <form class="max-w-sm mx-auto mt-2 ">
-          <div class="mb-5">
+        <form className="max-w-sm mx-auto mt-2 " onSubmit={handleSubmitButton}>
+          <div className="mb-5">
             <label
               htmlFor="text"
-              class="block text-sm font-medium text-gray-900 dark:text-white"
+              className="block text-sm font-medium text-gray-900 dark:text-white"
             >
-              <span class="flex items-center justify-between">Facility ID</span>
+              <span className="flex items-center justify-between">
+                Facility ID
+              </span>
             </label>
             <span className="text-[0.6rem] font-small">
               N/A, if not applicable
             </span>
             <input
-              type="text"
+              ref={facilityIdInputRef}
+              type="number"
               id="FacilityID"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              name="facility_id"
+              value={form.facility_id}
+              onChange={(e) =>
+                setForm({ ...form, facility_id: e.target.value })
+              }
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="ex. 123456"
               required
             />
           </div>
-          <div class="mb-5">
+          <div className="mb-5">
             <label
               htmlFor="text"
-              class="block text-sm font-medium text-gray-900 dark:text-white"
+              className="block text-sm font-medium text-gray-900 dark:text-white"
             >
               Room
             </label>
@@ -70,24 +531,32 @@ function SuggestionBoxPage() {
               N/A, if not applicable
             </span>
             <input
+              ref={roomInputRef}
               type="text"
               id="Room"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              name="room"
+              value={form.room}
+              onChange={(e) => setForm({ ...form, room: e.target.value })}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required
               placeholder="ex. IL503"
             />
           </div>
-          <div class="mb-5">
+          <div className="mb-5">
             <label
               htmlFor="text"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Location
             </label>
             <input
+              ref={locationInputRef}
               type="text"
               id="Location"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              name="location"
+              value={form.location}
+              onChange={(e) => setForm({ ...form, location: e.target.value })}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required
               placeholder="ex. Open Ground"
             />
@@ -95,348 +564,117 @@ function SuggestionBoxPage() {
 
           <label
             for="message"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Your message
+            Description
           </label>
           <textarea
+            ref={descriptionInputRef}
             id="message"
-            rows="4"
+            name="description"
+            value={form.description}
+            //  onChange={handleChange}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            rows="2"
             className="block mb-2 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Write your thoughts here..."
+            placeholder="ex. Issue description/What might it cause/How come?"
           ></textarea>
 
           {/* ----------------------------------------------------------------------------------------------------------------- */}
-          <div className="relative">
-            <button
-              ref={buttonRef}
-              id="dropdownDividerButton"
-              onClick={toggleDropdown}
-              className="text-white w-full flex justify-between bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="button"
-            >
-              {selectedItem || "Issue Type"}
-              <svg
-                className={`w-2.5 h-2.5 ms-3 ${
-                  isOpen ? "transform rotate-180" : ""
-                }`}
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
+
+          <div>
+            <div className="mb-5">
+              <label
+                htmlFor="issueCategory"
+                className="block text-sm font-medium text-gray-900 dark:text-white"
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
+                Issue Category
+              </label>
 
-            {isOpen && (
-              <div
-                id="dropdownDivider"
-                className="z-10 w-full bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 absolute"
-                style={{
-                  top: buttonRef.current.offsetHeight,
-                  left: buttonRef.current.offsetLeft,
-                }}
-              >
-                <div className="max-h-60  overflow-y-auto">
-                  <ul>
-                    <li className="flex justify-center">
-                      <a
-                        href="#"
-                        onClick={() => handleItemClick("Issue Type")}
-                        className="block px-4 py-2 text-gray-500 dark:text-gray-400 font-medium"
-                      >
-                        Not the following
-                      </a>
-                    </li>
-                  </ul>
-                  <ul
-                    className="py-2 text-sm w-full text-gray-700 dark:text-gray-200"
-                    aria-labelledby="dropdownDividerButton"
-                  >
-                    <li className="flex justify-center">
-                      <span className="block px-4 py-2 text-gray-500 dark:text-gray-400 font-medium">
-                        Maintenance and Repairs
-                      </span>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() =>
-                          handleItemClick("Roof Leaks : Carpentry")
-                        }
-                      >
-                        Roof Leaks : Carpentry
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() =>
-                          handleItemClick("Window Breaks : Carpentry")
-                        }
-                      >
-                        Window Breaks : Carpentry
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() =>
-                          handleItemClick("Electrical Issues : Electrical")
-                        }
-                      >
-                        Electrical Issues : Electrical
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() =>
-                          handleItemClick("Plumbing Problems : Plumbing")
-                        }
-                      >
-                        Plumbing Problems : Plumbing
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() =>
-                          handleItemClick("Broken Chairs/Tables : Carpentry")
-                        }
-                      >
-                        Broken Chairs/Tables : Carpentry
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() =>
-                          handleItemClick(" Elevator Malfunction : Electrical")
-                        }
-                      >
-                        Elevator Malfunction : Electrical
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() =>
-                          handleItemClick("Pathway Repairs : Carpentry")
-                        }
-                      >
-                        Pathway Repairs : Carpentry
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={() =>
-                          handleItemClick("Outdoor Lighting : Electrical")
-                        }
-                      >
-                        Outdoor Lighting : Electrical
-                      </a>
-                    </li>
-                  </ul>
+              <IssueCategoryDropdown
+                onSelect={handleCategorySelect}
+                issueCategoriesData={issueCategoriesData}
+              />
+            </div>
 
-                  <div className="py-2">
-                    <ul
-                      className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                      aria-labelledby="dropdownDividerButton"
-                    >
-                      <li className="flex justify-center">
-                        <span className="block px-4 py-2 text-gray-500 dark:text-gray-400 font-medium">
-                          Cleanliness and Sanitation
-                        </span>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() =>
-                            handleItemClick(
-                              "Restroom Cleanliness : Maintenance"
-                            )
-                          }
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Restroom Cleanliness : Maintenance
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() =>
-                            handleItemClick("Garbage Disposal : Maintenance")
-                          }
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Garbage Disposal : Maintenance
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() =>
-                            handleItemClick("Pest Control : Maintenance")
-                          }
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Pest Control : Maintenance
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() =>
-                            handleItemClick("Area Cleaning : Maintenance")
-                          }
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Area Cleaning : Maintenance
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() =>
-                            handleItemClick(" Garden Maintenance : Maintenance")
-                          }
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Garden Maintenance : Maintenance
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="py-2">
-                    <ul
-                      className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                      aria-labelledby="dropdownDividerButton"
-                    >
-                      <li className="flex justify-center">
-                        <span className="block px-4 py-2 text-gray-500 dark:text-gray-400 font-medium">
-                          Temperature and Ventilation
-                        </span>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() =>
-                            handleItemClick("HVAC Problems : Electrical")
-                          }
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          HVAC Problems : Electrical
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() =>
-                            handleItemClick("Heating/Cooling : Electrical")
-                          }
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Heating/Cooling : Electrical
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          onClick={() =>
-                            handleItemClick("Ventilation Issues : Electrical")
-                          }
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Ventilation Issues : Electrical
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+            {/* Selected issue */}
+            {selectedCategory && (
+              <div className="mb-5">
+                <label
+                  htmlFor="selectedIssue"
+                  className="block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Selected Issue
+                </label>
+                <select
+                  id="selectedIssue"
+                  name="selectedIssue"
+                  value={selectedIssue}
+                  onChange={(e) => handleIssueSelect(e.target.value)}
+                  className="block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value="">Select Issue</option>
+                  {Object.keys(issueCategoriesData[selectedCategory]).map(
+                    (issue, index) => (
+                      <option key={index} value={issue}>
+                        {issue}
+                      </option>
+                    )
+                  )}
+                </select>
               </div>
             )}
+            {/* Issue type (combined category and issue) */}
+            <input
+              type="text"
+              name="issue_type"
+              className="w-full"
+              value={issueType}
+              readOnly
+            />
           </div>
+
           {/* ------------------------------------------------------------------------------- */}
 
-          <label
-            class="block mb-1 mt-3 text-sm font-medium text-gray-900 dark:text-white"
-            htmlFor="file_input"
-          >
-            Upload file
-          </label>
+          <div className="camera-report-issue mt-3">
+            <div className="mt-3">
+              <div className="mb-2 block">
+                <Label htmlFor="file" value="Upload Picture" />
+              </div>
 
-          <div className="flex ">
-            <div class="flex items-center justify-center w-full sm:w-[10rem] mt-1">
-              <label
-                for="dropzone-file"
-                class="flex flex-col items-center justify-center w-full h-48 sm:h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-              >
-                <div class="flex flex-col items-center justify-center pt-2 pb-3 sm:pt-5 sm:pb-6">
-                  <svg
-                    class="w-6 h-6 mb-2 sm:w-8 sm:h-8 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 16"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              <div className="flex justify-center  space-x-5">
+                <button
+                  className="bg-white shadow-md rounded-md p-3 flex flex-col items-center space-y-3"
+                  onClick={initializeCamera}
+                >
+                  <Camera size={32} color="#828282" />
+                  <span className=" font-semibold">Take Picture</span>
+                </button>
+
+                {imageSrc && (
+                  <div className=" relative">
+                    <img
+                      src={imageSrc}
+                      alt="Captured"
+                      className="w-24 h-24  rounded-md" // Set your desired width and height
                     />
-                  </svg>
-                  <p class="mb-1 text-[0.7rem] sm:mb-2 sm:text-xs text-gray-500 dark:text-gray-400">
-                    <span class="font-semibold">Click to upload</span> or drag
-                    and drop
-                  </p>
-                  <p class="text-[0.7rem] text-gray-500 dark:text-gray-400">
-                    SVG, PNG, JPG (MAX. 800x400px)
-                  </p>
-                </div>
-                <input id="dropzone-file" type="file" class="hidden" />
-              </label>
-            </div>
 
-            <div className="mt-1 bg-gray-200 w-full rounded-[0.5rem] ml-1">
-              <Link
-                to="#"
-                className="w-full h-full flex justify-center items-center"
-              >
-                <Camera size={100} weight="thin" />{" "}
-              </Link>
+                    <button
+                      onClick={handleRemoveImage}
+                      className="bg-white absolute top-[-0.5rem] right-[-0.5rem]  rounded-full shadow-lg p-1 border border-mainColor"
+                    >
+                      <X size={15} color="#2e39ac" />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-
-          <input
-            class="block w-full mt-3 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-            id="file_input"
-            type="file"
-          />
 
           <br />
           <button
             type="submit"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Report Now
           </button>
