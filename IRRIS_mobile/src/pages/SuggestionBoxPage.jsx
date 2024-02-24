@@ -67,7 +67,7 @@ function SuggestionBoxPage() {
     room: "",
     location: "",
     description: "",
-    issue_type: "",
+   // issue_type: "",
     status: "pending",
   });
 
@@ -200,7 +200,7 @@ function SuggestionBoxPage() {
     setForm({
       facility_id: "",
       image_before: null,
-      issue_type: "",
+     // issue_type: "",
       room: "",
       location: "",
       issues: "",
@@ -234,7 +234,7 @@ function SuggestionBoxPage() {
     setForm({
       facility_id: "",
       image_before: null,
-      issue_type: "",
+     // issue_type: "",
       room: "",
       location: "",
       issues: "",
@@ -264,7 +264,7 @@ function SuggestionBoxPage() {
       formDataReport.append("facility_id", form.facility_id);
       formDataReport.append("room", form.room);
       formDataReport.append("location", form.location);
-      formDataReport.append("issue_type", form.issueType);
+     // formDataReport.append("issue_type", form.issueType);
       formDataReport.append("description", form.description);
       formDataReport.append("status", form.status);
 
@@ -582,57 +582,7 @@ function SuggestionBoxPage() {
 
           {/* ----------------------------------------------------------------------------------------------------------------- */}
 
-          <div>
-            <div className="mb-5">
-              <label
-                htmlFor="issueCategory"
-                className="block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Issue Category
-              </label>
-
-              <IssueCategoryDropdown
-                onSelect={handleCategorySelect}
-                issueCategoriesData={issueCategoriesData}
-              />
-            </div>
-
-            {/* Selected issue */}
-            {selectedCategory && (
-              <div className="mb-5">
-                <label
-                  htmlFor="selectedIssue"
-                  className="block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Selected Issue
-                </label>
-                <select
-                  id="selectedIssue"
-                  name="selectedIssue"
-                  value={selectedIssue}
-                  onChange={(e) => handleIssueSelect(e.target.value)}
-                  className="block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  <option value="">Select Issue</option>
-                  {Object.keys(issueCategoriesData[selectedCategory]).map(
-                    (issue, index) => (
-                      <option key={index} value={issue}>
-                        {issue}
-                      </option>
-                    )
-                  )}
-                </select>
-              </div>
-            )}
-            {/* Issue type (combined category and issue) */}
-            <input
-              type="text"
-              name="issue_type"
-              className="w-full"
-              value={issueType}
-              readOnly
-            />
-          </div>
+          
 
           {/* ------------------------------------------------------------------------------- */}
 
