@@ -21,6 +21,9 @@ const ManpowerRatingPage = () => {
     checkbox1: null,
     checkbox2: null,
     checkbox3: null,
+    checkbox4: null,
+    checkbox5: null,
+    checkbox6: null,
   });
 
   const notify = (message) =>
@@ -60,8 +63,9 @@ const ManpowerRatingPage = () => {
       if (jobOrderId) {
         formData.job_order_id = jobOrderId;
       }
+
       const response = await rateJobOrder(formData);
-      console.log("rate response", response);
+
       setShowModal(true);
     } catch (error) {
       notify("Can't find Job Order");
@@ -138,7 +142,7 @@ const ManpowerRatingPage = () => {
                   onChange={handleCheckboxChange}
                 />
                 <Label htmlFor="checkbox1" className="text-lg">
-                  I want to get promotional offers8
+                  Accurate Description
                 </Label>
               </div>
 
@@ -149,7 +153,7 @@ const ManpowerRatingPage = () => {
                   onChange={handleCheckboxChange}
                 />
                 <Label htmlFor="checkbox2" className="text-lg">
-                  I want to get promotional offers
+                  Detailed Description
                 </Label>
               </div>
 
@@ -160,54 +164,49 @@ const ManpowerRatingPage = () => {
                   onChange={handleCheckboxChange}
                 />
                 <Label htmlFor="checkbox3" className="text-lg">
-                  I want to get promotional offers
+                  Clear Media Attached
                 </Label>
               </div>
-              {/* {ratingValues.map((rating) => (
-                <button
-                  key={rating.value}
-                  onClick={() => handleRatingChange(rating.value)}
-                  className="flex flex-col items-center"
-                >
-                  <img
-                    src={rating.imgSrc}
-                    alt={rating.alt}
-                    className={
-                      formData.rating === rating.value
-                        ? "w-12 h-12"
-                        : "w-10 h-10"
-                    }
-                  />
-                  <p
-                    className={
-                      formData.rating === rating.value
-                        ? "font-bold text-mainColor"
-                        : ""
-                    }
-                  >
-                    {rating.label}
-                  </p>
-                </button>
-              ))} */}
+
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="checkbox4"
+                  className="h-6 w-6"
+                  onChange={handleCheckboxChange}
+                />
+                <Label htmlFor="checkbox4" className="text-lg">
+                  Very important
+                </Label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="checkbox5"
+                  className="h-6 w-6"
+                  onChange={handleCheckboxChange}
+                />
+                <Label htmlFor="checkbox5" className="text-lg">
+                  Safety Concern
+                </Label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="checkbox6"
+                  className="h-6 w-6"
+                  onChange={handleCheckboxChange}
+                />
+                <Label htmlFor="checkbox6" className="text-lg">
+                  Emergency Situation
+                </Label>
+              </div>
             </div>
             {error && (
               <span className="text-red-500 font-bold italic ">
-                *Ch experience first
+                *Check experience first
               </span>
             )}
           </div>
-
-          {/* <div>
-            <p className="font-bold text-xl mb-3">Comment</p>
-            <textarea
-              name="comment"
-              className="form-textarea mt-1 block w-full border rounded-lg border-gray-300 shadow-md focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              rows="8"
-              placeholder="Write comments about your task"
-              value={formData?.comment || ""}
-              onChange={handleChange}
-            ></textarea>
-          </div> */}
 
           <button
             className="bg-mainColor text-white font-bold rounded-md py-2 text-2xl"
