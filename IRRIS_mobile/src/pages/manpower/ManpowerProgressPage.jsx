@@ -4,7 +4,10 @@ import UserSample from "../../assets/images/user_sample.jpg";
 import useUserStore from "@/src/services/state/userStore";
 import { formatDate, addDays } from "@/src/utils/utils";
 import { Link, useParams } from "react-router-dom";
-import { getJobOrderDertails } from "@/src/services/api/manpowerService";
+import {
+  getJobOrderDertails,
+  getJobOrderRequestDetails,
+} from "@/src/services/api/manpowerService";
 import toast, { Toaster } from "react-hot-toast";
 import { getImageUrl, isTaskDurationValid } from "@/src/utils/utils";
 import {
@@ -24,11 +27,17 @@ import ConfirmationModal from "@/src/components/ConfirmationModal";
 import {
   updateJobOrderImage,
   acceptJobOrder,
+  acceptJobOrderRequest,
   finishJobOrder,
   notValidJobOrder,
+  finishJobOrderRequest,
 } from "@/src/services/api/manpowerService";
 import ImageModal from "@/src/components/ImageModal";
 import { useNavigate } from "react-router-dom";
+import ReportJobOrderPage from "@/src/components/manpower/ReportJobOrderPage";
+import RequestJobOrderPage from "@/src/components/manpower/RequestJobOrderPage";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "../../index.css";
 
 const ManpowerProgressPage = () => {
@@ -38,6 +47,7 @@ const ManpowerProgressPage = () => {
   }));
   const navigate = useNavigate();
   const { taskId, task } = useParams();
+  const [taskLocal, setTaskLocal] = useState(null);
   const [taskInProgress, setTaskInProgress] = useState(null);
   const [openImageReport, setOpenImageReport] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,6 +116,9 @@ const ManpowerProgressPage = () => {
         }
 
         if (task === "request") {
+          const { job_order_request } = await getJobOrderRequestDetails(taskId); // Corrected the function name
+          console.log("response", job_order_request);
+          setTaskInProgress(job_order_request);
           console.log("request");
         }
 
@@ -125,11 +138,13 @@ const ManpowerProgressPage = () => {
       console.log("no task id ");
       // Check local storage for task_inProgress
       const storedTaskInProgress = localStorage.getItem("task_inProgress");
+      const storedTaskLocal = localStorage.getItem("task_local");
 
       if (storedTaskInProgress) {
         const taskInProgressLocal = JSON.parse(storedTaskInProgress);
         console.log("task local", taskInProgressLocal);
         setTaskInProgress(taskInProgressLocal);
+        setTaskLocal(storedTaskLocal);
       }
 
       setIsLoading(false);
@@ -325,7 +340,7 @@ const ManpowerProgressPage = () => {
   };
 
   const handleConfirmButton = async () => {
-    if (taskInProgress.status === "assigned") {
+    if (taskInProgress.status === "assigned" && task === "report") {
       //proceed to submitting
       setIsLoading(true);
       try {
@@ -361,6 +376,7 @@ const ManpowerProgressPage = () => {
 
         //replace the task_inProgress in localStorage with job_order
         localStorage.setItem("task_inProgress", JSON.stringify(job_order));
+        localStorage.setItem("task_local", "report");
 
         //update task in progress
         setTaskInProgress(job_order);
@@ -374,7 +390,10 @@ const ManpowerProgressPage = () => {
       console.log("submit");
     }
 
-    if (taskInProgress.status === "ongoing") {
+    if (
+      taskInProgress.status === "ongoing" &&
+      (task === "report" || taskLocal === "report")
+    ) {
       //proceed to submitting
       setIsLoading(true);
       try {
@@ -414,6 +433,71 @@ const ManpowerProgressPage = () => {
         onCloseModalConfirm();
       }
     }
+
+    if (taskInProgress.status === "assigned" && task === "request") {
+      setIsLoading(true);
+      try {
+        //UPDATE JOB ORDER STATUS AND OTHERS
+        const formObjectData = {
+          status: "ongoing",
+          request_id: taskInProgress.request_id,
+        };
+
+        const { job_order_request } = await acceptJobOrderRequest(
+          formObjectData,
+          taskInProgress.id
+        );
+
+        console.log("taskInProgress", taskInProgress);
+
+        //replace the task_inProgress in localStorage with job_order
+        localStorage.setItem(
+          "task_inProgress",
+          JSON.stringify(job_order_request)
+        );
+        localStorage.setItem("task_local", "request");
+
+        //update task in progress
+        setTaskInProgress(job_order_request);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+        onCloseModalConfirm();
+      }
+    }
+
+    if (
+      taskInProgress.status === "ongoing" &&
+      (task === "request" || taskLocal === "request")
+    ) {
+      setIsLoading(true);
+      try {
+        //UPDATE JOB ORDER STATUS AND OTHERS
+        const formObjectData = {
+          status: "completed",
+          request_id: taskInProgress.request_id,
+          user_id: taskInProgress.assigned_manpower?.id,
+        };
+
+        const { job_order_request } = await finishJobOrderRequest(
+          formObjectData,
+          taskInProgress.id
+        );
+
+        setIsLoading(false);
+        //set the taskInProgress local to null
+        localStorage.setItem("task_inProgress", JSON.stringify(null));
+        localStorage.setItem("task_local", JSON.stringify(null));
+
+        navigate("/manpower/tasks");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+        onCloseModalConfirm();
+      }
+    }
   };
 
   const handleEstimatedDuration = (e) => {
@@ -445,8 +529,13 @@ const ManpowerProgressPage = () => {
   const handleDoneModal = () => {
     //set the taskInProgress local to null
     localStorage.setItem("task_inProgress", JSON.stringify(null));
+    localStorage.setItem("task_local", JSON.stringify(null));
 
-    navigate(`/manpower/rate/${taskInProgress?.id}`);
+    if (task === "report" || taskLocal === "report") {
+      navigate(`/manpower/rate/${taskInProgress?.id}`);
+    } else {
+      navigate(`/manpower/tasks`);
+    }
 
     //update task in progress
     setTaskInProgress(null);
@@ -454,7 +543,11 @@ const ManpowerProgressPage = () => {
 
   const handleButton = () => {
     // setToastActivated(true);
-    if (!reportStatus) {
+    if (
+      !reportStatus &&
+      (task === "report" || taskLocal === "report") &&
+      taskInProgress?.status === "assigned"
+    ) {
       console.log("report status", reportStatus);
       notify("Please select status");
       return;
@@ -467,7 +560,7 @@ const ManpowerProgressPage = () => {
     }
 
     // check first if imageSrcFileBefore has value
-    if (taskInProgress.status === "assigned") {
+    if (taskInProgress.status === "assigned" && task === "report") {
       if (estimatedDuration && estimatedDuration <= 2) {
         notify("Should be 3min or longer");
         return;
@@ -479,7 +572,10 @@ const ManpowerProgressPage = () => {
       }
     }
 
-    if (taskInProgress.status === "ongoing") {
+    if (
+      taskInProgress.status === "ongoing" &&
+      (task === "report" || taskLocal === "report")
+    ) {
       if (!imageFileAfter) {
         notify("Image required");
         return;
@@ -500,7 +596,7 @@ const ManpowerProgressPage = () => {
   };
 
   return (
-    <div className="h-full flex flex-col background">
+    <div className="h-full flex flex-col ">
       {/* {isToastActivated && <Toaster />} */}
       <Toaster />
 
@@ -601,220 +697,96 @@ const ManpowerProgressPage = () => {
         </button>
       </div>
 
-      <div className="p-5 flex-1 flex flex-col bg-blue-100 space-y-5">
+      <div className="p-5 flex-1 flex flex-col  space-y-5">
         <h1 className="capitalize text-2xl">
           <span className="text-3xl font-bold block">Your Task</span>
         </h1>
 
-        <div className="bg-white rounded-lg ">
-          {taskInProgress ? (
-            <div className="bg-white rounded-lg p-3 shadow-md">
-              <p className="font-bold pb-2">Job Order</p>
-
-              <div className="border-y-2  flex pb-5 text-sm space-y-1">
-                <div className="flex-1 ">
-                  <p className="flex items-center space-x-1 pt-2">
-                    <Clock size={20} color="#121212" />
-                    <span>
-                      Date Assigned: {formatDate(taskInProgress?.created_at)}
-                    </span>
-                  </p>
-
-                  {taskInProgress?.due_date && (
-                    <p className="flex items-center space-x-1">
-                      <CalendarBlank size={20} color="#121212" />
-                      <span>
-                        Due date: {formatDate(taskInProgress?.due_date)}
-                      </span>
+        <div className="rounded-lg p-0">
+          {isLoading ? (
+            <Skeleton width={"100%"} height={"11rem"} className="rounded-3xl" />
+          ) : (
+            <div className="rounded-lg">
+              {taskInProgress && task && (
+                <>
+                  {task === "report" ? (
+                    <ReportJobOrderPage
+                      taskInProgress={taskInProgress}
+                      setOpenImageReport={setOpenImageReport}
+                      onCloseImageModal={onCloseImageModal}
+                      openImageReport={openImageReport}
+                      task={task}
+                      initializeCamera={initializeCamera}
+                      imageSrcBefore={imageSrcBefore}
+                      reportStatus={reportStatus}
+                      handleReportStatus={handleReportStatus}
+                      handleEstimatedDuration={handleEstimatedDuration}
+                      handleRemoveImage={handleRemoveImage}
+                      handleButton={handleButton}
+                      imageSrcAfter={imageSrcAfter}
+                      finishFormData={finishFormData}
+                      handleFinishFormChange={handleFinishFormChange}
+                    />
+                  ) : task === "request" ? (
+                    <RequestJobOrderPage
+                      taskInProgress={taskInProgress}
+                      task={task}
+                      reportStatus={reportStatus}
+                      handleButton={handleButton}
+                      finishFormData={finishFormData}
+                      handleFinishFormChange={handleFinishFormChange}
+                    />
+                  ) : (
+                    <p className="text-center font-bold text-2xl p-5">
+                      No Task started
                     </p>
                   )}
-
-                  <p className="flex items-center space-x-1">
-                    <Hash size={20} color="#121212" />
-                    <span>Task No. {taskInProgress?.id}</span>
-                  </p>
-                  <p className="flex items-center space-x-1">
-                    <MapPin size={20} color="#121212" />
-                    <span>
-                      Location:{" "}
-                      {taskInProgress?.report?.facility?.facilities_name}
-                    </span>
-                  </p>
-                  <p className="flex items-center space-x-1">
-                    <WarningCircle size={20} color="#121212" />
-                    <span>Issue: {taskInProgress?.report?.description}</span>
-                  </p>
-                </div>
-
-                {taskInProgress.status === "assigned" &&
-                  taskInProgress?.image_before && (
-                    <div className="flex flex-1 justify-center mt-2">
-                      <img
-                        src={getImageUrl(taskInProgress?.report?.image_before)}
-                        alt="report-image"
-                        className="w-20 h-20 rounded-lg"
-                        onClick={() => setOpenImageReport(true)}
-                      />
-
-                      {openImageReport && (
-                        <ImageModal
-                          onCloseModal={onCloseImageModal}
-                          imgSrc={taskInProgress?.report?.image_before}
-                        />
-                      )}
-                    </div>
-                  )}
-              </div>
-
-              {taskInProgress.status === "assigned" && (
-                <div className="space-y-5">
-                  <p className="text-center font-bold text-lg">
-                    Task{" "}
-                    {task === "report"
-                      ? "Report"
-                      : task === "request"
-                      ? "Request"
-                      : "Daily"}
-                  </p>
-                  <div className="flex justify-center space-x-5 ">
-                    <button
-                      className="shadow-md rounded-md flex flex-col items-center justify-center p-2"
-                      onClick={initializeCamera}
-                    >
-                      <Camera size={30} color="#2e39ac" weight="fill" />
-                      <p> Take Picture</p>
-                    </button>
-
-                    {imageSrcBefore && (
-                      <div className="relative shadow-md">
-                        <img
-                          src={imageSrcBefore}
-                          alt="Captured"
-                          className="w-24 h-24  rounded-md" // Set your desired width and height
-                        />
-
-                        <button
-                          onClick={handleRemoveImage}
-                          className="bg-white absolute top-[-0.5rem] right-[-0.5rem]  rounded-full shadow-lg p-1 border border-mainColor"
-                        >
-                          <X size={15} color="#2e39ac" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-2 items-center">
-                    <label for="validity">Status of report:</label>
-
-                    <select
-                      name="validity"
-                      id="validity"
-                      className="w-full rounded-md"
-                      value={reportStatus}
-                      onChange={handleReportStatus}
-                    >
-                      <option value="">Please choose an option</option>
-                      <option value="valid">Valid</option>
-                      <option value="not-valid">Not Valid</option>
-                      <option value="delay">Delay</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2 items-center">
-                    <p>Estimated time to finish</p>
-                    <input
-                      type="number"
-                      placeholder="Input minutes (Optional)"
-                      className="w-full rounded-md"
-                      onChange={handleEstimatedDuration}
-                    />
-                  </div>
-                  <button
-                    className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-xl"
-                    onClick={handleButton}
-                  >
-                    {reportStatus === "not-valid" || reportStatus === "delay"
-                      ? "Submit"
-                      : "Start Task"}
-                    {/* Start Task */}
-                  </button>
-                </div>
+                </>
               )}
 
-              {taskInProgress.status === "ongoing" && (
-                <div className="space-y-5">
-                  <p className="text-center font-bold text-2xl">
-                    Accomplished{" "}
-                    {task === "report"
-                      ? "Report"
-                      : task === "request"
-                      ? "Request"
-                      : "Daily"}
-                  </p>
-                  <div className="flex justify-center space-x-5">
-                    <button
-                      className="shadow-md rounded-md flex flex-col items-center justify-center p-2"
-                      onClick={initializeCamera}
-                    >
-                      <Camera size={30} color="#2e39ac" weight="fill" />
-                      <p> Take Picture</p>
-                    </button>
+              {taskInProgress && !task && (
+                <>
+                  {taskLocal === "report" ? (
+                    <ReportJobOrderPage
+                      taskInProgress={taskInProgress}
+                      setOpenImageReport={setOpenImageReport}
+                      onCloseImageModal={onCloseImageModal}
+                      openImageReport={openImageReport}
+                      task={task}
+                      initializeCamera={initializeCamera}
+                      imageSrcBefore={imageSrcBefore}
+                      reportStatus={reportStatus}
+                      handleReportStatus={handleReportStatus}
+                      handleEstimatedDuration={handleEstimatedDuration}
+                      handleRemoveImage={handleRemoveImage}
+                      handleButton={handleButton}
+                      imageSrcAfter={imageSrcAfter}
+                      finishFormData={finishFormData}
+                      handleFinishFormChange={handleFinishFormChange}
+                    />
+                  ) : taskLocal === "request" ? (
+                    <RequestJobOrderPage
+                      taskInProgress={taskInProgress}
+                      task={task}
+                      reportStatus={reportStatus}
+                      handleButton={handleButton}
+                      finishFormData={finishFormData}
+                      handleFinishFormChange={handleFinishFormChange}
+                    />
+                  ) : (
+                    <p className="text-center font-bold text-2xl p-5">
+                      No Task started
+                    </p>
+                  )}
+                </>
+              )}
 
-                    {imageSrcAfter && (
-                      <div className="relative shadow-md">
-                        <img
-                          src={imageSrcAfter}
-                          alt="Captured"
-                          className="w-24 h-24  rounded-md" // Set your desired width and height
-                        />
-
-                        <button
-                          onClick={handleRemoveImage}
-                          className="bg-white absolute top-[-0.5rem] right-[-0.5rem]  rounded-full shadow-lg p-1 border border-mainColor"
-                        >
-                          <X size={15} color="#2e39ac" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-center space-x-5">
-                    <label>Select:</label>
-                    <select
-                      name="status"
-                      className="block appearance-none w-[50%] bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      value={finishFormData.status || ""}
-                      onChange={handleFinishFormChange}
-                    >
-                      <option value="completed">Completed</option>
-                      <option value="incomplete">Incomplete</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    {" "}
-                    <textarea
-                      name="comments"
-                      className="form-textarea mt-1 block w-full border rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                      rows="4"
-                      placeholder="Write comment for your tasks"
-                      value={finishFormData.comments || ""}
-                      onChange={handleFinishFormChange}
-                    ></textarea>
-                  </div>
-
-                  <button
-                    className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-xl"
-                    onClick={handleButton}
-                  >
-                    Finish Task
-                  </button>
-                </div>
+              {!taskInProgress && (
+                <p className="text-center font-bold text-2xl p-5">
+                  No Task started
+                </p>
               )}
             </div>
-          ) : (
-            <p className="text-center font-bold text-2xl p-5">
-              No Task started
-            </p>
           )}
         </div>
       </div>

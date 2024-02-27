@@ -140,13 +140,15 @@ const TasksPage = () => {
                           </span>
                         )}
                       </p>
-                      <Link
-                        className="text-mainColor font-bold"
-                        to={`/manpower/progress/${job.process_type}/${job?.id}`}
-                      >
-                        {" "}
-                        View
-                      </Link>
+                      {job.status !== "completed" && (
+                        <Link
+                          className="text-mainColor font-bold"
+                          to={`/manpower/progress/${job.process_type}/${job?.id}`}
+                        >
+                          {" "}
+                          View
+                        </Link>
+                      )}
                     </div>
 
                     <p className="flex items-center space-x-1 pt-2">

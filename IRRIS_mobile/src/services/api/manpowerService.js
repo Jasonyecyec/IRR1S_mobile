@@ -31,6 +31,16 @@ export const getJobOrder = async (userId,status = null) => {
     }
   };
 
+  export const getJobOrderRequestDetails = async (id) => {
+    try {
+      const response = await api.get(`/job-order-request-details/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Get Manpower notification error", error.response);
+      throw error;
+    }
+  };
+
   export const updateJobOrderImage = async (formData, id) => {
     try {
      
@@ -77,6 +87,21 @@ export const getJobOrder = async (userId,status = null) => {
     }
   };
 
+  export const acceptJobOrderRequest = async (formData, id) => {
+    try {
+  
+      // Make an API call with the formData object and id
+      const response = await api.patch(`/job-order-request-accept/${id}`, formData);
+  
+      console.log('Update Job Order response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Update Job Order error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+
 
   export const finishJobOrder = async (finishFormData, id) => {
     try {
@@ -91,6 +116,21 @@ export const getJobOrder = async (userId,status = null) => {
       throw error;
     }
   };
+
+  export const finishJobOrderRequest = async (finishFormData, id) => {
+    try {
+  
+      // Make an API call with the formData object and id
+      const response = await api.patch(`/job-order-request-finish/${id}`, finishFormData);
+  
+      console.log('Finish Job Order Request response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Finish Job Order Request error:', error.response || error.message);
+      throw error;
+    }
+  };
+
 
   export const rateJobOrder = async (formData) => {
     try {
