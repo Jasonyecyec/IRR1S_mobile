@@ -4,6 +4,7 @@ import useUserStore from "@/src/services/state/userStore";
 import { useNavigate } from "react-router-dom";
 import { getStaffRequest } from "@/src/services/api/StaffService";
 import { Spinner } from "flowbite-react";
+import { Link } from "react-router-dom";
 import {
   getStatusColor,
   getStatusText,
@@ -95,19 +96,6 @@ const RequestHistoryPage = () => {
                     <p>Description: {item.description}</p>
                   </div>
                 </div>
-
-                {item.status === "completed" &&
-                  (item.isRated ? (
-                    <p className="text-center w-full font-bold text-gray-500">
-                      Already claimed!
-                    </p>
-                  ) : (
-                    <p className="text-center w-full font-bold text-gray-500 underline">
-                      <Link to={`/student/rate-report/${item.id}`}>
-                        Review to claim rewards
-                      </Link>
-                    </p>
-                  ))}
               </div>
             ))
           ) : (

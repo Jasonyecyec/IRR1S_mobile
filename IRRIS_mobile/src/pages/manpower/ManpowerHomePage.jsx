@@ -28,14 +28,22 @@ const ManpowerHomePage = () => {
 
   const {
     isJobOrderNotif,
+    isJobOrderRequestNotif,
     jobOrderDetails,
+    jobOrderRequestDetails,
     setjobOrderNotif,
+    setjobOrderRequestNotif,
     setJobOrderDetails,
+    setJobOrderRequestDetails,
   } = useJobOrderStore((state) => ({
     isJobOrderNotif: state.isJobOrderNotif,
+    isJobOrderRequestNotif: state.isJobOrderRequestNotif,
     jobOrderDetails: state.jobOrderDetails,
+    jobOrderRequestDetails: state.jobOrderRequestDetails,
     setjobOrderNotif: state.setjobOrderNotif,
+    setjobOrderRequestNotif: state.setjobOrderRequestNotif,
     setJobOrderDetails: state.setJobOrderDetails,
+    setJobOrderRequestDetails: state.setJobOrderRequestDetails,
   }));
 
   const fetchRecentJobOrder = async () => {
@@ -80,31 +88,74 @@ const ManpowerHomePage = () => {
       `job-order-channel-${userIdCookie}`
     );
 
+    const jobOrderRequestChannel = window.Echo.channel(
+      `job-order-request-channel-${userIdCookie}`
+    );
+
+    // LISTEN TO REPORT
     jobOrderChannel.listen("JobOrderNotification", (notification) => {
       console.log(
         "Successfully subscribed to job-order-channel:",
         notification
       );
+      if (
+        notification &&
+        notification.jobOrder &&
+        Array.isArray(notification.jobOrder)
+      ) {
+        notification.jobOrder.forEach((job) => {
+          if (job.assigned_manpower === parseInt(userIdCookie, 10)) {
+            console.log("setting job order");
+            setjobOrderNotif(true);
 
-      notification.jobOrder.forEach((job) => {
-        if (job.assigned_manpower === parseInt(userIdCookie, 10)) {
-          console.log("setting job order");
-          setjobOrderNotif(true);
+            setJobOrderDetails((prev) => {
+              const updatedJobOrderDetails = { ...prev, job };
+              console.log("updatedJobOrderDetails", updatedJobOrderDetails);
 
-          setJobOrderDetails((prev) => {
-            const updatedJobOrderDetails = { ...prev, job };
-            console.log("updatedJobOrderDetails", updatedJobOrderDetails);
+              // set the job order to local storage
+              localStorage.setItem(
+                "job_order",
+                JSON.stringify(updatedJobOrderDetails)
+              );
+              return updatedJobOrderDetails;
+            });
+          }
+        });
+      }
+    });
 
-            // set the job order to local storage
-            localStorage.setItem(
-              "job_order",
-              JSON.stringify(updatedJobOrderDetails)
-            );
-            return updatedJobOrderDetails;
+    // LISTEN TO REQUEST
+    jobOrderRequestChannel.listen(
+      "JobOrderRequestNotification",
+      (notification) => {
+        console.log(
+          "Successfully subscribed to job-order-request-channel:",
+          notification
+        );
+        setjobOrderRequestNotif(true);
+
+        if (
+          notification &&
+          notification.jobOrderRequest &&
+          Array.isArray(notification.jobOrderRequest)
+        ) {
+          notification.jobOrderRequest.forEach((job) => {
+            setjobOrderRequestNotif(true);
+
+            setJobOrderRequestDetails((prev) => {
+              const updatedJobOrderDetails = { ...prev, job };
+              console.log("updatedJobOrderDetails", updatedJobOrderDetails);
+              // set the job order to local storage
+              localStorage.setItem(
+                "job_order_request",
+                JSON.stringify(updatedJobOrderDetails)
+              );
+              return updatedJobOrderDetails;
+            });
           });
         }
-      });
-    });
+      }
+    );
   };
 
   useEffect(() => {
@@ -146,6 +197,16 @@ const ManpowerHomePage = () => {
     localStorage.removeItem("job_order");
     setjobOrderNotif(false);
     setJobOrderDetails(null);
+
+    //redirect to task page
+    navigate("/manpower/tasks");
+  };
+
+  const handleRequestButton = () => {
+    // Clear the value in localStorage for the key "job_order"
+    localStorage.removeItem("job_order_request");
+    setjobOrderRequestNotif(false);
+    setJobOrderRequestDetails(null);
 
     //redirect to task page
     navigate("/manpower/tasks");
@@ -198,9 +259,20 @@ const ManpowerHomePage = () => {
               )}
             </button>
 
-            <button className="bg-[#D9D9D9]  flex flex-col items-center justify-center w-24 h-24 rounded-md">
+            <button
+              className="bg-[#D9D9D9]  flex flex-col items-center justify-center w-24 h-24 rounded-md relative"
+              onClick={handleRequestButton}
+            >
               <img src={RequestIcon} className="w-10 h-10 " />
               Request
+              {isJobOrderRequestNotif && (
+                <span className="absolute top-[-5px] right-[-5px] flex h-6 w-6 ">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-xs justify-center items-center text-white"></span>
+                </span>
+                // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
+              )}
+              {console.log("job order requesst", isJobOrderRequestNotif)}
             </button>
 
             <button className="bg-[#D9D9D9] flex flex-col items-center justify-center w-24 h-24 rounded-md">

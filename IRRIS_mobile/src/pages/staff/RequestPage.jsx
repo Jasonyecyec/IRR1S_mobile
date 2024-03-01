@@ -145,10 +145,9 @@ const RequestPage = () => {
               onChange={handleChange}
             >
               <option value="">Select Urgency</option>
-              <option value="urgent">Urgent</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              <option value="immediate">Immediate</option>
+              <option value="high-priority">High Priority</option>
+              <option value="standard-priority">Standard Priority</option>
             </select>
           </div>
 
