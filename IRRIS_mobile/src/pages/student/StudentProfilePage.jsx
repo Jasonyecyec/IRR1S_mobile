@@ -125,11 +125,11 @@ const StudentProfilePage = () => {
           <SignOut size={24} color="#ffffff" className="ml-4" />
         </button>
 
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
           <div className=" shadow-lg w-52 bg-white p-2">
             <img src={StudentQR} alt="student-qr" className="w-full" />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
