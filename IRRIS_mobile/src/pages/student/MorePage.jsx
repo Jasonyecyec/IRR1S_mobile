@@ -15,7 +15,7 @@ import useUserStore from "@/src/services/state/userStore";
 const moreItems = [
   // { to: "", label: "Report", icon: ReportIcon },
   // { to: "", label: "Scan", icon: ScanIcon },
-  { to: "", label: "View Details", icon: ViewDetailsIcon },
+  // { to: "", label: "View Details", icon: ViewDetailsIcon },
   {
     to: "/search-facility",
     label: "Rate & Review ",

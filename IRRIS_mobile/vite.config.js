@@ -10,8 +10,8 @@ export default defineConfig({
     react(),
     VitePWA({
       manifest: {
-        name: 'IRRIS',
-        short_name: 'IRRIS',
+        name: 'QCU-UPKEEP',
+        short_name: 'QCU-UPKEEP',
         start_url: '/',
         background_color: '#ffffff',
         theme_color: '#ffffff',
