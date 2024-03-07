@@ -611,12 +611,21 @@ const ManpowerProgressPage = () => {
         />
       )}
 
-      {openModalConfirm && (
+      {openModalConfirm && taskInProgress.status === "assigned" && (
         <ConfirmationModal
           isLoading={isLoading}
           onCloseModal={onCloseModalConfirm}
           handleConfirmButton={handleConfirmButton}
           content="Are you sure you want to start the task now?"
+        />
+      )}
+
+      {openModalConfirm && taskInProgress.status === "ongoing" && (
+        <ConfirmationModal
+          isLoading={isLoading}
+          onCloseModal={onCloseModalConfirm}
+          handleConfirmButton={handleConfirmButton}
+          content="Are you sure you want to finish the task?"
         />
       )}
 
@@ -698,8 +707,8 @@ const ManpowerProgressPage = () => {
       </div>
 
       <div className="p-5 flex-1 flex flex-col  space-y-5">
-        <h1 className="capitalize text-2xl">
-          <span className="text-3xl font-bold block">Your Task</span>
+        <h1 className="capitalize text-lg">
+          <span className=" font-bold block">Your Task</span>
         </h1>
 
         <div className="rounded-lg p-0">
