@@ -417,7 +417,7 @@ const ReportIssuePage = () => {
       <PageTitle title="REPORT ISSUE" />
       <div className="h-full w-full  p-5 pt-16 ">
         <form onSubmit={handleSubmitButton} className="space-y-8">
-          <div>
+          <div className="space-y-1 text-sm">
             <TextInput
               placeholder="Facility ID"
               label="Facility ID"
@@ -506,7 +506,7 @@ const ReportIssuePage = () => {
               ></textarea>
             </div>
 
-            <div className="mt-3">
+            <div className="mt-2">
               <div className="mb-2 block">
                 <Label htmlFor="file" value="Upload Picture" />
               </div>
@@ -516,7 +516,7 @@ const ReportIssuePage = () => {
                   className="bg-white shadow-md rounded-md p-3 flex flex-col items-center space-y-3"
                   onClick={initializeCamera}
                 >
-                  <Camera size={32} color="#828282" />
+                  <Camera size={28} color="#828282" />
                   <span className=" font-semibold">Take Picture</span>
                 </button>
 
@@ -541,11 +541,11 @@ const ReportIssuePage = () => {
           </div>
 
           <div className="flex space-x-5 ">
-            <button className="bg-mainColor p-3 text-white rounded-lg flex-1 font-bold text-lg">
+            <button className="bg-mainColor p-3 text-white rounded-lg flex-1 font-bold text-base">
               Cancel
             </button>
             <button
-              className="bg-mainColor p-3 text-white rounded-lg flex-1 font-bold text-lg"
+              className="bg-mainColor p-3 text-white rounded-lg flex-1 font-bold text-base"
               type="submit"
             >
               Submit

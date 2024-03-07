@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { X, XCircle } from "@phosphor-icons/react";
+import { X, XCircle, WarningCircle } from "@phosphor-icons/react";
 import Cookies from "js-cookie";
 
 import "../index.css";
@@ -39,11 +39,11 @@ const ReportErrorPage = () => {
       </button>
       <div className="flex flex-col items-center space-y-5">
         {/* <CheckCircle size="7rem" color="#14b334" weight="fill" /> */}
-        <XCircle size="7rem" color="#e60f0f" weight="fill" />
-        <h1 className="text-3xl font-bold">Submission Error!</h1>
+        <WarningCircle size="7rem" color="#e60f0f" weight="fill" />
+        <h1 className="text-3xl font-bold">Reported Already!</h1>
       </div>
 
-      <div className="bg-red-300 p-3 rounded-xl text-lg">
+      <div className="bg-green-300 p-3 rounded-xl text-lg">
         {errorMessage && <p>{errorMessage}</p>}
       </div>
 

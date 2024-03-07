@@ -105,7 +105,7 @@ const ReportJobOrderPage = ({
                 <img
                   src={imageSrcBefore}
                   alt="Captured"
-                  className="w-24 h-24  rounded-md" // Set your desired width and height
+                  className="w-24 h-20  rounded-md" // Set your desired width and height
                 />
 
                 <button
@@ -118,13 +118,13 @@ const ReportJobOrderPage = ({
             )}
           </div>
 
-          <div className="space-y-2 items-center">
+          <div className="space-y-1 items-center text-sm">
             <label for="validity">Status of report:</label>
 
             <select
               name="validity"
               id="validity"
-              className="w-full rounded-md"
+              className="w-full rounded-md "
               value={reportStatus}
               onChange={handleReportStatus}
             >
@@ -134,7 +134,7 @@ const ReportJobOrderPage = ({
               <option value="delay">Delay</option>
             </select>
           </div>
-          <div className="space-y-2 items-center">
+          <div className="space-y-1 items-center text-sm">
             <p>Estimated time to finish</p>
             <input
               type="number"
@@ -144,7 +144,7 @@ const ReportJobOrderPage = ({
             />
           </div>
           <button
-            className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-xl"
+            className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-base"
             onClick={handleButton}
           >
             {reportStatus === "not-valid" || reportStatus === "delay"
@@ -179,7 +179,7 @@ const ReportJobOrderPage = ({
                 <img
                   src={imageSrcAfter}
                   alt="Captured"
-                  className="w-24 h-24  rounded-md" // Set your desired width and height
+                  className="w-24 h-20  rounded-md" // Set your desired width and height
                 />
 
                 <button
@@ -209,7 +209,7 @@ const ReportJobOrderPage = ({
             {" "}
             <textarea
               name="comments"
-              className="form-textarea mt-1 block w-full border rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              className="form-textarea mt-1 text-sm block w-full border rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               rows="4"
               placeholder="Write comment for your tasks"
               value={finishFormData.comments || ""}
@@ -218,7 +218,7 @@ const ReportJobOrderPage = ({
           </div>
 
           <button
-            className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-xl"
+            className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-base"
             onClick={handleButton}
           >
             Finish Task
