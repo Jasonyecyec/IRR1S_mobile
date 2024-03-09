@@ -44,6 +44,7 @@ import RateFacilityPage from "./pages/RateFacilityPage";
 import RewardsPage from "./pages/student/RewardsPage";
 import StaffRoutes from "./routes/StaffRoutes";
 import NotificationPage from "./pages/NotificationPage";
+import LeaderBoardPage from "./pages/student/LeaderBoardPage";
 import "./index.css";
 
 function App() {
@@ -114,6 +115,18 @@ function App() {
             // <TransitionWrapper location={location}>
             <HomepageLayout>
               <HomePage />
+            </HomepageLayout>
+            // </TransitionWrapper>
+          }
+        />
+
+        <Route
+          key="leaderboards"
+          path="/leaderboards"
+          element={
+            // <TransitionWrapper location={location}>
+            <HomepageLayout>
+              <LeaderBoardPage />
             </HomepageLayout>
             // </TransitionWrapper>
           }
