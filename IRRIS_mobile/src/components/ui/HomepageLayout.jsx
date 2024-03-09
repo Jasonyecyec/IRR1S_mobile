@@ -44,7 +44,7 @@ const HomepageLayout = ({ children }) => {
 
   return (
     <div className="h-screen w-screen ">
-      <main className="h-[90%]  bg-thirdColor">{children}</main>
+      <main className="h-[90%]  bg-white">{children}</main>
       {currentUser && bottomNavigationComponent}
     </div>
   );

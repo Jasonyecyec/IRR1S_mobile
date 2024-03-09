@@ -97,7 +97,7 @@ const CalendarPage = () => {
           <select
             name="filter"
             id="filter"
-            className="p-1 rounded-md"
+            className="p-1 rounded-md font-semibold w-52 px-5"
             value={currentFilter}
             onChange={handleFilterChange}
           >

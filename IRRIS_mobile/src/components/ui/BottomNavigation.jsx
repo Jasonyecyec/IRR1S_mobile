@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { QrCode, House, Eye, Gift } from "@phosphor-icons/react";
+import {
+  QrCode,
+  House,
+  Eye,
+  Gift,
+  DotsThreeCircle,
+  UserCircle,
+} from "@phosphor-icons/react";
 import MoreIcon from "../../assets/images/more_icon.png";
 
 const BottomNavigation = () => {
@@ -30,45 +37,65 @@ const BottomNavigation = () => {
   // };
   console.log("pathname", pathname);
   return (
-    <div className="shadow-2xl h-[10%] bg-mainColor text-white relative w-full  flex px-5 justify-around items-center">
+    <div
+      className="h-[10%] bg-bottomNav text-black relative w-full  flex px-5 justify-around items-center"
+      style={{
+        boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+      }}
+    >
       <button>
+        <Link
+          to="/student/home"
+          className="text-center text-gray-500  flex flex-col items-center"
+        >
+          <House
+            size={32}
+            className={pathname === "/student/home" && "text-mainColor"}
+          />
+          <span className={pathname === "/student/home" && "text-mainColor"}>
+            {" "}
+            Home
+          </span>
+        </Link>
+      </button>
+
+      <button className="text-gray-500">
+        <Link
+          className="rounded-full flex flex-col justify-center  content-center  w-20 h-20 items-center p-3"
+          to={"/student/more"}
+        >
+          <DotsThreeCircle
+            size={32}
+            className={
+              pathname === "/student/more"
+                ? "text-mainColor"
+                : "text-iconGrayColor "
+            }
+          />
+
+          <p className={pathname === "/student/more" && "text-mainColor"}>
+            More
+          </p>
+        </Link>
+      </button>
+
+      <button className="text-gray-500">
         <Link
           to="/report-history"
           className="text-center  flex flex-col items-center"
         >
-          <Eye size={30} color="#9c9c9c" />
-          Reports
+          <Eye size={32} className="text-iconGrayColor" />{" "}
+          <span className="">Reports</span>
         </Link>
       </button>
 
-      <div className="absolute flex  items-center justify-center top-[-2rem] left-27.5 p-1 bg-white rounded-full ">
-        {pathname === "/student/home" ? (
-          <Link
-            className="rounded-full flex flex-col justify-center bg-mainColor content-center  w-20 h-20 items-center p-3"
-            to={"/student/more"}
-          >
-            <img src={MoreIcon} className="w-7 h-7" />
-            <p className="text-white">More</p>
-          </Link>
-        ) : (
-          <Link
-            className="rounded-full flex flex-col justify-center bg-mainColor content-center  w-20 h-20 items-center p-3"
-            to={"/student/home"}
-          >
-            <House size={40} color="#ffffff" weight="fill" />
-            <p className="text-white">Home</p>
-          </Link>
-        )}
-      </div>
-
-      <div className="w-8 h-14"></div>
-
-      <button>
+      <button className="text-gray-500">
         <Link
-          to="/student/rewards"
+          to="/student/profile"
           className="text-center  flex flex-col items-center"
         >
-          <Gift size={32} color="#9c9c9c" /> Redeem
+          <UserCircle size={32} className="text-iconGrayColor" />{" "}
+          <span className="">Profile</span>
         </Link>
       </button>
     </div>

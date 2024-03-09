@@ -18,6 +18,12 @@ import { Coins } from "@phosphor-icons/react";
 import CountUp from "react-countup";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { getReportStudent } from "../services/api/StudentService";
+import { Spinner } from "flowbite-react";
+import { formatDateTime } from "../utils/utils";
+import StatusIndicator from "../components/StatusIndicator";
+import { CalendarBlank } from "@phosphor-icons/react";
+import UkeepLogo from "/qcu_upkeep_logo.png";
 
 const HomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -33,7 +39,7 @@ const HomePage = () => {
     }));
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const [reports, setReports] = useState(null);
   const navigate = useNavigate();
   const [points, setPoints] = useState(null);
 
@@ -46,6 +52,24 @@ const HomePage = () => {
       console.log(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchReport = async () => {
+    setIsLoading(true);
+    try {
+      const params = {
+        status: null,
+      };
+      const { report } = await getReportStudent(user.id, null);
+      //Get only the first 10
+      const first10Reports = report.slice(0, 10);
+      setReports(first10Reports);
+      console.log("report response", report);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(true);
     }
   };
 
@@ -100,7 +124,7 @@ const HomePage = () => {
     });
 
     listenToNotification();
-
+    fetchReport();
     fetchStudentPoints();
   }, []);
 
@@ -115,8 +139,30 @@ const HomePage = () => {
   };
 
   return (
-    <div className="h-full ">
-      <div className="flex justify-between bg-mainColor p-5 border-b-8 border-red-500">
+    <div className="h-full bg-secondaryColor">
+      <div className="flex p-3 justify-between">
+        <div className="flex items-center font-semibold text-mainColor space-x-2">
+          <img src={UkeepLogo} className="w-12 h-12" />
+          <p className="text-xl">
+            Hello!{" "}
+            <span>
+              {" "}
+              {user?.first_name} {user?.last_name}
+            </span>
+          </p>
+        </div>
+        <button onClick={handleNotificationButton} className="relative">
+          {notification && (
+            <span className="absolute top-[2px] right-[3px] flex h-3 w-3 ">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accentColor opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-accentColor text-xs justify-center items-center text-white"></span>
+            </span>
+          )}
+
+          <Bell size={"2.3rem"} color="#1656ea" weight="fill" />
+        </button>
+      </div>
+      {/* <div className="flex justify-between bg-mainColor p-5 border-b-8 border-accentColor">
         <button onClick={handleProfileButton}>
           <img src={UserSample} className="w-12 h-12 rounded-full " />
         </button>
@@ -124,41 +170,40 @@ const HomePage = () => {
         <button onClick={handleNotificationButton} className="relative">
           {notification && (
             <span className="absolute top-[2px] right-[3px] flex h-3 w-3 ">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 text-xs justify-center items-center text-white">
-                {/* {jobOrderDetails && <p> {jobOrderDetails.length}</p>} */}
-              </span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accentColor opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-accentColor text-xs justify-center items-center text-white"></span>
             </span>
-            // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
           )}
 
-          <Bell size={"2.5rem"} color="#FFFFFF" />
+          <Bell size={"2.5rem"} color="#caced5" />
         </button>
-      </div>
+      </div> */}
 
       {/* <div className="bg-[#f11408] h-2"></div> */}
 
-      <div className="p-3 bg-background h-full space-y-10">
-        <div className="flex justify-between items-center">
+      <div className="p-3 bg-secondaryColor h-full space-y-12">
+        <div className="flex justify-between items-center bg-[#017afe] text-white rounded-lg p-5 py-6">
           <div className="flex space-x-3  max-w-[15rem]">
-            <div>
-              <img src={QCULogo} alt="qcu-logo" className="w-16 h-16" />
-            </div>
-            <div className="text-[#987700] font-bold">
-              <p>Welcome</p>
-              <p className="text-2xl capitalize">
-                {user?.first_name} {user?.last_name}
+            <div className=" font-bold space-y-1.5">
+              <p className="text-sm text-[#6fbeff] uppercase">Total Points</p>
+              <p className="text-2xl capitalize flex items-center space-x-2">
+                <Coins size={32} />
+                <div>
+                  <CountUp end={points} start={0} />{" "}
+                  <span className="font-normal text-sm font-semibold">
+                    points{" "}
+                  </span>
+                </div>
               </p>
             </div>
           </div>
 
-          <div className="bg-[#987700] text-white p-2 w-[8.5rem] justify-center rounded-full font-semibold flex space-x-2 items-center">
-            <Coins size={25} />
-            <p className=" ">
-              <CountUp end={points} start={0} />{" "}
-              <span className="text-sm">points </span>
-            </p>
+          <div className="">
+            <button className="bg-[#ddeefe] text-sm rounded-full p-2 px-3 font-semibold text-mainColor ">
+              View history
+            </button>{" "}
           </div>
+
           {/* {isLoading ? (
             <Skeleton
               width={"6rem"}
@@ -198,8 +243,74 @@ const HomePage = () => {
           </button>
         </div>
 
-        <div className="bg-white p-3 rounded-lg shadow-md">
-          <p>Status</p>
+        <div className="bg-white rounded-2xl shadow relative">
+          <div className="flex justify-between font-semibold px-5 mb-5 rounded-t-xl p-2  bg-gray-50 text-mainColor">
+            <p>Reports</p>
+            <p>Status</p>
+          </div>
+
+          <div className="h-[20rem]  overflow-y-auto space-y-3 pb-14 p-2">
+            {" "}
+            {isLoading ? (
+              <div className="w-full flex justify-center pt-5  items-center">
+                <Spinner aria-label="Large spinner example" size="lg" />
+              </div>
+            ) : reports && reports.length > 0 ? (
+              reports.map((report) => (
+                <div
+                  className="shadow rounded-md p-2 px-3 text-sm flex justify-between"
+                  key={report.id}
+                >
+                  <div className="space-y-1">
+                    <p className=" text-gray-600 flex items-center space-x-2.5">
+                      <span>
+                        <CalendarBlank size={"23"} color="#caced5" />{" "}
+                      </span>
+                      <span> {formatDateTime(report.created_at)}</span>
+                    </p>
+                    <p>
+                      {" "}
+                      <span className="font-semibold">
+                        Reported Issue:{" "}
+                      </span>{" "}
+                      {report.issues}
+                    </p>
+                    <p>
+                      {" "}
+                      <span className="font-semibold"> Description</span>:
+                      {report.description}
+                    </p>
+
+                    <p>
+                      {" "}
+                      <span className="font-semibold">Location: </span>{" "}
+                      {report.facility?.facilities_name}
+                    </p>
+                  </div>
+                  <div className="flex    flex-1 items-center justify-end">
+                    <p className="flex items-center space-x-2">
+                      {/* <span class="relative flex h-3 w-3 items-center justify-center">
+                        <span class=" absolute inline-flex h-5 w-5 rounded-full bg-sky-300 opacity-30"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                      </span>{" "} */}
+                      <StatusIndicator status={report.status} />
+                      <span className="capitalize font-semibold">
+                        {report.status}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No data available</p>
+            )}
+          </div>
+
+          <Link to={"/report-history"}>
+            <button className="absolute bottom-0 left-0 w-full shadow bg-bottomNav rounded-b-2xl hover:bg-gray-100 ease-in-out font-semibold text-iconGrayColor p-2.5">
+              View All
+            </button>
+          </Link>
         </div>
       </div>
 

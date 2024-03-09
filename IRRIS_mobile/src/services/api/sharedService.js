@@ -216,4 +216,18 @@
     }
   };
 
+  export const getTopLeaders = async (filter = null) => {
+    try {
+      const params = filter !== null ? { filter } : {};
+
+      const response = await api.get('/top-leaders', {params});
+  
+      console.log('Fetch Top leaders response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch Top leaders error:', error.response || error.message);
+      throw error;
+    }
+  };
+
 

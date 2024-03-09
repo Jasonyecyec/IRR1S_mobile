@@ -8,11 +8,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        mainColor: "#2e39ac",
-        secondaryColor: "#EEF2FF",
+        mainColor: "#0037b1",
+        secondaryColor: "#f2f8ff",
         thirdColor: "#f8faff",
-        accentColor: "#7447EB",
+        accentColor: "#f52400",
+        iconGrayColor: "#9ba3ae",
         errorColor: "#FF0000",
+        bottomNav:"#f7f7f7",
         background: "#e8ecf9",
       },
     },

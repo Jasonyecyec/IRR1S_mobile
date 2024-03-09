@@ -227,7 +227,7 @@ const Login = () => {
         <div className="w-full text-center">
           <button
             onClick={handleSubmit}
-            className="py-4 bg-mainColor rounded-lg text-white font-semibold flex justify-center text-xl w-full inline-block"
+            className="py-4 bg-[#16425B] rounded-lg text-white font-semibold flex justify-center text-xl w-full inline-block"
           >
             {isLoading ? (
               <p className="flex items-center ">
@@ -242,12 +242,12 @@ const Login = () => {
           <p className="mt-5 text-sm text-end text-slate-700">
             Doesn't have an account?{" "}
             <Link to="/activate">
-              <span className="font-bold text-mainColor">Register</span>
+              <span className="font-bold text-[#16425B]">Register</span>
             </Link>
           </p>
           <div className="flex justify-end mt-5 ">
-          <Link to="/suggestion-box">
-              <span className="font-bold text-mainColor">Suggestion Box</span>
+            <Link to="/suggestion-box">
+              <span className="font-bold text-[#16425B]">Suggestion Box</span>
             </Link>
           </div>
         </div>
