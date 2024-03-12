@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import UserSample from "../../assets/images/user_sample.jpg";
 import NotificationIcon from "../../assets/images/bell_icon.png";
 import useUserStore from "@/src/services/state/userStore";
@@ -8,12 +8,56 @@ import "../../index.css";
 import { useNavigate } from "react-router-dom";
 import useNotificationStore from "@/src/services/state/notificationStore";
 import beamsClient from "@/src/pushNotificationConfig";
+import UpKeepLogo from "/qcu_upkeep_logo.png";
+import { formatDateTime } from "@/src/utils/utils";
+import StatusIndicator from "@/src/components/StatusIndicator";
+import {
+  NotePencil,
+  Note,
+  Calendar,
+  MagnifyingGlass,
+  Notepad,
+  CalendarBlank,
+} from "@phosphor-icons/react";
+import { Link } from "react-router-dom";
+import { getReportStudent } from "@/src/services/api/StudentService";
+import { Spinner } from "flowbite-react";
+
+const servicesItems = [
+  // { to: "", label: "Report", icon: ReportIcon },
+  // { to: "", label: "Scan", icon: ScanIcon },
+  // { to: "", label: "View Details", icon: ViewDetailsIcon },
+  {
+    to: "/search-facility",
+    label: "Rate & Review ",
+    icon: MagnifyingGlass,
+  },
+  { to: "/staff/calendar", label: "Calendar", icon: Calendar },
+  {
+    to: "/staff/pencil-book-facility",
+    label: "Pencil Book",
+    icon: NotePencil,
+  },
+
+  {
+    to: "/staff/request",
+    label: "Request",
+    icon: Note,
+  },
+  {
+    to: "/staff/pencil-book-history",
+    label: "Pencil Book History",
+    icon: Notepad,
+  },
+];
 
 const StaffHomepage = () => {
   const { user, setUser } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
   }));
+  const [isLoading, setIsLoading] = useState(false);
+  const [reports, setReports] = useState(null);
 
   const { notification, setNotification, setNotificationDetails } =
     useNotificationStore((state) => ({
@@ -23,6 +67,24 @@ const StaffHomepage = () => {
     }));
 
   const navigate = useNavigate();
+
+  const fetchReport = async () => {
+    setIsLoading(true);
+    try {
+      const params = {
+        status: null,
+      };
+      const { report } = await getReportStudent(user.id, null);
+      //Get only the first 10
+      const first10Reports = report.slice(0, 10);
+      setReports(first10Reports);
+      console.log("report response", report);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const initializePusherBeams = async () => {
     try {
@@ -101,6 +163,8 @@ const StaffHomepage = () => {
     initializePusherBeams();
 
     listenToNotification();
+
+    fetchReport();
   }, []);
   const handleProfileButton = () => {
     navigate("/staff/profile");
@@ -113,42 +177,31 @@ const StaffHomepage = () => {
   };
 
   return (
-    <div className="h-full background">
-      <div className="flex justify-between bg-mainColor p-5 border-b-8 border-red-500">
-        <button onClick={handleProfileButton}>
-          <img src={UserSample} className="w-12 h-12 rounded-full " />
-        </button>
-
+    <div className="h-full bg-secondaryColor">
+      <div className="flex p-3 justify-between">
+        <div className="flex items-center font-semibold text-mainColor space-x-2">
+          <img src={UpKeepLogo} className="w-12 h-12" />
+          <p className="text-xl">
+            Hello!{" "}
+            <span>
+              {" "}
+              {user?.first_name} {user?.last_name}
+            </span>
+          </p>
+        </div>
         <button onClick={handleNotificationButton} className="relative">
           {notification && (
             <span className="absolute top-[2px] right-[3px] flex h-3 w-3 ">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 text-xs justify-center items-center text-white">
-                {/* {jobOrderDetails && <p> {jobOrderDetails.length}</p>} */}
-              </span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accentColor opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-accentColor text-xs justify-center items-center text-white"></span>
             </span>
-            // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
           )}
 
-          <Bell size={"2.5rem"} color="#FFFFFF" />
+          <Bell size={"2.3rem"} color="#1656ea" weight="fill" />
         </button>
       </div>
 
-      <div className="p-3  h-full flex flex-col space-y-10">
-        <div className="flex justify-between items-center">
-          <div className="flex space-x-3">
-            <div>
-              {/* <img src={QCULogo} alt="qcu-logo" className="w-16 h-16" /> */}
-            </div>
-            <div className="text-[#987700] font-bold">
-              <p>Welcome</p>
-              <p className="text-2xl capitalize">
-                {user?.first_name} {user?.last_name}
-              </p>
-            </div>
-          </div>
-        </div>
-
+      <div className="p-3  h-full flex flex-col space-y-7">
         <div className="bg-[#d4e3f9] border-2 border-white flex justify-center rounded-full ">
           <button
             onClick={() => navigate("/scan-facility")}
@@ -172,8 +225,96 @@ const StaffHomepage = () => {
           </button>
         </div>
 
-        <div className="bg-white p-3 rounded-lg shadow-md">
-          <p>Status</p>
+        {/* MORE SERVICES */}
+        <div className=" flex justify-center flex-wrap gap-x-5 gap-y-5 ">
+          {servicesItems.map((item, index) => (
+            <Link className="" key={index} to={item.to}>
+              <div
+                key={index}
+                className="flex p-2 flex-col space-y-2 items-center "
+              >
+                {/* <span className="bg-black h-12 w-12">s</span>
+                 */}
+                {item.icon &&
+                  React.createElement(item.icon, {
+                    size: "1.8rem",
+                    // color: "#",
+                    className: "text-[#0f59cb]",
+                  })}
+                <p className="font-semibold text-[#0f59cb]">{item.label}</p>{" "}
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div className="bg-white rounded-2xl shadow relative">
+          <div className="flex justify-between font-semibold px-5 mb-5 rounded-t-xl p-2  bg-gray-50 text-mainColor">
+            <p>Reports</p>
+            <p>Status</p>
+          </div>
+
+          <div className="h-[17rem]  overflow-y-auto space-y-3 pb-14 p-2">
+            {" "}
+            {isLoading ? (
+              <div className="w-full flex justify-center pt-5  items-center">
+                <Spinner aria-label="Large spinner example" size="lg" />
+              </div>
+            ) : reports && reports.length > 0 ? (
+              reports.map((report) => (
+                <div
+                  className="shadow rounded-md p-2 px-3 text-sm flex justify-between"
+                  key={report.id}
+                >
+                  <div className="space-y-1">
+                    <p className=" text-gray-600 flex items-center space-x-2.5">
+                      <span>
+                        <CalendarBlank size={"23"} color="#caced5" />{" "}
+                      </span>
+                      <span> {formatDateTime(report.created_at)}</span>
+                    </p>
+                    <p>
+                      {" "}
+                      <span className="font-semibold">
+                        Reported Issue:{" "}
+                      </span>{" "}
+                      {report.issues}
+                    </p>
+                    <p>
+                      {" "}
+                      <span className="font-semibold"> Description</span>:
+                      {report.description}
+                    </p>
+
+                    <p>
+                      {" "}
+                      <span className="font-semibold">Location: </span>{" "}
+                      {report.facility?.facilities_name}
+                    </p>
+                  </div>
+                  <div className="flex    flex-1 items-center justify-end">
+                    <p className="flex items-center space-x-2">
+                      {/* <span class="relative flex h-3 w-3 items-center justify-center">
+                        <span class=" absolute inline-flex h-5 w-5 rounded-full bg-sky-300 opacity-30"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                      </span>{" "} */}
+                      <StatusIndicator status={report.status} />
+                      <span className="capitalize font-semibold">
+                        {report.status}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No data available</p>
+            )}
+          </div>
+
+          <Link to={"/report-history"}>
+            <button className="absolute bottom-0 left-0 w-full shadow bg-bottomNav rounded-b-2xl hover:bg-gray-100 ease-in-out font-semibold text-iconGrayColor p-2.5">
+              View All
+            </button>
+          </Link>
         </div>
       </div>
     </div>

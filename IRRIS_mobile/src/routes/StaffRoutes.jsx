@@ -17,11 +17,11 @@ const StaffRoutes = [
     key="staffRoute1"
     path="/staff/home"
     element={
-      // <TransitionWrapper>
-      <HomepageLayout>
-        <StaffHomepage />
-      </HomepageLayout>
-      // </TransitionWrapper>
+      <TransitionWrapper location={location}>
+        <HomepageLayout>
+          <StaffHomepage />
+        </HomepageLayout>
+      </TransitionWrapper>
     }
   />,
 
