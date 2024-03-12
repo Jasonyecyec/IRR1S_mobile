@@ -10,6 +10,7 @@ import useUserStore from "@/src/services/state/userStore";
 import CountUp from "react-countup";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { CaretLeft } from "@phosphor-icons/react";
 import "../../index.css";
 
 const RewardsPage = () => {
@@ -25,6 +26,7 @@ const RewardsPage = () => {
     try {
       setIsLoading(true);
       const { rewards } = await getRewards();
+      console.log("rewards", rewards);
       setRewards(rewards);
     } catch (error) {
       console.log(error);
@@ -51,33 +53,28 @@ const RewardsPage = () => {
   }, []);
 
   return (
-    <div className="background h-screen w-screen flex flex-col">
-      <PageTitle title="REWARDS" />
+    <div className="bg-white h-screen w-screen flex flex-col">
+      <PageTitle title="Rewards" />
 
-      <div className="flex-1  p-5 pt-10 space-y-9">
-        <div className="flex justify-end">
-          {" "}
-          {/* <div className="rounded-full bg-white px-3 py-2 flex flex-col items-center justify-center font-semibold  border-2">
-            <Coins size={32} color="#FFB800" />
-            <p>24 points</p>
-          </div> */}
-          <div className="bg-[#987700] mt-2 text-white p-2 w-[8.5rem] justify-center rounded-full font-semibold flex space-x-2 items-center">
-            <Coins size={25} />
-            <p className=" ">
-              <CountUp end={points} start={0} />{" "}
-              <span className="text-sm">points </span>
+      <div className="flex justify-end  p-2">
+        <div className="flex space-x-3 bg-[#017afe] p-2 rounded-md w-[9rem] justify-center">
+          <div className=" font-bold space-y-1.5">
+            <p className="text-xs text-[#6fbeff] uppercase">Total Points</p>
+            <p className="text-white text-sm capitalize flex items-center space-x-2">
+              <Coins size={24} />
+              <div>
+                <CountUp end={points} start={0} />{" "}
+                <span className=" text-sm font-semibold">points </span>
+              </div>
             </p>
           </div>
-          {/* <p className="ml-8 font-semibold text-sm">AVAILABLE POINTS</p> */}
         </div>
+      </div>
 
-        <div className="relative bg-white shadow-md rounded-xl p-5 py-12 ">
-          <span className="bg-mainColor z-30 text-white shadow-md rounded-full  font-bold py-3 px-4  text-lg absolute top-[-1.5rem] text-center  left-1/2  transform -translate-x-1/2">
-            Available Rewards
-          </span>
-
+      <div className="flex-1 p-2 space-y-10 ">
+        <div className=" h-[38rem]  flex-wrap justify-center overflow-y-scroll w-full grid grid-cols-2 gap-5">
           {isLoading ? (
-            <div className=" h-[30rem]  w-full grid grid-cols-2 grid-rows-2 justify-center gap-8 py-10">
+            <div className=" flex-wrap justify-center overflow-y-scroll w-full grid grid-cols-2 gap-5">
               {/* <Spinner aria-label="Loading spinner" size="lg" /> */}
               <Skeleton
                 width={"100%"}
@@ -101,17 +98,18 @@ const RewardsPage = () => {
               />
             </div>
           ) : (
-            <div className="h-[30rem] overflow-y-auto w-full grid grid-cols-2 grid-rows-2 justify-center gap-8 py-10">
-              {rewards &&
-                rewards.map((item) => (
-                  <Rewards
-                    rewardTitle={item.reward_name}
-                    points={item.points}
-                    rewardImg={getImageUrl(item.reward_image)}
-                    key={item.id}
-                  />
-                ))}
-            </div>
+            rewards &&
+            rewards.map((item) => (
+              <Rewards
+                id={item.id}
+                rewardTitle={item.reward_name}
+                points={item.total_points}
+                criteria={item.criteria}
+                frequency={item.reward_frequency}
+                rewardImg={getImageUrl(item.reward_image)}
+                key={item.id}
+              />
+            ))
           )}
         </div>
       </div>
