@@ -46,7 +46,7 @@ const LeaderBoardPage = () => {
           <CaretLeft size={28} />{" "}
         </button>
 
-        <p className="font-semibold text-lg">STUDENT LEADERBOARDS</p>
+        <p className="font-semibold text-lg">Student Leaderboards</p>
       </div>
 
       <div className="p-3  space-y-5">
@@ -89,22 +89,26 @@ const LeaderBoardPage = () => {
                 student.points !== 0 && (
                   <div
                     key={student.id}
-                    className="flex rounded-md justify-between shadow p-3"
+                    className="flex rounded-md justify-between shadow  p-3"
                   >
-                    <div>
+                    <div className="flex space-x-3 items-center">
                       {/* Student information */}
-                      <p className="flex space-x-3 items-center">
-                        <span>{index + 1}</span>{" "}
+                      <span>{index + 1}</span>{" "}
+                      <span>
+                        {" "}
+                        <img
+                          src={getImageUrl(student.profile_image)}
+                          className="w-12 h-12 rounded-full"
+                          alt={`${student.first_name} ${student.last_name}`}
+                        />
+                      </span>{" "}
+                      <p className="flex flex-col">
                         <span>
                           {" "}
-                          <img
-                            src={getImageUrl(student.profile_image)}
-                            className="w-10 h-10 rounded-full"
-                            alt={`${student.first_name} ${student.last_name}`}
-                          />
-                        </span>{" "}
-                        <span>
                           {student.first_name} {student.last_name}
+                        </span>
+                        <span className="text-sm text-iconGrayColor">
+                          {student.student_number}
                         </span>
                       </p>
                     </div>
@@ -144,7 +148,7 @@ const LeaderBoardPage = () => {
                           {" "}
                           {student.points}
                         </span>{" "}
-                        points
+                        Points
                       </p>
                     </div>
                   </div>

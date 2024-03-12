@@ -33,8 +33,8 @@ const moreItems = [
   },
   { to: "/staff/calendar", label: "Calendar", icon: Calendar },
   { to: "/leaderboards", label: "Leaderboards", icon: Trophy },
-  { to: "/student/rewards", label: "Redeem ", icon: Gift },
-  { to: "", label: "Achievements ", icon: Certificate },
+  { to: "/student/rewards", label: "Rewards ", icon: Gift },
+  { to: "/achievements", label: "Achievements ", icon: Certificate },
 ];
 
 const MorePage = () => {

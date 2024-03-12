@@ -45,6 +45,10 @@ import RewardsPage from "./pages/student/RewardsPage";
 import StaffRoutes from "./routes/StaffRoutes";
 import NotificationPage from "./pages/NotificationPage";
 import LeaderBoardPage from "./pages/student/LeaderBoardPage";
+import PointsHistoryPage from "./pages/student/PointsHistoryPage";
+import AchievementPage from "./pages/student/AchievementPage";
+import AchievementDetailsPage from "./pages/student/AchievementDetailsPage";
+import RewardsQualifiedPage from "./pages/student/RewardsQualifiedPage";
 import "./index.css";
 
 function App() {
@@ -124,11 +128,33 @@ function App() {
           key="leaderboards"
           path="/leaderboards"
           element={
-            // <TransitionWrapper location={location}>
-            <HomepageLayout>
+            <TransitionWrapper location={location}>
+              {/* <HomepageLayout> */}
               <LeaderBoardPage />
-            </HomepageLayout>
-            // </TransitionWrapper>
+              {/* </HomepageLayout> */}
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          key="achievements"
+          path="/achievements"
+          element={
+            <TransitionWrapper location={location}>
+              {/* <HomepageLayout> */}
+              <AchievementPage />
+              {/* </HomepageLayout> */}
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          key="achievements"
+          path="/achievements-details/:achievementId"
+          element={
+            <TransitionWrapper location={location}>
+              <AchievementDetailsPage />
+            </TransitionWrapper>
           }
         />
 
@@ -150,6 +176,17 @@ function App() {
             <TransitionWrapper location={location}>
               {/* <HomepageLayout> */}
               <RewardsPage />
+              {/* </HomepageLayout> */}
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/student/rewards-qualified/:rewardsId"
+          element={
+            <TransitionWrapper location={location}>
+              {/* <HomepageLayout> */}
+              <RewardsQualifiedPage />
               {/* </HomepageLayout> */}
             </TransitionWrapper>
           }
@@ -294,6 +331,16 @@ function App() {
             </TransitionWrapper>
           }
         />
+
+        <Route
+          path="/student/points-history"
+          element={
+            <HomepageLayout location={location}>
+              <PointsHistoryPage />
+            </HomepageLayout>
+          }
+        />
+
         <Route
           path="/student/about"
           element={

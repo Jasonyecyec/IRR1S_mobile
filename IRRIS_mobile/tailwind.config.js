@@ -9,6 +9,7 @@ export default {
     extend: {
       colors: {
         mainColor: "#0037b1",
+        mainColor2: "#1a72fa",
         secondaryColor: "#f2f8ff",
         thirdColor: "#f8faff",
         accentColor: "#f52400",

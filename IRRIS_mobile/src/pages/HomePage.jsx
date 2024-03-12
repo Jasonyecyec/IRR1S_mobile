@@ -190,18 +190,18 @@ const HomePage = () => {
                 <Coins size={32} />
                 <div>
                   <CountUp end={points} start={0} />{" "}
-                  <span className="font-normal text-sm font-semibold">
-                    points{" "}
-                  </span>
+                  <span className=" text-sm font-semibold">points </span>
                 </div>
               </p>
             </div>
           </div>
 
           <div className="">
-            <button className="bg-[#ddeefe] text-sm rounded-full p-2 px-3 font-semibold text-mainColor ">
-              View history
-            </button>{" "}
+            <Link to={"/student/points-history"}>
+              <button className="bg-[#ddeefe] text-sm rounded-full p-2 px-3 font-semibold text-mainColor ">
+                View history
+              </button>
+            </Link>
           </div>
 
           {/* {isLoading ? (
