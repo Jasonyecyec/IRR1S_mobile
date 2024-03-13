@@ -63,3 +63,18 @@ import api from "./api";
       throw error;
     }
   };
+
+  export const getPencilBookHistory = async (id,status = null) => {
+    try {
+      const params = status !== null ? { status } : {};
+  
+      // Correctly construct the URL with the query parameter
+      const response = await api.get(`/pencil-book-history/${id}`,{params});
+  
+      console.log('Get pencil-book-history response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Get pencil-book-history  error:', error.response || error.message);
+      throw error;
+    }
+  };
