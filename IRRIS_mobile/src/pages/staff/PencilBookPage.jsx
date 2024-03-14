@@ -7,6 +7,8 @@ import useUserStore from "@/src/services/state/userStore";
 import { reserveFacilities } from "@/src/services/api/StaffService";
 import ConfirmationModal from "@/src/components/ConfirmationModal";
 import SuccessModal from "@/src/components/SuccessModal";
+import ErrorModal from "@/src/components/ErrorModal";
+import Loading from "@/src/components/Loading";
 
 const PencilBookPage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -21,6 +23,7 @@ const PencilBookPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isShowConfirmation, SetShowConfirmation] = useState(false);
   const [isSuccessModal, setIsSuccessModal] = useState(false);
+  const [isErrorModal, setIsErrorModal] = useState(false);
   const [form, setForm] = useState({
     description: null,
     dateStart: null,
@@ -82,17 +85,18 @@ const PencilBookPage = () => {
     }
 
     setIsLoading(true);
+    SetShowConfirmation(false);
     try {
       form.user_id = user?.id;
       form.facility_id = facility?.id;
       const response = await reserveFacilities(form);
+      setIsSuccessModal(true);
       console.log("reserve response", response);
     } catch (error) {
-      console.log(error);
+      console.log("pencil book error", error);
+      setIsErrorModal(true);
     } finally {
       setIsLoading(false);
-      SetShowConfirmation(false);
-      setIsSuccessModal(true);
     }
   };
 
@@ -124,9 +128,19 @@ const PencilBookPage = () => {
         />
       )}
 
+      {isErrorModal && (
+        <ErrorModal
+          title={"Time Slot Unavailable"}
+          message="Sorry, the selected time slot is already booked. Please select another time slot for your reservation."
+          handleCloseButton={() => setIsErrorModal(false)}
+        />
+      )}
+
+      {isLoading && <Loading />}
       {isSuccessModal && (
         <SuccessModal
-          message="Pencil book successfully! Please wait for admin approval."
+          title={"Reservation Submitted"}
+          message="Your pencil booking has been successfully submitted. It is now pending approval from the admin. We'll notify you once it's confirmed."
           handleCloseButton={() => navigate("/staff/home")}
         />
       )}
@@ -212,21 +226,21 @@ const PencilBookPage = () => {
             ></textarea>
           </div>
 
-          <div className="flex space-x-3 font-semibold text-lg">
+          <div className="flex space-x-5 font-semibold text-lg">
             <button
-              className="flex-1 bg-mainColor text-white rounded-md"
+              className="flex-1 border-2 text-black rounded-md font-semibold "
               onClick={(e) => {
                 e.preventDefault();
                 navigate(-1);
               }}
             >
-              CANCEL
+              Cancel
             </button>
             <button
               type="submit"
               className="bg-mainColor text-white rounded-md px-3 py-2 flex-1"
             >
-              SUBMIT
+              Submit
             </button>
           </div>
         </form>
