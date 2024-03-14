@@ -116,7 +116,7 @@ export const getImageUrl = (imagePath) => {
 
 export const getPdfUrl = (imagePath) => {
   // const baseUrl = 'http://127.0.0.1:8000/reward_certificates'; // Base URL of your Laravel backend
-  const baseUrl = 'https://irris-sbit4a-api.com/images';
+  const baseUrl = 'https://irris-sbit4a-api.com/reward_certificates';
   return `${baseUrl}/${imagePath}`;
 };
 
