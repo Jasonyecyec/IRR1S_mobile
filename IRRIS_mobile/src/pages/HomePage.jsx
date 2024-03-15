@@ -114,6 +114,7 @@ const HomePage = () => {
     const last_nameCookie = Cookies.get("last_name");
     const user_roleCookie = Cookies.get("user_role");
     const emailCookie = Cookies.get("email");
+    const referralCode_Cookie = Cookies.get("referral_code");
 
     setUser({
       id: userIdCookie,
@@ -121,6 +122,7 @@ const HomePage = () => {
       last_name: last_nameCookie,
       email: emailCookie,
       user_role: user_roleCookie,
+      referral_code: referralCode_Cookie,
     });
 
     listenToNotification();
@@ -302,7 +304,9 @@ const HomePage = () => {
                 </div>
               ))
             ) : (
-              <p>No data available</p>
+              <p className="font-semibold text-center text-gray-500 mt-10">
+                No data available
+              </p>
             )}
           </div>
 

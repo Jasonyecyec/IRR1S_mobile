@@ -32,6 +32,7 @@ const ActivateAccountPage = () => {
     password: "",
     confirm_password: "",
     user_role: "student",
+    referral_code: null,
   });
   const [isLoading, setIsLoading] = useState(false);
   const activateButtonRef = useRef(null);
@@ -104,6 +105,9 @@ const ActivateAccountPage = () => {
 
     try {
       setIsLoading(true);
+      // if (form.referral_code === "") {
+      //   form.referral_code = null;
+      // }
       const response = await registerStudent(form);
       console.log("response", response);
       setEmail(form.email);
@@ -125,112 +129,137 @@ const ActivateAccountPage = () => {
   };
 
   return (
-    <div className=" h-screen w-screen background flex flex-col p-10 pt-24    relative">
-      <Toaster />
+    <div className=" h-screen w-screen bg-secondaryColor 2  flex flex-col p-8 pt-16 relative">
       {isLoading && <Loading />}
       <div>
-        <h1 className="text-mainColor font-bold text-3xl text-center">
+        <h1 className="text-black font-bold text-3xl text-center text-mainColor2">
           Create Account
         </h1>
-
+        <Toaster />
         <form onSubmit={handleSubmit}>
-          <div className=" flex flex-col w-full space-y-10 mt-10">
+          <div className=" flex flex-col w-full space-y-7 mt-10">
             <div className="flex space-x-5">
-              <div>
-                <label htmlFor="first_name">First name:</label>
+              <div className="space-y-2">
+                <label htmlFor="first_name" className="font-semibold">
+                  First name
+                </label>
                 <input
                   type="text"
                   id="first_name"
                   name="first_name"
                   value={form.first_name}
                   onChange={handleInputChange}
-                  className=" w-full"
+                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                  focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
                   required
                 />
               </div>
 
-              <div>
-                <label htmlFor="last_name">Last name:</label>
+              <div className="space-y-2">
+                <label htmlFor="last_name" className="font-semibold">
+                  Last name
+                </label>
                 <input
                   type="text"
                   id="last_name"
                   name="last_name"
                   value={form.last_name}
                   onChange={handleInputChange}
-                  className=" w-full"
+                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                  focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
                   required
                 />
               </div>
             </div>
 
-            <div>
-              <label htmlFor="email">Email:</label>
+            <div className="space-y-2">
+              <label htmlFor="email" className="font-semibold">
+                Email
+              </label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 value={form.email}
                 onChange={handleInputChange}
-                className=" w-full"
+                className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
                 required
               />
             </div>
 
-            <div className="relative">
-              <label htmlFor="password">Password:</label>
+            <div className="relative space-y-2">
+              <label htmlFor="password">Password</label>
               <input
                 type={isPasswordVisible ? "text" : "password"}
                 id="password"
                 name="password"
                 value={form.password}
-                className=" w-full"
+                className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
                 onChange={handleInputChange}
                 required
               />
 
               <button
-                className="absolute right-2 top-7 "
+                className="absolute right-2 top-8 "
                 onClick={(e) => {
                   e.preventDefault();
                   setIsPasswordVisible(!isPasswordVisible);
                 }}
               >
                 {isPasswordVisible ? (
-                  <EyeSlash size="30" color="#969696" weight="light" />
+                  <EyeSlash size="25" color="#969696" weight="light" />
                 ) : (
-                  <Eye size="30" color="#969696" weight="light" />
+                  <Eye size="25" color="#969696" weight="light" />
                 )}
               </button>
             </div>
 
-            <div className="relative">
-              <label htmlFor="confirm_password">Confirm Password:</label>
+            <div className="relative space-y-2">
+              <label htmlFor="confirm_password">Confirm Password</label>
               <input
                 type={isConfirmPasswordVisible ? "text" : "password"}
                 id="confirm_password"
                 name="confirm_password"
                 value={form.confirm_password}
-                className=" w-full"
+                className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
                 onChange={handleInputChange}
                 required
               />
 
               <button
-                className="absolute right-2 top-7 "
+                className="absolute right-2 top-8 "
                 onClick={(e) => {
                   e.preventDefault();
                   setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
                 }}
               >
                 {isConfirmPasswordVisible ? (
-                  <EyeSlash size="30" color="#969696" weight="light" />
+                  <EyeSlash size="25" color="#969696" weight="light" />
                 ) : (
-                  <Eye size="30" color="#969696" weight="light" />
+                  <Eye size="25" color="#969696" weight="light" />
                 )}
               </button>
             </div>
 
-            <button className=" w-full bg-mainColor text-white font-bold rounded-lg py-3">
+            <div className="relative space-y-2">
+              <label htmlFor="confirm_password">Referral Code</label>
+              <input
+                type="text"
+                id="referral_code"
+                name="referral_code"
+                value={form.referral_code}
+                className="border-gray uppercase-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                onChange={handleInputChange}
+                placeholder="(Optional)"
+                min={8}
+              />
+            </div>
+
+            <button className=" w-full bg-mainColor2 text-white font-bold rounded-lg py-3">
               Submit
             </button>
           </div>

@@ -7,6 +7,7 @@ import {
   CaretRight,
   User,
   SignOut,
+  Copy,
 } from "@phosphor-icons/react";
 import UserSample from "../../assets/images/user_sample.jpg";
 import studentProfile from "./studentProfile.js";
@@ -15,6 +16,7 @@ import StudentQR from "../../assets/images/student_qr.png";
 import useUserStore from "../../services/state/userStore";
 import { Button, Modal } from "flowbite-react";
 import ConfirmationModal from "@/src/components/ConfirmationModal";
+import toast, { Toaster } from "react-hot-toast";
 
 const StudentProfilePage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -35,6 +37,7 @@ const StudentProfilePage = () => {
     Cookies.remove("first_name");
     Cookies.remove("last_name");
     Cookies.remove("email");
+    Cookies.remove("referral_code");
 
     //clear user store
     setUser("");
@@ -50,8 +53,27 @@ const StudentProfilePage = () => {
     setOpenModal(false);
   };
 
+  const handleCopyToClipboard = () => {
+    // Accessing the referral code from user object
+    const referralCode = user.referral_code;
+
+    // Copying to clipboard
+    navigator.clipboard
+      .writeText(referralCode)
+      .then(() => {
+        toast.success("Copied to clipboard!", {
+          id: "referral-toast", // Assigning an ID to the toast
+        });
+      })
+      .catch((err) => {
+        toast.error("Failed to copy referral code", {
+          id: "referral-toast", // Assigning the same ID for consistency
+        });
+      });
+  };
+
   return (
-    <div className="">
+    <div className="h-screen w-screen relative">
       {openModal && (
         <ConfirmationModal
           onCloseModal={onCloseModal}
@@ -59,6 +81,7 @@ const StudentProfilePage = () => {
           content=" Are you sure you want to logout?"
         />
       )}
+      <Toaster />
 
       <div className="border border-2 p-6 relative bg-mainColor text-white rounded-b-[2rem]">
         <div className="flex items-center  justify-center mb-10">
@@ -117,19 +140,26 @@ const StudentProfilePage = () => {
           );
         })}
 
+        <div className="flex flex-col items-center w-full space-y-1">
+          <p className="font-semibold uppercase text-xl relative">
+            {user.referral_code}
+            <span
+              className="absolute top-0 right-[-18px]"
+              onClick={handleCopyToClipboard}
+            >
+              <Copy size={15} />
+            </span>
+          </p>
+          <span className="text-sm text-gray-500 ">Referral code </span>
+        </div>
+
         <button
           onClick={() => setOpenModal(true)}
-          className="bg-mainColor text-white font-semibold  p-3 rounded-lg  flex justify-center items-center"
+          className="bg-mainColor text-lg flex justify-center items-center text-white absolute left-1/2 transform -translate-x-1/2 bottom-20 w-[90%] rounded-full p-3 font-semibold mx-auto"
         >
           Sign Out
           <SignOut size={24} color="#ffffff" className="ml-4" />
         </button>
-
-        {/* <div className="flex justify-center">
-          <div className=" shadow-lg w-52 bg-white p-2">
-            <img src={StudentQR} alt="student-qr" className="w-full" />
-          </div>
-        </div> */}
       </div>
     </div>
   );
