@@ -306,12 +306,14 @@ const StaffHomepage = () => {
                 </div>
               ))
             ) : (
-              <p>No data available</p>
+              <p className="text-center font-semibold text-iconGrayColor">
+                No data available
+              </p>
             )}
           </div>
 
           <Link to={"/report-history"}>
-            <button className="absolute bottom-0 left-0 w-full shadow bg-bottomNav rounded-b-2xl hover:bg-gray-100 ease-in-out font-semibold text-iconGrayColor p-2.5">
+            <button className="absolute bottom-0 left-0 w-full shadow bg-bottomNav rounded-b-2xl hover:bg-gray-100 ease-in-out font-semibold text-gray-500  p-2.5">
               View All
             </button>
           </Link>
