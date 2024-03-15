@@ -43,7 +43,7 @@ const ReportHistoryPage = () => {
     fetchReport();
   }, []);
   return (
-    <div className="h-screen w-screen background flex flex-col ">
+    <div className="h-screen w-screen bg-white flex flex-col ">
       <PageTitle
         title="REPORT HISTORY"
         closeFunction={() => navigate(`/${user?.user_role}/home`)}

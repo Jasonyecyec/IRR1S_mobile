@@ -19,7 +19,7 @@ const StaffBottomNavigation = () => {
 
   return (
     <div
-      className="h-[10%] bg-bottomNav text-black relative w-full  flex px-5 justify-around items-center"
+      className="h-[10%] bg-bottomNav text-black relative w-full font-semibold flex px-5 justify-around items-center"
       style={{
         boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
       }}
@@ -28,7 +28,7 @@ const StaffBottomNavigation = () => {
       <button>
         <Link
           to="/report-history"
-          className="text-center  flex flex-col items-center"
+          className="text-center  text-gray-500  flex flex-col items-center"
         >
           <Eye size={30} color="#9c9c9c" />
           Reports
@@ -37,7 +37,7 @@ const StaffBottomNavigation = () => {
       <button>
         <Link
           to="/staff/request-history"
-          className="text-center  flex flex-col items-center"
+          className="text-center  flex flex-col text-gray-500  items-center"
         >
           <Note size={32} color="#9c9c9c" /> Request
         </Link>
@@ -45,7 +45,7 @@ const StaffBottomNavigation = () => {
       <button>
         <Link
           to="/staff/profile"
-          className="text-center  flex flex-col items-center"
+          className="text-center  flex flex-col text-gray-500 font-semibold items-center"
         >
           <UserCircle size={32} color="#9c9c9c" /> Profile
         </Link>
