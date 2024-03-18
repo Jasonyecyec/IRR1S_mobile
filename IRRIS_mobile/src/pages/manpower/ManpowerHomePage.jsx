@@ -16,6 +16,14 @@ import { formatDate } from "@/src/utils/utils";
 import { useNavigate } from "react-router-dom";
 import { getJobOrder } from "@/src/services/api/manpowerService";
 import "../../index.css";
+import UPkeepLogo from "/qcu_upkeep_logo.png";
+import {
+  Bell,
+  WarningCircle,
+  NotePencil,
+  Notepad,
+} from "@phosphor-icons/react";
+import StatusBadgeReport from "@/src/components/StatusBadgeReport";
 
 const ManpowerHomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -217,36 +225,49 @@ const ManpowerHomePage = () => {
   };
 
   return (
-    <div className="h-full flex flex-col background">
-      <div className="flex justify-between items-center bg-mainColor p-5">
-        <button onClick={handleProfileButton}>
-          <img src={UserSample} className="w-12 h-12 rounded-full " />
-        </button>
+    <div className="h-full flex flex-col bg-secondaryColor">
+      <div className="flex p-3 justify-between">
+        <div className="flex items-center font-semibold text-mainColor space-x-2">
+          <img src={UPkeepLogo} className="w-12 h-12" />
+          <p className="text-xl">
+            Hello!{" "}
+            <span>
+              {" "}
+              {user?.first_name} {user?.last_name}
+            </span>
+          </p>
+        </div>
+        {/* <button onClick={handleNotificationButton} className="relative">
+          {notification && (
+            <span className="absolute top-[2px] right-[3px] flex h-3 w-3 ">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accentColor opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-accentColor text-xs justify-center items-center text-white"></span>
+            </span>
+          )}
 
-        <button>
-          <Link to={`/manpower/notification/${user?.id}`}>
-            <img src={NotificationIcon} className="w-10 h-10 " />
-          </Link>
-        </button>
+          <Bell size={"2.3rem"} color="#1656ea" weight="fill" />
+        </button> */}
+
+        <Link to={`/manpower/notification/${user?.id}`}>
+          <button>
+            <Bell size={"2.3rem"} color="#1656ea" weight="fill" />
+          </button>
+        </Link>
       </div>
 
       <div className="p-5 flex-1 flex flex-col space-y-7">
-        <h1 className="capitalize text-2xl">
-          Welcome{" "}
-          <span className="text-3xl font-bold block">
-            {user?.first_name} {user?.last_name}
-          </span>
-        </h1>
-
-        <div className="bg-white shadow-md p-6 rounded-lg">
-          <p className="font-bold text-xl mb-5">Categories</p>
+        <div className="p-2 rounded-lg">
+          <p className="font-bold text-xl mb-5 text-center text-mainColor2">
+            Categories
+          </p>
           <div className="flex justify-between">
             <button
-              className="bg-[#D9D9D9]  flex flex-col items-center justify-center w-24 h-24 rounded-md relative"
+              className="bg-white shadow flex flex-col space-y-1 items-center justify-center w-28 h-28 rounded-md relative"
               onClick={handleReportButton}
             >
-              <img src={ReportIcon} className="w-10 h-10 " />
-              Report
+              <WarningCircle className="text-[#0f59cb] w-10 h-10" />
+              <span className="text-[#0f59cb] font-semibold"> Report</span>
+
               {isJobOrderNotif && (
                 <span className="absolute top-[-5px] right-[-5px] flex h-6 w-6 ">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -260,11 +281,12 @@ const ManpowerHomePage = () => {
             </button>
 
             <button
-              className="bg-[#D9D9D9]  flex flex-col items-center justify-center w-24 h-24 rounded-md relative"
+              className="bg-white shadow space-y-1  flex flex-col items-center justify-center w-28 h-28 rounded-md relative"
               onClick={handleRequestButton}
             >
-              <img src={RequestIcon} className="w-10 h-10 " />
-              Request
+              <NotePencil className="text-[#0f59cb] w-10 h-10" />
+
+              <span className="text-[#0f59cb] font-semibold"> Request</span>
               {isJobOrderRequestNotif && (
                 <span className="absolute top-[-5px] right-[-5px] flex h-6 w-6 ">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -275,56 +297,89 @@ const ManpowerHomePage = () => {
               {console.log("job order requesst", isJobOrderRequestNotif)}
             </button>
 
-            <button className="bg-[#D9D9D9] flex flex-col items-center justify-center w-24 h-24 rounded-md">
-              <img src={DailyTaskIcon} className="w-10 h-10 " />
-              Daily Task
+            <button className="bg-white shadow space-y-1  flex flex-col items-center justify-center w-28 h-28 rounded-md">
+              <Notepad className="text-[#0f59cb] w-10 h-10" />
+              <span className="text-sm font-semibold text-[#0f59cb]">
+                {" "}
+                Report Form
+              </span>
             </button>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg  shadow-lg flex-1 flex  flex-col p-5">
-          <div className="flex justify-between w-full pb-5 ">
-            <p className="font-bold text-xl">Status</p>
-            <Link to="/manpower/tasks" className="text-mainColor font-bold">
-              See more
-            </Link>
+        <div className="bg-white  rounded-lg  shadow h-[25rem]  flex  flex-col p-5 relative">
+          <div className="flex justify-between w-full pb-3 border-b-[1px]">
+            <p className="font-semibold text-[#0f59cb]">Job order details</p>
+
+            <p className="font-semibold text-[#0f59cb]">Status</p>
           </div>
           {isLoading ? (
-            <div className="flex justify-center">
+            <div className="flex justify-center pt-10">
               <Spinner aria-label="Large spinner example" size="lg" />
             </div>
           ) : (
             <div className="h-[16.5rem]  overflow-y-scroll">
-              {recentJobOrder &&
+              {recentJobOrder && recentJobOrder.length > 0 ? (
                 recentJobOrder?.map((item, index) => (
                   <div
                     key={index}
-                    className="space-y-3 bg-white py-2 border-t-2"
+                    className="space-y-1 bg-white shadow-md rounded-md p-2 flex justify-between"
                   >
-                    <div className="flex justify-between">
-                      <p className="font-bold text-lg">{item.description}</p>
-                      <p className="text-md flex items-center space-x-2">
+                    <div>
+                      {" "}
+                      <p className="font-semibold">{item.description}</p>
+                      <p className="text-sm flex items-center space-x-2 ">
+                        <Clock size={24} color="#121212" />
+                        <span className="text-gray-500">
+                          {" "}
+                          {formatDate(item.created_at)}{" "}
+                        </span>
+                      </p>
+                      <p className="flex text-sm items-center space-x-2">
+                        <MapPin size={24} color="#121212" />
+                        <span className="text-gray-500">
+                          {" "}
+                          {item.report?.facility?.facilities_name}
+                        </span>
+                      </p>
+                      <p className="flex text-sm items-center space-x-2">
+                        <WarningCircle size={24} color="#121212" />
+                        <span className="text-gray-500">
+                          {" "}
+                          {item.report?.issues}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="flex  items-center justify-center">
+                      <p>
+                        {" "}
+                        <StatusBadgeReport status={item.status} />
+                      </p>
+
+                      {/* <p className="text-sm flex items-center space-x-2">
                         <Circle size={24} color="#3cd008" weight="fill" />
                         <span>
                           {item.status === "assigned" ? "Pending" : "Ongoing"}
                         </span>
-                      </p>
+                      </p> */}
                     </div>
-                    <p className="flex items-center space-x-2">
-                      <Clock size={24} color="#121212" />
-                      <span> {formatDate(item.created_at)} </span>
-                    </p>
-                    <p className="flex items-center space-x-2">
-                      <MapPin size={24} color="#121212" />
-                      <span> {item.report?.facility?.facilities_name}</span>
-                    </p>
                   </div>
-                ))}
+                ))
+              ) : (
+                <p className="text-center font-semibold text-gray-500 mt-10">
+                  No data available
+                </p>
+              )}
             </div>
           )}
-        </div>
 
-        <div className="p-5">asdasd</div>
+          <Link
+            to="/manpower/tasks"
+            className="text-gray-500 font-bold absolute bottom-0 left-0 bg-bottomNav w-full p-2 text-center rounded-b-lg"
+          >
+            <button> See more</button>
+          </Link>
+        </div>
       </div>
     </div>
   );

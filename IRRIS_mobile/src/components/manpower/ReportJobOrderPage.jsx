@@ -26,6 +26,8 @@ const ReportJobOrderPage = ({
   imageSrcAfter,
   finishFormData,
   handleFinishFormChange,
+  handlePendingReason,
+  pendingReason,
 }) => {
   return (
     <div className="bg-white rounded-lg p-3 shadow-md">
@@ -128,26 +130,34 @@ const ReportJobOrderPage = ({
               value={reportStatus}
               onChange={handleReportStatus}
             >
-              <option value="">Please choose an option</option>
+              <option value="">Select status</option>
               <option value="valid">Valid</option>
-              <option value="not-valid">Not Valid</option>
-              <option value="delay">Delay</option>
+              <option value="not-valid">No Fault Found</option>
+              <option value="pending">Pending</option>
             </select>
           </div>
-          <div className="space-y-1 items-center text-sm">
-            <p>Estimated time to finish</p>
-            <input
-              type="number"
-              placeholder="Input minutes (Optional)"
-              className="w-full rounded-md"
-              onChange={handleEstimatedDuration}
-            />
-          </div>
+
+          {reportStatus === "pending" && (
+            <div>
+              <textarea
+                id="comments"
+                name="comments"
+                rows="4"
+                cols="33"
+                value={pendingReason}
+                onChange={handlePendingReason}
+                placeholder={"Input pending reason"}
+                className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary text-sm"
+              ></textarea>
+            </div>
+          )}
+
           <button
-            className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-base"
+            className="bg-mainColor2 text-white rounded-md w-full p-3 font-bold text-base"
             onClick={handleButton}
           >
-            {reportStatus === "not-valid" || reportStatus === "delay"
+            {reportStatus === "not-valid" || reportStatus === "pending"
               ? "Submit"
               : "Start Task"}
             {/* Start Task */}
@@ -201,7 +211,7 @@ const ReportJobOrderPage = ({
               onChange={handleFinishFormChange}
             >
               <option value="completed">Completed</option>
-              <option value="incomplete">Incomplete</option>
+              <option value="pending">Pending</option>
             </select>
           </div>
 
@@ -211,7 +221,11 @@ const ReportJobOrderPage = ({
               name="comments"
               className="form-textarea mt-1 text-sm block w-full border rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               rows="4"
-              placeholder="Write comment for your tasks"
+              placeholder={
+                finishFormData.status === "pending"
+                  ? "Input pending reason"
+                  : "Write comment for your tasks"
+              }
               value={finishFormData.comments || ""}
               onChange={handleFinishFormChange}
             ></textarea>
@@ -221,7 +235,9 @@ const ReportJobOrderPage = ({
             className="bg-mainColor text-white rounded-md w-full p-3 font-bold text-base"
             onClick={handleButton}
           >
-            Finish Task
+            {finishFormData.status === "pending"
+              ? "Submit Reason"
+              : " Finish Task"}
           </button>
         </div>
       )}

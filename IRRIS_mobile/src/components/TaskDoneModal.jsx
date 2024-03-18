@@ -1,22 +1,35 @@
 import React from "react";
-import { CheckCircle } from "@phosphor-icons/react";
+import { CheckCircle, Check } from "@phosphor-icons/react";
 
-const TaskDoneModal = ({ handleDone }) => {
+const TaskDoneModal = ({ handleDone, content = null }) => {
   return (
     <div
       className="fixed z-20 inset-0 bg-gray-800 bg-opacity-50 p-5 overflow-y-auto h-full w-full flex justify-center items-center"
       id="my-modal"
     >
       <div className="p-5 pt-8 border w-full space-y-5 shadow-lg rounded-md bg-white relative">
-        <div className="flex flex-col items-center justify-center ">
-          <CheckCircle size={100} color="#2ead3d" weight="fill" />
+        <div className="flex flex-col items-center justify-center space-y-5">
+          <span className="rounded-full bg-green-100 p-3 flex items-center justify-center">
+            {" "}
+            <Check size={35} className="text-green-500" />
+          </span>
 
-          <p className="text-2xl text-center bg-green-100 p-3 rounded-lg mt-5">
-            You accomplishment is submitted!
-          </p>
+          <p className="font-semibold text-lg"> Thanks for submitting!</p>
+
+          {content === null && (
+            <p className="text-base text-center text-gray-500  rounded-lg ">
+              Thank's for submitting feedback.
+            </p>
+          )}
+
+          {content && (
+            <p className="text-base text-center text-gray-500   rounded-lg ">
+              {content}
+            </p>
+          )}
 
           <button
-            className="text-white bg-mainColor font-bold text-xl px-8 py-2 mt-12 rounded-lg"
+            className="text-white w-full bg-mainColor font-semibold text-lg px-8 py-2  rounded-lg"
             onClick={handleDone}
           >
             Done

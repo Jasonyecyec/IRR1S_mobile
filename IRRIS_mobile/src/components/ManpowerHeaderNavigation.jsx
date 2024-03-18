@@ -1,9 +1,14 @@
 import React from "react";
-import ArrowLeft from "../assets/images/arrow-left.png";
+import ArrowLeft2 from "../assets/images/arrow-left.png";
 import NotificationIcon from "../assets/images/bell_icon.png";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft, CaretLeft, Bell } from "@phosphor-icons/react";
 
-const ManpowerHeaderNavigation = ({ navigateTo, showBell = true }) => {
+const ManpowerHeaderNavigation = ({
+  navigateTo,
+  showBell = true,
+  title = null,
+}) => {
   const navigate = useNavigate();
   const goBack = () => {
     if (navigateTo === "home") {
@@ -14,14 +19,16 @@ const ManpowerHeaderNavigation = ({ navigateTo, showBell = true }) => {
   };
 
   return (
-    <div className="bg-mainColor py-3 px-5 flex justify-between rounded-b-[2rem]">
+    <div className="bg-mainColor2 p-3 px-4 flex justify-between items-center ">
       <button onClick={goBack}>
-        <img src={ArrowLeft} className="w-12" />
+        <ArrowLeft size={28} color="#FFFFFF" />
       </button>
+
+      {title && <p className=" text-white text-lg">{title}</p>}
 
       {showBell && (
         <button>
-          <img src={NotificationIcon} className="w-10" />
+          <Bell size={30} color="#FFFFFF" />
         </button>
       )}
     </div>

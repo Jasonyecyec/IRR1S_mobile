@@ -73,6 +73,20 @@ export const getJobOrder = async (userId,status = null) => {
     }
   };
 
+  export const markedAsPendingJobOrder = async (id,form) => {
+    try {
+  
+      // Make an API call with the formData object and id
+      const response = await api.patch(`/job-order-pending/${id}`,form);
+  
+      console.log('Update Job Order Mark as pending response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Update Job Order Mark as pending  error:', error.response || error.message);
+      throw error;
+    }
+  };
+
   export const acceptJobOrder = async (formData, id) => {
     try {
   

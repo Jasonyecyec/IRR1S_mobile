@@ -13,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { Spinner } from "flowbite-react";
 import TaskFilter from "@/src/components/manpower/TaskFilter";
+import StatusBadgeReport from "@/src/components/StatusBadgeReport";
 
 const TasksPage = () => {
   const { user } = useUserStore((state) => ({
@@ -69,17 +70,9 @@ const TasksPage = () => {
   const fullname = user?.first_name + " " + user?.last_name;
   return (
     <div className="h-full flex flex-col">
-      <ManpowerHeaderNavigation navigateTo={"home"} />
+      <ManpowerHeaderNavigation navigateTo={"home"} title={"Job Orders"} />
       <div className="p-5 space-y-3  flex flex-col flex-1">
-        <div className="flex justify-between items-center">
-          <div className="space-y-3">
-            <h1 className="text-xl  ">
-              Hello, <span className="capitalize">{fullname} </span>
-            </h1>
-
-            <p className="font-bold text-3xl">Job Orders</p>
-          </div>
-
+        <div className="flex justify-end">
           <div className=" relative">
             <button
               onClick={() => setIsFilterOpen(true)}
@@ -119,26 +112,7 @@ const TasksPage = () => {
                         <span className="bg-yellow-300 py-1 px-2 rounded-md mr-2 capitalize">
                           {job.process_type}
                         </span>
-                        {job.status === "assigned" && (
-                          <span className="bg-red-500 py-1 px-2 rounded-md text-white">
-                            Pending
-                          </span>
-                        )}
-                        {job.status === "ongoing" && (
-                          <span className="bg-blue-500 py-1 px-2 rounded-md text-white">
-                            Ongoing
-                          </span>
-                        )}
-                        {job.status === "completed" && (
-                          <span className="bg-green-500 py-1 px-2 rounded-md text-white">
-                            Completed
-                          </span>
-                        )}
-                        {job.status === "not-valid" && (
-                          <span className="bg-gray-400 py-1 px-2 rounded-md text-white">
-                            Not Valid
-                          </span>
-                        )}
+                        <StatusBadgeReport status={job.status} />
                       </p>
                       {job.status !== "completed" && (
                         <Link
