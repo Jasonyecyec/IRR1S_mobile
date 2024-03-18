@@ -14,11 +14,11 @@ const ManpowerRoutes = [
     key="manpowerRoute1"
     path="/manpower/home"
     element={
-      // <TransitionWrapper>
-      <HomepageLayout>
-        <ManpowerHomePage />
-      </HomepageLayout>
-      // </TransitionWrapper>
+      <TransitionWrapper location={location}>
+        <HomepageLayout>
+          <ManpowerHomePage />
+        </HomepageLayout>
+      </TransitionWrapper>
     }
   />,
   <Route
@@ -80,7 +80,11 @@ const ManpowerRoutes = [
   <Route
     key="manpowerRoute7"
     path="/manpower/profile"
-    element={<ManpowerProfilePage />}
+    element={
+      <TransitionWrapper location={location}>
+        <ManpowerProfilePage />
+      </TransitionWrapper>
+    }
   />,
 ];
 

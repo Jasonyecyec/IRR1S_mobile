@@ -31,6 +31,7 @@ import {
   finishJobOrder,
   notValidJobOrder,
   finishJobOrderRequest,
+  markedAsPendingJobOrder,
 } from "@/src/services/api/manpowerService";
 import ImageModal from "@/src/components/ImageModal";
 import { useNavigate } from "react-router-dom";
@@ -53,6 +54,7 @@ const ManpowerProgressPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [reportStatus, setReportStatus] = useState(null);
   const [isNotValidOrDelayModal, setIsNotValidOrDelayModal] = useState(false);
+  const [pendingReason, setPendingReason] = useState(null);
   const [estimatedDuration, setEstimatedDuration] = useState(null);
   const [finishFormData, setFinishFormData] = useState({
     status: "completed",
@@ -79,8 +81,7 @@ const ManpowerProgressPage = () => {
   const notify = (message) =>
     toast.error(message, {
       style: {
-        fontSize: "1.2rem",
-        fontWeight: "bold",
+        textAlign: "center",
         marginTop: "2rem",
       },
       id: "error",
@@ -167,6 +168,10 @@ const ManpowerProgressPage = () => {
 
   const handleReportStatus = (e) => {
     setReportStatus(e.target.value);
+  };
+
+  const handlePendingReason = (e) => {
+    setPendingReason(e.target.value);
   };
 
   const initializeCamera = async (e) => {
@@ -360,6 +365,7 @@ const ManpowerProgressPage = () => {
         //UPDATE JOB ORDER STATUS AND OTHERS
         const formObjectData = {
           status: "ongoing",
+          user_id: taskInProgress.report?.user_id,
           report_id: taskInProgress.report_id,
           job_type: taskInProgress.job_type,
         };
@@ -515,14 +521,28 @@ const ManpowerProgressPage = () => {
     try {
       setIsLoading(true);
 
-      const response = await notValidJobOrder(taskInProgress?.id);
-      console.log("response not valid", response);
+      if (reportStatus === "not-valid") {
+        const response = await notValidJobOrder(taskInProgress?.id);
+        console.log("response not valid", response);
+      }
+
+      if (reportStatus === "pending") {
+        const form = {
+          pending_reason: pendingReason,
+        };
+        const response = await markedAsPendingJobOrder(
+          taskInProgress?.id,
+          form
+        );
+        console.log("response pending", response);
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
       setIsNotValidOrDelayModal(false);
-      navigate("/manpower/tasks");
+      setOpenModalTaskDone(true);
+      // navigate("/manpower/tasks");
     }
   };
 
@@ -532,6 +552,16 @@ const ManpowerProgressPage = () => {
     localStorage.setItem("task_local", JSON.stringify(null));
 
     if (task === "report" || taskLocal === "report") {
+      if (finishFormData.status === "pending") {
+        navigate(`/manpower/tasks`);
+        return;
+      }
+
+      if (reportStatus === "pending" || reportStatus === "not-valid") {
+        navigate(`/manpower/tasks`);
+        return;
+      }
+
       navigate(`/manpower/rate/${taskInProgress?.id}`);
     } else {
       navigate(`/manpower/tasks`);
@@ -553,7 +583,15 @@ const ManpowerProgressPage = () => {
       return;
     }
 
-    if (reportStatus === "not-valid" || reportStatus === "delay") {
+    if (
+      reportStatus === "pending" &&
+      (pendingReason === "" || pendingReason === null)
+    ) {
+      notify("Input reason");
+      return;
+    }
+
+    if (reportStatus === "not-valid" || reportStatus === "pending") {
       setIsNotValidOrDelayModal(true);
       console.log("are you sure you want to submit");
       return;
@@ -576,8 +614,16 @@ const ManpowerProgressPage = () => {
       taskInProgress.status === "ongoing" &&
       (task === "report" || taskLocal === "report")
     ) {
-      if (!imageFileAfter) {
+      if (!imageFileAfter && finishFormData.status !== "pending") {
         notify("Image required");
+        return;
+      }
+
+      if (
+        finishFormData.status === "pending" &&
+        (finishFormData.comments === null || finishFormData.comments === "")
+      ) {
+        notify("Input reason");
         return;
       }
 
@@ -600,7 +646,18 @@ const ManpowerProgressPage = () => {
       {/* {isToastActivated && <Toaster />} */}
       <Toaster />
 
-      {openModalTaskDone && <TaskDoneModal handleDone={handleDoneModal} />}
+      {openModalTaskDone && (
+        <TaskDoneModal
+          content={
+            reportStatus === "pending"
+              ? " Your task is pending review due to required information. Please hang tight while we process it."
+              : reportStatus === "not-valid"
+              ? "Thanks for submitting! We've received your submission."
+              : "Your task has been successfully completed and submitted!"
+          }
+          handleDone={handleDoneModal}
+        />
+      )}
 
       {openModalImage && (
         <ConfirmationModal
@@ -735,6 +792,8 @@ const ManpowerProgressPage = () => {
                       imageSrcAfter={imageSrcAfter}
                       finishFormData={finishFormData}
                       handleFinishFormChange={handleFinishFormChange}
+                      handlePendingReason={handlePendingReason}
+                      pendingReason={pendingReason}
                     />
                   ) : task === "request" ? (
                     <RequestJobOrderPage
@@ -772,6 +831,8 @@ const ManpowerProgressPage = () => {
                       imageSrcAfter={imageSrcAfter}
                       finishFormData={finishFormData}
                       handleFinishFormChange={handleFinishFormChange}
+                      handlePendingReason={handlePendingReason}
+                      pendingReason={pendingReason}
                     />
                   ) : taskLocal === "request" ? (
                     <RequestJobOrderPage

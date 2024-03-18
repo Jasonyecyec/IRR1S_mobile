@@ -24,6 +24,7 @@ import { formatDateTime } from "../utils/utils";
 import StatusIndicator from "../components/StatusIndicator";
 import { CalendarBlank } from "@phosphor-icons/react";
 import UkeepLogo from "/qcu_upkeep_logo.png";
+import beamsClient from "@/src/pushNotificationConfig";
 
 const HomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -70,6 +71,28 @@ const HomePage = () => {
       console.error(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const initializePusherBeams = async () => {
+    try {
+      const client = await beamsClient.start();
+      const userIdCookie = Cookies.get("user_id");
+
+      console.log("Pusher Beams initialized successfully", client);
+
+      // Set user ID if needed
+      // await client.setUserId("USER_ID");
+
+      // Subscribe to push notifications
+      await client.setDeviceInterests([`notification-channel-${userIdCookie}`]);
+      console.log("Device interests have been set");
+
+      // Get and log device interests
+      const interests = await client.getDeviceInterests();
+      console.log("Device interests:", interests);
+    } catch (error) {
+      console.error("Error initializing Pusher Beams:", error);
     }
   };
 
@@ -124,7 +147,7 @@ const HomePage = () => {
       user_role: user_roleCookie,
       referral_code: referralCode_Cookie,
     });
-
+    initializePusherBeams();
     listenToNotification();
     fetchReport();
     fetchStudentPoints();
@@ -183,7 +206,7 @@ const HomePage = () => {
 
       {/* <div className="bg-[#f11408] h-2"></div> */}
 
-      <div className="p-3 bg-secondaryColor h-full space-y-12">
+      <div className="p-3 bg-secondaryColor h-full space-y-6">
         <div className="flex justify-between items-center bg-[#017afe] text-white rounded-lg p-5 py-6">
           <div className="flex space-x-3  max-w-[15rem]">
             <div className=" font-bold space-y-1.5">
@@ -251,7 +274,7 @@ const HomePage = () => {
             <p>Status</p>
           </div>
 
-          <div className="h-[20rem]  overflow-y-auto space-y-3 pb-14 p-2">
+          <div className="h-[19.5rem]  overflow-y-auto space-y-2 pb-14 p-2">
             {" "}
             {isLoading ? (
               <div className="w-full flex justify-center pt-5  items-center">
