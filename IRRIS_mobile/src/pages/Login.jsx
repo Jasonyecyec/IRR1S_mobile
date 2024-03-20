@@ -250,7 +250,7 @@ const Login = () => {
           </p>
           <div className="flex justify-end mt-5 ">
             <Link to="/suggestion-box">
-              <span className="font-bold text-[#16425B]">Suggestion Box</span>
+              <span className="font-bold text-[#16425B]">Suggestion</span>
             </Link>
           </div>
         </div>
