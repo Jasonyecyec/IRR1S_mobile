@@ -36,10 +36,14 @@ const issueCategories = {
     "Area Cleaning": "maintenance",
     "Garden Maintenance": "maintenance",
   },
+
   "Temperature and Ventilation": {
     "HVAC Problems": "electrical",
-    "Heating/Cooling": "electrical",
-    "Ventilation Issues": "electrical",
+    "Outdoor Lighting": "electrical",
+  },
+
+  Others: {
+    Others: "others",
   },
 };
 
@@ -108,6 +112,7 @@ const ReportIssuePage = () => {
       ...prevForm,
       issue_type: issueType,
       issues: issuesSelect,
+      description: "",
     }));
 
     //SET FORM VALUE
@@ -127,11 +132,18 @@ const ReportIssuePage = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = event.target;
+    const { name, value } = e.target;
+
+    //set the issue_type and issue to null
     setForm((prevForm) => ({
       ...prevForm,
+      issue_type: "",
+      issues: "",
       [name]: value,
     }));
+
+    //set search term to empty
+    setSearchTerm("");
   };
 
   const handleRemoveImage = (e) => {
@@ -225,7 +237,7 @@ const ReportIssuePage = () => {
       const response = await reportFacility(formData);
       navigate(response.route);
     } catch (error) {
-      console.error(error);
+      console.error("error message", error);
       navigate(error.response.data.route, {
         state: { errorMessage: error.response.data.error },
       });
@@ -340,7 +352,7 @@ const ReportIssuePage = () => {
     }));
   }, []);
   return (
-    <div className="background h-screen w-screen relative">
+    <div className="bg-secondaryColor h-screen w-screen relative">
       {openModal && (
         <ConfirmationModal
           isLoading={false}
@@ -415,9 +427,9 @@ const ReportIssuePage = () => {
         </div>
       )}
       <PageTitle title="REPORT ISSUE" />
-      <div className="h-full w-full  p-5 pt-16 ">
+      <div className="h-full w-full  p-5 pt-5 ">
         <form onSubmit={handleSubmitButton} className="space-y-8">
-          <div className="space-y-1 text-sm">
+          <div className="space-y-2 text-sm">
             <TextInput
               placeholder="Facility ID"
               label="Facility ID"
@@ -436,7 +448,7 @@ const ReportIssuePage = () => {
                 htmlFor="issue-type"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Issue Type
+                Select Issue
               </label>
 
               {/* <div className="relative">
@@ -468,11 +480,11 @@ const ReportIssuePage = () => {
               />
 
               {isDropdownOpen && (
-                <div className="bg-white space-y-4 shadow-lg absolute bottom-[-8.3rem] rounded-b-md px-2 py-3 left-0 w-full h-32 overflow-auto">
+                <div className="bg-white space-y-4 shadow-lg absolute bottom-[-8.3rem] rounded-b-md  py-3 left-0 w-full h-32 overflow-auto">
                   {filteredCategories().map((category, index) => (
                     <div
                       key={index}
-                      className="bg-gray-100 p-2 rounded-md"
+                      className="bg-gray-50 p-2 px-5 rounded-md"
                       onClick={(e) =>
                         handleSelectIssue(
                           category.subCategoryType,
@@ -486,23 +498,22 @@ const ReportIssuePage = () => {
                 </div>
               )}
             </div>
-
+            <p className="text-center font-semibold text-gray-500">Or</p>
             <div>
               <label
                 for="message"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Issue Details
+                Input Issue details
               </label>
               <textarea
                 id="message"
                 rows="4"
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Leave a comment..."
+                placeholder="Pleas provide accurate description of the issue."
                 name="description"
                 value={form.description}
                 onChange={handleChange}
-                required
               ></textarea>
             </div>
 
@@ -541,11 +552,11 @@ const ReportIssuePage = () => {
           </div>
 
           <div className="flex space-x-5 ">
-            <button className="bg-mainColor p-3 text-white rounded-lg flex-1 font-bold text-base">
+            <button className="border p-3 text-black bg-white shadow rounded-lg flex-1 font-bold text-base">
               Cancel
             </button>
             <button
-              className="bg-mainColor p-3 text-white rounded-lg flex-1 font-bold text-base"
+              className="bg-mainColor2 p-3 text-white rounded-lg shadow flex-1 font-bold text-base"
               type="submit"
             >
               Submit

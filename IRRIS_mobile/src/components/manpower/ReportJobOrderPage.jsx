@@ -131,7 +131,7 @@ const ReportJobOrderPage = ({
               onChange={handleReportStatus}
             >
               <option value="">Select status</option>
-              <option value="valid">Valid</option>
+              <option value="valid">Validated</option>
               <option value="not-valid">No Fault Found</option>
               <option value="pending">Pending</option>
             </select>
