@@ -48,12 +48,12 @@ const FacilityInputModal = ({
         <div className="">
           <button
             onClick={handleSubmit}
-            className="px-4 bg-mainColor text-white w-full rounded-md text-lg py-3 mr-2"
+            className="px-4 bg-mainColor2 text-white w-full rounded-md font-semibold py-3 mr-2"
           >
             {isLoading ? (
               <Spinner aria-label="Medium sized spinner example" size="md" />
             ) : (
-              "SUBMIT"
+              "Submit"
             )}
           </button>
         </div>
