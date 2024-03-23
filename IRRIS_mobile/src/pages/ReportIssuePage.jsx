@@ -65,6 +65,7 @@ const ReportIssuePage = () => {
 
   const [form, setForm] = useState({
     user_id: "",
+    urgency: false,
     facility_id: "",
     image_before: null,
     issue_type: "",
@@ -144,6 +145,14 @@ const ReportIssuePage = () => {
 
     //set search term to empty
     setSearchTerm("");
+  };
+
+  // Handler for toggling urgency checkbox
+  const handleUrgencyCheckbox = () => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      urgency: !form.urgency,
+    }));
   };
 
   const handleRemoveImage = (e) => {
@@ -228,6 +237,7 @@ const ReportIssuePage = () => {
       formData.append("issues", form.issues);
       formData.append("description", form.description);
       formData.append("status", form.status);
+      formData.append("urgency", form.urgency);
 
       // Append the file if it exists
       if (imageFile) {
@@ -443,31 +453,13 @@ const ReportIssuePage = () => {
               disabled={true}
             />
 
-            <div className=" relative">
+            {/* <div className=" relative">
               <label
                 htmlFor="issue-type"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Select Issue
               </label>
-
-              {/* <div className="relative">
-                <select
-                  id="issue-type"
-                  className="rounded-md w-40 "
-                  name="issue_type"
-                  value={form.issue_type}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="" disabled selected>
-                    Select Issue
-                  </option>
-                  <option value="electrical">Electrical</option>
-                  <option value="plumbing">Plumbing</option>
-                  <option value="carpentry">Carpentry</option>
-                </select>
-              </div> */}
 
               <input
                 type="text"
@@ -498,7 +490,8 @@ const ReportIssuePage = () => {
                 </div>
               )}
             </div>
-            <p className="text-center font-semibold text-gray-500">Or</p>
+            <p className="text-center font-semibold text-gray-500">Or</p> */}
+
             <div>
               <label
                 for="message"
@@ -513,8 +506,26 @@ const ReportIssuePage = () => {
                 placeholder="Pleas provide accurate description of the issue."
                 name="description"
                 value={form.description}
+                required
                 onChange={handleChange}
               ></textarea>
+            </div>
+
+            <div className="space-x-3  flex items-center py-3">
+              <input
+                type="checkbox"
+                id="urgency"
+                name="urgency"
+                className="text-mainColor"
+                onChange={handleUrgencyCheckbox}
+                checked={form.urgency}
+              />
+              <label for="urgency" className="font-semibold text-base">
+                Urgent
+              </label>
+              <span id="urgencyText" className="text-sm text-gray-500 italic">
+                *This task is urgent.
+              </span>
             </div>
 
             <div className="mt-2">
@@ -552,8 +563,14 @@ const ReportIssuePage = () => {
           </div>
 
           <div className="flex space-x-5 ">
-            <button className="border p-3 text-black bg-white shadow rounded-lg flex-1 font-bold text-base">
-              Cancel
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(-1);
+              }}
+              className="border p-3 text-black bg-white shadow rounded-lg flex-1 font-bold text-base"
+            >
+              Back
             </button>
             <button
               className="bg-mainColor2 p-3 text-white rounded-lg shadow flex-1 font-bold text-base"
