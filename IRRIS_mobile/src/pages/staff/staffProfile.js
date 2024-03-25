@@ -4,7 +4,7 @@ const studentProfile = [
  
   {
     title: "Account Setting",
-    route: "/student/account-setting",
+    route: "",
     icon: GearSix,
   },
   {
@@ -14,7 +14,7 @@ const studentProfile = [
   },
   {
     title: "About Us",
-    route: "/student/about",
+    route: "",
     icon: Info,
   },
 ];
