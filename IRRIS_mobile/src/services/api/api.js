@@ -7,21 +7,21 @@ const api = axios.create({
   baseURL: "https://irris-sbit4a-api.com/api",
 });
 
-// api.interceptors.request.use(
-//   (config) => {
-//     // Get the token from wherever you stored it
-//     const token = Cookies.get("authToken");; // Replace with your actual token
+api.interceptors.request.use(
+  (config) => {
+    // Get the token from wherever you stored it
+    const token = Cookies.get("authToken");; // Replace with your actual token
 
-//     // Set the Authorization header for every request
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
+    // Set the Authorization header for every request
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default api;

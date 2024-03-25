@@ -17,6 +17,13 @@ import useUserStore from "../../services/state/userStore";
 import { Button, Modal } from "flowbite-react";
 import ConfirmationModal from "@/src/components/ConfirmationModal";
 import toast, { Toaster } from "react-hot-toast";
+import UploadProfileModal from "@/src/components/UploadProfileModal";
+import { getUserDetails } from "@/src/services/api/sharedService";
+import { getImageUrl } from "@/src/utils/utils";
+import Skeleton from "react-loading-skeleton";
+import Loading from "@/src/components/Loading";
+
+import "react-loading-skeleton/dist/skeleton.css";
 
 const StudentProfilePage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -25,10 +32,27 @@ const StudentProfilePage = () => {
   }));
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [openUploadProfile, setOpenUploadProfile] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userDetails, setUserDetails] = useState(null);
+
+  const fetchUserDetails = async () => {
+    setIsLoading(true);
+    try {
+      const { user_details } = await getUserDetails(user?.id);
+      console.log("user details", user_details);
+      setUserDetails(user_details);
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    console.log("user", user);
+    fetchUserDetails(user?.id);
   }, []);
+
   const handleConfirmButton = () => {
     // To remove a specific cookie
     Cookies.remove("authToken");
@@ -53,6 +77,18 @@ const StudentProfilePage = () => {
     setOpenModal(false);
   };
 
+  const notifySuccess = (message) => {
+    toast.success(message, {
+      id: "success", // Assigning an ID to the toast
+    });
+  };
+
+  const notifyError = (message) => {
+    toast.error(message, {
+      id: "error", // Assigning an ID to the toast
+    });
+  };
+
   const handleCopyToClipboard = () => {
     // Accessing the referral code from user object
     const referralCode = user.referral_code;
@@ -71,7 +107,6 @@ const StudentProfilePage = () => {
         });
       });
   };
-
   return (
     <div className="h-screen w-screen relative">
       {openModal && (
@@ -81,9 +116,20 @@ const StudentProfilePage = () => {
           content=" Are you sure you want to logout?"
         />
       )}
+
+      {openUploadProfile && (
+        <UploadProfileModal
+          onCloseModal={() => setOpenUploadProfile(false)}
+          userId={user?.id}
+          notifySuccess={notifySuccess}
+          notifyError={notifyError}
+          fetchUserDetails={fetchUserDetails}
+        />
+      )}
+
       <Toaster />
 
-      <div className="border border-2 p-6 relative bg-mainColor text-white rounded-b-[2rem]">
+      <div className="p-6 relative bg-mainColor2 text-white rounded-b-[2rem]">
         <div className="flex items-center  justify-center mb-10">
           <p className="font-semibold text-xl">My Profile</p>
           <button
@@ -94,16 +140,35 @@ const StudentProfilePage = () => {
           </button>
         </div>
 
-        <div className="flex space-x-5">
+        <div className="flex space-x-3">
           {/* User Image */}
           <div className="relative">
-            <img
-              src={UserSample}
-              alt="user-sample"
-              className="rounded-full w-24 h-24 "
-            />
+            {isLoading ? (
+              <div className="rounded-full w-24 h-24">
+                {" "}
+                <Skeleton
+                  width={"100%"}
+                  height={"100%"}
+                  className="rounded-full"
+                  style={{ borderRadius: "100%" }}
+                />
+              </div>
+            ) : userDetails ? (
+              <img
+                src={getImageUrl(userDetails?.profile_image)}
+                alt="user-sample"
+                className="rounded-full w-24 h-24 "
+              />
+            ) : (
+              <img
+                src={UserSample}
+                alt="user-sample"
+                className="rounded-full w-24 h-24 "
+              />
+            )}
+
             <button
-              onClick={() => console.log("camera click")}
+              onClick={() => setOpenUploadProfile(true)}
               className="rounded-full p-1.5 absolute bottom-0 right-1 bg-white  border-[2px] border-gray"
             >
               <Camera size={48} color="#121212" className="w-6 h-6" />
@@ -111,17 +176,17 @@ const StudentProfilePage = () => {
           </div>
 
           {/* User details */}
-          <div className="text-base p-3 font-medium">
+          <div className="text-base p-3 space-y-1">
             <p className="text-2xl font-semibold">
               {user?.first_name} {user?.last_name}
             </p>
-            <p className="">{user?.email}</p>
-            <p>Student : SBIT4A</p>
+            <p className="text-base">{user?.email}</p>
+            <p className="text-base">SBIT4A</p>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col p-6 text-lg space-y-8">
+      <div className="flex flex-col p-6 text-lg space-y-6">
         {studentProfile?.map((item, index) => {
           const IconComponent = item.icon;
           return (
@@ -130,8 +195,8 @@ const StudentProfilePage = () => {
               to={item.route}
               className="flex items-center justify-between"
             >
-              <span className="flex items-center">
-                <IconComponent size={24} color="#121212" className="mr-4" />
+              <span className="flex items-center text-gray-500 ">
+                <IconComponent size={24} className="mr-4 text-gray-500" />
                 {item.title}
               </span>
 
@@ -155,10 +220,14 @@ const StudentProfilePage = () => {
 
         <button
           onClick={() => setOpenModal(true)}
-          className="bg-mainColor text-lg flex justify-center items-center text-white absolute left-1/2 transform -translate-x-1/2 bottom-20 w-[90%] rounded-full p-3 font-semibold mx-auto"
+          className="bg-gray-100 text-lg space-x-2 border hover:bg-gray-100 ease-in-out duration-150 flex justify-center items-center text-mainColor2 absolute left-1/2 transform -translate-x-1/2 bottom-20 w-[90%] rounded-full p-3 font-semibold mx-auto"
         >
-          Sign Out
-          <SignOut size={24} color="#ffffff" className="ml-4" />
+          <span> Sign Out </span>
+
+          <span>
+            {" "}
+            <SignOut size={24} className=" " />
+          </span>
         </button>
       </div>
     </div>

@@ -230,4 +230,35 @@
     }
   };
 
+  export const uploadProfileImage = async (form) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const response = await api.post('/upload-profile-image', form,config);
+  
+      console.log('Fetch upload-profile-image response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch upload-profile-image error:', error.response || error.message);
+      throw error;
+    }
+  };
+
+  export const getUserDetails = async (id) => {
+    try {
+  
+      const response = await api.get(`/user-details/${id}`);
+  
+      console.log('Get user-details response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Get user-details  error:', error.response || error.message);
+      throw error;
+    }
+  };
+
 

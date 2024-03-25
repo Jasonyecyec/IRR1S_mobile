@@ -49,6 +49,7 @@ import PointsHistoryPage from "./pages/student/PointsHistoryPage";
 import AchievementPage from "./pages/student/AchievementPage";
 import AchievementDetailsPage from "./pages/student/AchievementDetailsPage";
 import RewardsQualifiedPage from "./pages/student/RewardsQualifiedPage";
+import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import "./index.css";
 
 function App() {
@@ -354,6 +355,15 @@ function App() {
           element={
             <TransitionWrapper location={location}>
               <SuggestionBoxPage />
+            </TransitionWrapper>
+          }
+        />
+
+        <Route
+          path="/terms-and-conditions"
+          element={
+            <TransitionWrapper location={location}>
+              <TermsAndConditionsPage />
             </TransitionWrapper>
           }
         />
