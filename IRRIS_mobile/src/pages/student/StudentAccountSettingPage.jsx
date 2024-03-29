@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom"; // If you're using React
-import { LockKeyOpen, Trash, CaretRight, SkipBack } from "@phosphor-icons/react";
+import { LockKeyOpen, Trash, CaretRight, SkipBack, ArrowLeft } from "@phosphor-icons/react";
 
 function StudentAccountSettingPage() {
   return (
     <div>
-      <header className="  bg-blue-900 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
+      <header className="  bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
         <div className="backbutton  w-[2rem] ml-2 mt-1">
           <Link to="/student/profile" className="text-white  ">
-            <SkipBack size={32} />
+            <ArrowLeft size={32} />
           </Link>
         </div>
       </header>
@@ -29,17 +29,17 @@ function StudentAccountSettingPage() {
               Eugine M. Manliclic
             </h5>
             <span class="text-sm text-gray-500 dark:text-gray-400">
-              Visual Designer
+              QCU student
             </span>
             <div class="flex mt-4 md:mt-6"></div>
           </div>
 
           <div>
-            <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <div class="w-full p-4 text-center bg-white   rounded-lg  sm:p-8 dark:bg-gray-800 ">
               <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
                 <a
                   href="#"
-                  class="flex items-center justify-between w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  class="flex items-center justify-between w-full sm:w-auto bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                 >
                   <div class="flex items-center">
                     <LockKeyOpen className="me-3 w-7 h-7" />
@@ -55,7 +55,7 @@ function StudentAccountSettingPage() {
 
                 <a
                   href="#"
-                  class="flex items-center justify-between w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                  class="flex items-center justify-between w-full sm:w-auto bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                 >
                   <div class="flex items-center">
                     <Trash className="me-3 w-7 h-7" />

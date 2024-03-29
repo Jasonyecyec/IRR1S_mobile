@@ -55,7 +55,6 @@ function SuggestionBoxPage() {
   const [issueType, setIssueType] = useState(""); // Combined issue type
 
   // clear the form inputs when the form is submitted or canceled
-
   const facilityIdInputRef = useRef(null);
   const roomInputRef = useRef(null);
   const locationInputRef = useRef(null);
@@ -70,7 +69,6 @@ function SuggestionBoxPage() {
    // issue_type: "",
     status: "pending",
   });
-
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedIssue, setSelectedIssue] = useState("");
 
@@ -91,41 +89,33 @@ function SuggestionBoxPage() {
       // other issues...
     },
   };
-
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
     setSelectedIssue(""); // Reset selected issue when category changes
   };
-
   const handleIssueSelect = (issue) => {
     console.log("Selected issue:", issue);
     setSelectedIssue(issue);
-
     // Combine selected category and issue to form the issue type
     const newIssueType = selectedCategory
       ? `${selectedCategory} - ${issue}`
       : issue;
-
     // Update the form state with the new issue type
     setForm((prevForm) => ({
       ...prevForm,
       issue_type: newIssueType,
     }));
   };
-
   // Update issue type whenever selected category or issue changes
   useEffect(() => {
     let newIssueType = "";
-
     if (selectedCategory && selectedIssue) {
       newIssueType = `${selectedCategory} - ${selectedIssue}`;
     } else if (selectedCategory) {
       newIssueType = selectedCategory;
     }
-
     // Update the issueType state with the new value
     setIssueType(newIssueType);
-
     // Log the input value for the useEffect hook
     console.log("Input for useEffect:", selectedCategory, selectedIssue);
   }, [selectedCategory, selectedIssue]);
@@ -180,7 +170,6 @@ function SuggestionBoxPage() {
       }
     }
   };
-
   const logAvailableCameras = () => {
     navigator.mediaDevices
       .enumerateDevices()
@@ -194,7 +183,6 @@ function SuggestionBoxPage() {
         console.error("Error listing devices:", err);
       });
   };
-
   const onCloseModal = () => {
     // Clear the form data
     setForm({
@@ -214,22 +202,17 @@ function SuggestionBoxPage() {
     descriptionInputRef.current.value = "";
     // Clear selected issue type
     setSelectedIssue("");
-
     // Clear image file
     setImageFile(null);
-
     setOpenModal(false);
   };
-
   const onCloseModalSubmit = () => {
     setOpenModalSubmit(false);
   };
-
   const handleConfirmButton = () => {
     setImageFile(null);
     setImageSrc(null);
     onCloseModal();
-
     // Clear the form data
     setForm({
       facility_id: "",
@@ -248,36 +231,26 @@ function SuggestionBoxPage() {
     descriptionInputRef.current.value = "";
     // Clear selected issue type
     setSelectedIssue("");
-
-    // Clear image file
     setImageFile(null);
-    // Close the modal
     setOpenModal(false);
   };
-
   const handleConfirmButtonSubmit = async () => {
     setIsLoading(true);
-
     try {
       const formDataReport = new FormData();
-
       formDataReport.append("facility_id", form.facility_id);
       formDataReport.append("room", form.room);
       formDataReport.append("location", form.location);
      // formDataReport.append("issue_type", form.issueType);
       formDataReport.append("description", form.description);
       formDataReport.append("status", form.status);
-
       // Append the file if it exists
       if (imageFile) {
         formDataReport.append("image_before", imageFile); // Append image file to form data
-
         // Log the appended image file
         console.log("Appended image file:", imageFile);
       }
-
       setOpenModalSubmit(false);
-
       console.log("form", form);
       const response = await reportSuggestion(formDataReport);
       navigate(response.route);
@@ -290,50 +263,38 @@ function SuggestionBoxPage() {
       setIsLoading(false);
     }
   };
-
   const handleSubmitButton = (e) => {
     e.preventDefault();
     console.log("Form data:", form); // Check if issue_type is included in form data
     setOpenModalSubmit(true);
   };
-
   const captureImage = () => {
     const canvas = canvasRef.current;
     const video = videoRef.current;
-
     console.log(video.videoWidth);
-
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-
     const context = canvas.getContext("2d");
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     // You can then save the image from the canvas as needed
-
     // Add date and time to the canvas
     const dateTime = new Date().toLocaleString();
     const fontSize = 20; // Choose an appropriate font size
     context.font = `${fontSize}px Arial`; // Set font on context, not canvas
-
     // Align text in the center horizontally
     context.textAlign = "center";
-
     // Align text in the middle vertically
     context.textBaseline = "middle";
-
     // Text color that contrasts with the background
     context.fillStyle = "white";
-
     // Position the text in the center of the canvas
     // The x-coordinate is half the canvas width
     // The y-coordinate is a certain distance from the bottom, for example, 30 pixels
     context.fillText(dateTime, canvas.width / 2, canvas.height - 50);
-
     //set to state
     setCanvas(canvas); // Convert canvas to base64 URL and set it as state
     console.log(canvas);
   };
-
   const savedImage = () => {
     if (canvasRef.current) {
       // Convert the canvas to a data URL and then to a Blob
@@ -343,34 +304,27 @@ function SuggestionBoxPage() {
         const fileName = `image_${date
           .toISOString()
           .replace(/:|\./g, "-")}.jpg`;
-
         // Create a file from the blob
         const imageFile = new File([blob], fileName, {
           type: "image/jpeg",
           lastModified: date.getTime(),
         });
-
         // Create an object URL for the File object
         const objectURL = URL.createObjectURL(imageFile);
-
         // Set the object URL as the source for the image
         setImageSrc(objectURL);
-
         // Log the image file to check if it's correctly created
         console.log("Image File:", imageFile);
         // Set the file in the state or do something with it (e.g., upload)
         setImageFile(imageFile);
-
         // Log the updated imageFile state
         console.log("Updated Image File State:", imageFile);
         // Example: Log the file size to see if the file was created successfully
         console.log("Size of the new File:", imageFile.size);
       }, "image/jpeg");
     }
-
     stopCameraStream();
   };
-
   const stopCameraStream = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       // Get the stream from the video element
@@ -384,7 +338,6 @@ function SuggestionBoxPage() {
       setCanvas(null);
     }
   };
-
   const retakeImage = () => {
     setCanvas(null); // Reset the canvas
     setImageFile(null); // Reset the image file
@@ -473,7 +426,7 @@ function SuggestionBoxPage() {
       )}
 
       {/* ------------------------------------------------------------------------------------------------------------------ */}
-      <header className="fixed z-[-1] top-0 left-0 right-0 bg-blue-900 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
+      <header className="fixed z-[-1] top-0 left-0 right-0 bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
         <div className="backbutton  w-[2rem] ml-2 mt-1">
           <Link to="/" className="text-white  ">
             <ArrowLeft size={32} />
@@ -482,9 +435,9 @@ function SuggestionBoxPage() {
       </header>
 
       <div className="flex justify-center mt-[5rem] z-1">
-        <div className="banner w-[17rem] h-[4rem] rounded-full bg-blue-100 flex justify-center align-items-center pt-2 pb-2 mt-[-2rem]">
+        <div className="banner w-[17rem] h-[3.2rem] pt-1 rounded-full bg-blue-700 flex justify-center align-center  mt-[-2rem]">
           {" "}
-          <p className="text-3xl font-medium text-gray-900 dark:text-white">
+          <p className="text-3xl font-medium  text-white dark:text-white">
             Suggestion Box
           </p>
         </div>
@@ -504,7 +457,7 @@ function SuggestionBoxPage() {
               </span>
             </label>
             <span className="text-[0.6rem] font-small">
-              N/A, if not applicable
+              N/A or 0, if not applicable
             </span>
             <input
               ref={facilityIdInputRef}
@@ -516,7 +469,7 @@ function SuggestionBoxPage() {
                 setForm({ ...form, facility_id: e.target.value })
               }
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="ex. 123456"
+              placeholder="ex. 671354"
               required
             />
           </div>
@@ -581,11 +534,6 @@ function SuggestionBoxPage() {
           ></textarea>
 
           {/* ----------------------------------------------------------------------------------------------------------------- */}
-
-          
-
-          {/* ------------------------------------------------------------------------------- */}
-
           <div className="camera-report-issue mt-3">
             <div className="mt-3">
               <div className="mb-2 block">
@@ -624,7 +572,7 @@ function SuggestionBoxPage() {
           <br />
           <button
             type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white  h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Report Now
           </button>

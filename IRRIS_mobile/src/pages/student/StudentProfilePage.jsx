@@ -181,7 +181,7 @@ const StudentProfilePage = () => {
               {user?.first_name} {user?.last_name}
             </p>
             <p className="text-base">{user?.email}</p>
-            <p className="text-base">SBIT4A</p>
+            <p className="text-base">QCU student</p>
           </div>
         </div>
       </div>
