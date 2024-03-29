@@ -153,7 +153,7 @@ const StudentProfilePage = () => {
                   style={{ borderRadius: "100%" }}
                 />
               </div>
-            ) : userDetails ? (
+            ) : userDetails?.profile_image ? (
               <img
                 src={getImageUrl(userDetails?.profile_image)}
                 alt="user-sample"

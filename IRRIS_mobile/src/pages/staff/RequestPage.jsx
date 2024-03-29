@@ -23,7 +23,7 @@ const RequestPage = () => {
     description: null,
     date_due: null,
     status: "pending",
-    urgency: null,
+    urgency: false,
   });
 
   const handleChange = (e) => {
@@ -61,6 +61,14 @@ const RequestPage = () => {
 
       setIsSuccessModal(true);
     }
+  };
+
+  // Handler for toggling urgency checkbox
+  const handleUrgencyCheckbox = () => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      urgency: !form.urgency,
+    }));
   };
 
   useEffect(() => {
@@ -112,6 +120,9 @@ const RequestPage = () => {
               <option value="">Select Request</option>
               <option value="manpower">Manpower Assistance</option>
               <option value="maintenance">Maintenance</option>
+              <option value="logistics" disabled>
+                Logistics
+              </option>
             </select>
           </div>
 
@@ -132,23 +143,21 @@ const RequestPage = () => {
             />
           </div>
 
-          <div className="space-y-2 flex flex-col">
-            <label for="urgency" className="text-sm font-semibold">
-              Urgency
-            </label>
-
-            <select
-              name="urgency"
+          <div className="space-x-3  flex items-center py-3">
+            <input
+              type="checkbox"
               id="urgency"
-              className="rounded-md"
-              required
-              onChange={handleChange}
-            >
-              <option value="">Select Urgency</option>
-              <option value="immediate">Immediate</option>
-              <option value="high-priority">High Priority</option>
-              <option value="standard-priority">Standard Priority</option>
-            </select>
+              name="urgency"
+              className="text-mainColor"
+              onChange={handleUrgencyCheckbox}
+              checked={form.urgency}
+            />
+            <label for="urgency" className="font-semibold text-base">
+              Urgent
+            </label>
+            <span id="urgencyText" className="text-sm text-gray-500 italic">
+              *This request is urgent.
+            </span>
           </div>
 
           <div className="space-y-2">
@@ -167,7 +176,7 @@ const RequestPage = () => {
             ></textarea>
           </div>
 
-          <div className="flex space-x-3 font-semibold text-lg">
+          <div className="flex space-x-3 font-semibold text-lg pt-5">
             <button
               className="flex-1 bg-mainColor text-white rounded-md"
               onClick={(e) => {
