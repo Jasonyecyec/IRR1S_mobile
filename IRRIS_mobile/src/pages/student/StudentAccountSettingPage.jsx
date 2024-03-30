@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, CaretRight, LockKeyOpen, Trash } from "@phosphor-icons/react";
 
+import UserSample from "../../assets/images/user_sample.jpg";
 import useUserStore from "../../services/state/userStore";
 import { getUserDetails } from "@/src/services/api/sharedService";
 import { getImageUrl } from "@/src/utils/utils";
 import Skeleton from "react-loading-skeleton";
+
+import "react-loading-skeleton/dist/skeleton.css";
 
 const StudentAccountSettingPage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -20,7 +23,7 @@ const StudentAccountSettingPage = () => {
     try {
       const { user_details } = await getUserDetails(user?.id);
       console.log("user details", user_details);
-      setUserDetails(user_details);
+      setUserDetails(user_details); 
     } catch (error) {
       console.log("error", error);
     } finally {
@@ -50,9 +53,31 @@ const StudentAccountSettingPage = () => {
             </h5>
 
             <div className="relative inline-flex items-center justify-center w-20 h-20 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-              <span className="font-medium text-gray-600 dark:text-gray-300">
-                user
-              </span>
+            <div className="relative">
+            {isLoading ? (
+              <div className="rounded-full w-24 h-24">
+                {" "}
+                <Skeleton
+                  width={"100%"}
+                  height={"100%"}
+                  className="rounded-full"
+                  style={{ borderRadius: "100%" }}
+                />
+              </div>
+            ) : userDetails?.profile_image ? (
+              <img
+                src={getImageUrl(userDetails?.profile_image)}
+                alt="user-sample"
+                className="rounded-full w-24 h-24 "
+              />
+            ) : (
+              <img
+                src={UserSample}
+                alt="user-sample"
+                className="rounded-full w-24 h-24 "
+              />
+            )}
+          </div>
             </div>
             <p className="text-2xl font-semibold mb-1">
               {user?.first_name} {user?.last_name}
