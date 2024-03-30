@@ -23,7 +23,7 @@ const StudentAccountSettingPage = () => {
     try {
       const { user_details } = await getUserDetails(user?.id);
       console.log("user details", user_details);
-      setUserDetails(user_details);
+      setUserDetails(user_details); 
     } catch (error) {
       console.log("error", error);
     } finally {
