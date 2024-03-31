@@ -126,6 +126,26 @@
     }
   };
 
+  export const feedbackEvaluation = async (formDataFeedback) => {
+    try {
+      // Set the appropriate headers for multipart/form-data
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      const response = await api.post("/feedback-evaluation", formDataFeedback, config);
+      console.log("Feedback Report  response:", response);
+
+      return response.data;
+    } catch (error) {
+      console.error("Feedback Report  error", error.response);
+      throw error;
+    }
+  };
+
+
+
   export const fetchUserData  = async ()=>{
     try {
       const userIdCookie = Cookies.get("user_id");
