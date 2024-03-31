@@ -12,6 +12,7 @@ import {
   formatDateTime,
   getImageUrl,
 } from "../utils/utils";
+import StatusBadgeReport from "../components/StatusBadgeReport";
 
 const ReportHistoryPage = () => {
   const { user } = useUserStore((state) => ({
@@ -87,20 +88,21 @@ const ReportHistoryPage = () => {
                   item.status
                 )}-500 space-y-3`}
               >
-                <span
+                {/* <span
                   className={`bg-${getStatusColor(
                     item.status
                   )}-500 w-16 h-2 absolute top-0 left-5`}
-                ></span>
+                ></span> */}
 
                 <div className="flex justify-between ">
-                  <p
+                  {/* <p
                     className={`font-bold  text-${getStatusColor(
                       item.status
                     )}-500 capitalize`}
                   >
                     {getStatusText(item.status)}
-                  </p>
+                  </p> */}
+                  <StatusBadgeReport status={item.status} />
                   <p>{formatDateTime(item.created_at)}</p>
                 </div>
 

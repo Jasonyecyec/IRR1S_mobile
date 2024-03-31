@@ -25,6 +25,7 @@ import StatusIndicator from "../components/StatusIndicator";
 import { CalendarBlank } from "@phosphor-icons/react";
 import UkeepLogo from "/qcu_upkeep_logo.png";
 import beamsClient from "@/src/pushNotificationConfig";
+import StatusBadgeReport from "../components/StatusBadgeReport";
 
 const HomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -313,16 +314,7 @@ const HomePage = () => {
                     </p>
                   </div>
                   <div className="flex    flex-1 items-center justify-end">
-                    <p className="flex items-center space-x-2">
-                      {/* <span class="relative flex h-3 w-3 items-center justify-center">
-                        <span class=" absolute inline-flex h-5 w-5 rounded-full bg-sky-300 opacity-30"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-                      </span>{" "} */}
-                      <StatusIndicator status={report.status} />
-                      <span className="capitalize font-semibold">
-                        {report.status}
-                      </span>
-                    </p>
+                    <StatusBadgeReport status={report.status} />
                   </div>
                 </div>
               ))

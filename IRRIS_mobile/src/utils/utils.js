@@ -128,14 +128,14 @@ export const getPdfUrl = (imagePath) => {
 
 export const getStatusColor = (status) => {
   switch (status) {
-    case "ongoing":
+    case "pending":
       return "yellow";
+    case "assigned":
+      return "purple";
+    case "ongoing":
+      return "blue";
     case "completed":
       return "green";
-    case "assigned":
-      return "red";
-    case "pending":
-      return "red";
     case "not-valid":
       return "red";
     case "reported":
@@ -152,7 +152,7 @@ export const getStatusText = (status) => {
     case "completed":
       return "Fixed";
     case "assigned":
-      return "Pending";
+      return "Assigned";
     case "pending":
       return "Pending";
     case "not-valid":

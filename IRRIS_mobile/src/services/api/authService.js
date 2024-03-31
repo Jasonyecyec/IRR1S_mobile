@@ -34,3 +34,16 @@ export const registerStudent = async (form) => {
     throw error;
   }
 }
+
+export const registerStaff = async (form) => {
+  try {
+   
+    const response = await api.post('/register-staff', form);
+
+    console.log('Fetch register staff  response:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Fetch register staff  error:', error.response || error.message);
+    throw error;
+  }
+};

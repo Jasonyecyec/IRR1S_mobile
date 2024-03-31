@@ -142,7 +142,7 @@ const StudentProfilePage = () => {
 
         <div className="flex space-x-3">
           {/* User Image */}
-          <div className="relative">
+          <div className="relative ">
             {isLoading ? (
               <div className="rounded-full w-24 h-24">
                 {" "}
