@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useNavigate } from "react";
 import { Link } from "react-router-dom";
 import {
   SkipBack,
@@ -7,16 +7,519 @@ import {
   SmileyMeh,
   Smiley,
   ArrowLeft,
+  Heart,
+  HeartBreak,
+  SmileyWink,
+  SmileyBlank,
+  Star,
 } from "@phosphor-icons/react";
+import { Label, Textarea } from "flowbite-react";
+import { Modal } from "flowbite-react";
+import { toast } from "react-hot-toast";
+import FeedbackCreateModal from "./ConfirmationFeedbackModal";
+import { feedbackEvaluation } from "../../services/api/sharedService";
+import { getUserDetails } from "@/src/services/api/sharedService";
+import useUserStore from "../../services/state/userStore";
 
-function StudentAboutUs() {
+const StudentAboutUs = () => {
   const [activeTab, setActiveTab] = useState("about");
-
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
   };
+
+  //get the user details ()
+  const { user, setUser } = useUserStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+  }));
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
+  const [userDetails, setUserDetails] = useState(null);
+
+  const fetchUserDetails = async () => {
+    setIsLoadingUser(true);
+    try {
+      const { user_details } = await getUserDetails(user?.id);
+      console.log("user details", user_details);
+      setUserDetails(user_details);
+
+      // Set the ratingName and ratingEmail states with user details
+      setRatingName(user_details.first_name + " " + user_details.last_name);
+      setRatingEmail(user_details.email);
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsLoadingUser(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserDetails(user?.id);
+  }, []);
+  // State to hold the textarea value
+  const [textareaValue, setTextareaValue] = useState("");
+
+  // Function to handle textarea value change
+  const handleTextareaChange = (event) => {
+    const { name, value } = event.target;
+
+    // setRatingOpinion(newRatingOpinion);
+    setRatingOpinion(value); // Update the ratingOpinion state
+
+    handleChange(event); // Call handleChange to update formData
+    // setTextareaValue(event.target.value);
+    // setFormData({
+    //   ...formData,
+    //   opinion: newRatingOpinion,
+    // });
+  };
+
+  // multistep
+  const [phase, setPhase] = useState(1);
+  const [formData, setFormData] = useState({
+    // Initialize form data here
+    name: `${user?.first_name || ""} ${user?.last_name || ""}`, // Initialize overall rating
+    email:  user?.email || "", // Initialize overall rating
+    overall: "", // Initialize overall rating
+    functionality: "", // Initialize functionality rating
+    maintainability: "", // Initialize maintainability rating
+    portability: "", // Initialize portability rating
+    efficiency: "", // Initialize efficiency rating
+    opinion: "", // Initialize opinion
+    // Add more fields as needed
+  });
+
+  const handleNextPhase = () => {
+    setPhase(phase + 1);
+  };
+
+  const handlePreviousPhase = () => {
+    setPhase(phase - 1);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  //opinion evaluation-------------------------------------------------------------------------------------
+  const [ratingOpinion, setRatingOpinion] = useState("");
+  const [ratingName, setRatingName] = useState(
+    `${user?.first_name || ""} ${user?.last_name || ""}`
+  );
+  const [ratingEmail, setRatingEmail] = useState(user?.email || "");
+
+  // Function to handle name input change
+  const handleNameChange = (event) => {
+    const newName = event.target.value;
+    setRatingName(newName); // Update the ratingName state
+    setFormData({
+      ...formData,
+      name: newName, // Update formData with the new name
+    });
+  };
+
+  // Function to handle email input change
+  const handleEmailChange = (event) => {
+    const newEmail = event.target.value;
+    setRatingEmail(newEmail); // Update the ratingEmail state
+    setFormData({
+      ...formData,
+      email: newEmail, // Update formData with the new email
+    });
+  };
+
+  //OOOOOOOOOOOOVVVVVVVVVVVVVVVVVVVEEEEEEEEEEEEERRRRRRRRRRRAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLL----------------
+  const [selectedEmoticonOverall, setSelectedEmoticonOverall] = useState(null);
+  const [ratingOverall, setRatingOverall] = useState(
+    "Heart kita, Kaya i-Heart mo ako!"
+  );
+
+  const handleOverallClick = (event, over) => {
+    setSelectedEmoticonOverall(over);
+
+    // Update the color of each star based on its position relative to the selected star
+    const starsOver = [
+      "Star1over",
+      "Star2over",
+      "Star3over",
+      "Star4over",
+      "Star5over",
+    ];
+    const selectedIndex = starsOver.indexOf(over);
+
+    const newRatingOverall = (() => {
+      // Update the color of each emoticon based on the selected emoticon
+      switch (over) {
+        case "Star1over":
+          return "Poor";
+
+        case "Star2over":
+          return "Fair";
+
+        case "Star3over":
+          return "Good";
+
+        case "Star4over":
+          return "Very Good";
+
+        case "Star5over":
+          return "Excellent";
+
+        default:
+          return "None";
+      }
+    })();
+
+    setRatingOverall(newRatingOverall);
+    //handleChange("overall", newRatingOverall); // Update formData
+    handleChange(event);
+    // Update formData with the new overall rating
+    setFormData({
+      ...formData,
+      overall: newRatingOverall,
+    });
+
+    // Update the color of each star
+    const updatedStarsOver = starsOver.map((star, index) => {
+      if (index <= selectedIndex) {
+        // If the star is before or at the selected index, set its color to yellow
+        return "#42adff";
+      } else {
+        // If the star is after the selected index, reset its color
+        return "";
+      }
+    });
+    setStarColorsoverall(updatedStarsOver);
+    console.log("Overall emote:", newRatingOverall, updatedStarsOver);
+  };
+
+  const [starColorsoverall, setStarColorsoverall] = useState([
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+
+  //functionality stars------------------------------------------------------------------------------------
+  const [selectedStarfunctionality, setSelectedStarfunctionality] =
+    useState(null);
+  const [ratingFunctionality, setRatingfunctionality] = useState("tanginamo");
+
+  const handleFunctionalityClick = (event, func) => {
+    setSelectedStarfunctionality(func);
+
+    // Update the color of each star based on its position relative to the selected star
+    const stars = ["Star1", "Star2", "Star3", "Star4", "Star5"];
+    const selectedIndex = stars.indexOf(func);
+
+    const newRatingFunctionality = (() => {
+      switch (func) {
+        case "Star1":
+          return "Poor";
+        case "Star2":
+          return "Fair";
+        case "Star3":
+          return "Good";
+        case "Star4":
+          return "Very Good";
+        case "Star5":
+          return "Excellent";
+        default:
+          return "None";
+      }
+    })();
+
+    setRatingfunctionality(newRatingFunctionality);
+    // handleChange("functionality", newRatingFunctionality); // Update formData
+    handleChange(event);
+    // Update formData with the new overall rating
+    setFormData({
+      ...formData,
+      functionality: newRatingFunctionality,
+    });
+
+    // Update the color of each star
+    const updatedStars = stars.map((star, index) => {
+      if (index <= selectedIndex) {
+        // If the star is before or at the selected index, set its color to yellow
+        return "#fbff05";
+      } else {
+        // If the star is after the selected index, reset its color
+        return "";
+      }
+    });
+    setStarColors(updatedStars);
+    // Log the stars
+    console.log("Functionality Stars:", newRatingFunctionality, updatedStars);
+  };
+  const [starColors, setStarColors] = useState(["", "", "", "", ""]);
+
+  //maintainabiity stars----------------------------------------------------------------------------------
+  const [selectedStarmaintainability, setSelectedStarmaintainability] =
+    useState(null);
+  const [ratingMaintainability, setRatingMaintainability] =
+    useState("tanginamo");
+
+  const handleMaintainabilityClick = (event, maint) => {
+    setSelectedStarmaintainability(maint);
+
+    // Update the color of each star based on its position relative to the selected star
+    const starsMaint = [
+      "Star1main",
+      "Star2main",
+      "Star3main",
+      "Star4main",
+      "Star5main",
+    ];
+    const selectedIndex = starsMaint.indexOf(maint);
+
+    const newRatingMaintainability = (() => {
+      switch (maint) {
+        case "Star1main":
+          return "Poor";
+        case "Star2main":
+          return "Fair";
+        case "Star3main":
+          return "Good";
+        case "Star4main":
+          return "Very Good";
+        case "Star5main":
+          return "Excellent";
+        default:
+          return "None";
+      }
+    })();
+
+    setRatingMaintainability(newRatingMaintainability);
+    //handleChange("maintainability", newRatingMaintainability); // Update formData
+    handleChange(event);
+    // Update formData with the new overall rating
+    setFormData({
+      ...formData,
+      maintainability: newRatingMaintainability,
+    });
+
+    // Update the color of each star
+    const updatedStarsMaint = starsMaint.map((star, index) => {
+      if (index <= selectedIndex) {
+        // If the star is before or at the selected index, set its color to yellow
+        return "#fbff05";
+      } else {
+        // If the star is after the selected index, reset its color
+        return "";
+      }
+    });
+    setStarColorsMaint(updatedStarsMaint);
+    console.log(
+      "Maintainability Stars:",
+      newRatingMaintainability,
+      updatedStarsMaint
+    );
+  };
+  const [starColorsMaint, setStarColorsMaint] = useState(["", "", "", "", ""]);
+
+  //portability stars----------------------------------------------------------------------------------
+  const [selectedStarportability, setSelectedStarportability] = useState();
+  const [ratingPortability, setRatingPortability] = useState("tanginamo");
+
+  const handlePortabilityClick = (event, port) => {
+    setSelectedStarportability(port);
+
+    // Update the color of each star based on its position relative to the selected star
+    const starsPort = [
+      "Star1port",
+      "Star2port",
+      "Star3port",
+      "Star4port",
+      "Star5port",
+    ];
+    const selectedIndex = starsPort.indexOf(port);
+
+    const newRatingPortability = (() => {
+      switch (port) {
+        case "Star1port":
+          return "Poor";
+        case "Star2port":
+          return "Fair";
+        case "Star3port":
+          return "Good";
+        case "Star4port":
+          return "Very Good";
+        case "Star5port":
+          return "Excellent";
+        default:
+          return "None";
+      }
+    })();
+
+    setRatingPortability(newRatingPortability);
+    //handleChange("portability", newRatingPortability); // Update formData
+    handleChange(event);
+    // Update formData with the new overall rating
+    setFormData({
+      ...formData,
+      portability: newRatingPortability,
+    });
+
+    // Update the color of each star
+    const updatedStarsPort = starsPort.map((star, index) => {
+      if (index <= selectedIndex) {
+        // If the star is before or at the selected index, set its color to yellow
+        return "#fbff05";
+      } else {
+        // If the star is after the selected index, reset its color
+        return "";
+      }
+    });
+    setStarColorsPort(updatedStarsPort);
+    console.log("Portability Stars:", newRatingPortability, updatedStarsPort);
+  };
+  const [starColorsPort, setStarColorsPort] = useState(["", "", "", "", ""]);
+
+  //efficiency stars----------------------------------------------------------------------------------
+  const [selectedStarefficiency, setSelectedStarefficiency] = useState();
+  const [ratingEfficiency, setRatingEffieciency] = useState("tanginamo");
+
+  const handleEfficiencyClick = (event, effi) => {
+    setSelectedStarmaintainability(effi);
+
+    // Update the color of each star based on its position relative to the selected star
+    const starsEffi = [
+      "Star1effi",
+      "Star2effi",
+      "Star3effi",
+      "Star4effi",
+      "Star5effi",
+    ];
+    const selectedIndex = starsEffi.indexOf(effi);
+
+    const newRatingEfficiency = (() => {
+      switch (effi) {
+        case "Star1effi":
+          return "Poor";
+        case "Star2effi":
+          return "Fair";
+        case "Star3effi":
+          return "Good";
+        case "Star4effi":
+          return "Very Good";
+        case "Star5effi":
+          return "Excellent";
+        default:
+          return "None";
+      }
+    })();
+
+    setRatingEffieciency(newRatingEfficiency);
+    //handleChange("efficiency", newRatingEfficiency); // Update formData
+    handleChange(event);
+    // Update formData with the new overall rating
+    setFormData({
+      ...formData,
+      efficiency: newRatingEfficiency,
+    });
+
+    // Update the color of each star
+    const updatedStarsEffi = starsEffi.map((star, index) => {
+      if (index <= selectedIndex) {
+        // If the star is before or at the selected index, set its color to yellow
+        return "#fbff05";
+      } else {
+        // If the star is after the selected index, reset its color
+        return "";
+      }
+    });
+    setStarColorsEffi(updatedStarsEffi);
+    console.log("Efficiency Stars:", newRatingEfficiency, updatedStarsEffi);
+  };
+  const [StarColorsEffi, setStarColorsEffi] = useState(["", "", "", "", ""]);
+
+  //const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  // State to manage the visibility of the confirmation modal
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    //open modal
+
+    // Do something with the textarea value, like submitting to a server
+    console.log("Textarea value:", textareaValue);
+    // Show the confirmation modal
+    setShowConfirmationModal(true);
+    // Log to confirm that the modal is being opened
+    console.log("Confirmation modal opened");
+  };
+
+  //-----------------------------------MODAL---------------------------------------------
+
+  const [openFeedbackModal, setOpenFeedbackModal] = useState(false); // State to control the visibility of the Venue modal
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Function to toggle the visibility of the Venue modal
+  const toggleFeedbackModal = () => {
+    setOpenFeedbackModal(!openFeedbackModal);
+  };
+
+  //close modal
+  const onCloseModal = () => {
+    //clear all the formdata
+  };
+
+  // const navigate = useNavigate();
+
+
+  const handleConfirmation = async () => {
+    setIsLoading(true);
+    try {
+      // Perform form submission action here
+      // Create a new FormData object
+      const formDataFeedback = new FormData();
+
+      // Append each field to the FormData object
+      formDataFeedback.append("name", formData.name);
+      formDataFeedback.append("email", formData.email);
+      formDataFeedback.append("maintainability", formData.maintainability);
+      formDataFeedback.append("functionality", formData.functionality);
+      formDataFeedback.append("efficiency", formData.efficiency);
+      formDataFeedback.append("portability", formData.portability);
+      formDataFeedback.append("overall", formData.overall);
+      formDataFeedback.append("opinion", formData.opinion);
+
+      // You can now use the formData object to send the data to the server or perform other actions
+      // For example, you can log the formData object
+      for (const [key, value] of formDataFeedback.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+      // Handle form submission here
+      console.log("FEEDBACK : ", formData);
+      // You may want to send the data to the server or perform other actions
+      // Show toast notification on successful submission
+      toast.success("Feedback submitted successfully!");
+
+      // Once submitted successfully, close the confirmation modal
+      setShowConfirmationModal(false);
+      console.log("showConfirmationModal:", showConfirmationModal); // Log to track the modal's visibility
+
+      // Show toaster notification
+
+      const response = await feedbackEvaluation(formDataFeedback);
+      //navigate(response.route);
+    } catch (error) {
+      console.error(error);
+      navigate(error.response.data.route, {
+        state: { errorMessage: error.response.data.error },
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div>
+    <div className="container mx-auto">
       <header className="  bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
         <div className="backbutton  w-[2rem] ml-2 mt-1">
           <Link to="/student/profile" className="text-white  ">
@@ -25,129 +528,270 @@ function StudentAboutUs() {
         </div>
       </header>
 
-      <div className="h-[90vh]  overflow-y-auto pt-5 pb-5">
+      <div className="h-[150vh]  overflow-y-auto pt-5 pb-5">
         <div>
           <div className="flex justify-center items-center mt-5 pt-5">
-            <div class="w-[95%] max-w-sm bg-white border border-gray-200 r shadow dark:bg-gray-800 dark:border-gray-700">
-              <div className="satisfactory-container  h-[20rem]">
+            <div className="w-[95%] max-w-sm bg-white border border-gray-200 r shadow dark:bg-gray-800 dark:border-gray-700">
+              <div className="satisfactory-container  h-[40rem]">
                 <div className="flex justify-center items-center">
                   <span className="text-2xl text-white rounded-[2.5rem] bg-blue-700 w-[15rem] h-[3.5rem] mt-[-1rem] flex justify-center items-center">
-                    System Evaluation
+                    Feedback Form
                   </span>
                 </div>
-                <div className=" pb-4">
-                  <div className="emoji flex justify-between items-center p-4 pb-1 ">
-                    <a>
-                      <SmileyAngry size={60} />
-                      Frustrated
-                    </a>
-                    <a>
-                      <SmileySad size={60} />
-                      Unhappy
-                    </a>
-                    <a>
-                      <SmileyMeh size={60} />
-                      Neutral
-                    </a>
-                    <a>
-                      <Smiley size={60} />
-                      Satisfied
-                    </a>
-                  </div>
-                  <div className=" flex flex-col items-center mt-6 justify-center h-full">
-                    <p class="text-4xl text-gray-900 dark:text-white">
-                      Rate Us
-                    </p>
-                    <p class="text-sm text-gray-900 dark:text-white">
-                      Unhappy - Happy
-                    </p>
-                    <br />
-                    <div>
-                      <form>
-                        <label for="chat" class="sr-only">
-                          Your message
-                        </label>
-                        <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
-                          <button
-                            type="button"
-                            class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                          >
-                            <svg
-                              class="w-5 h-5"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 18"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z"
-                              />
-                              <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M18 1H2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"
-                              />
-                              <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z"
-                              />
-                            </svg>
-                            <span class="sr-only">Upload image</span>
-                          </button>
-                          <button
-                            type="button"
-                            class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-                          >
-                            <svg
-                              class="w-5 h-5"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M13.408 7.5h.01m-6.876 0h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM4.6 11a5.5 5.5 0 0 0 10.81 0H4.6Z"
-                              />
-                            </svg>
-                            <span class="sr-only">Add emoji</span>
-                          </button>
-                          <textarea
-                            id="chat"
-                            rows="1"
-                            class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Your message..."
-                          ></textarea>
+                <div className=" pb-4"></div>
+                <div className=" overflow-y-auto">
+                  {/* multi step form */}
+                  <div className="container mx-auto">
+                    {phase === 1 && (
+                      <form onSubmit={handleNextPhase}>
+                        <div>
+                          <h2>UP KEEP : System Evaluation</h2>
+                        </div>
+                        <div className="">
+                          <p>Please Evaluate the system CAREFULLY :</p>
+                          {/* Selected option displayed */}
+                          <Label className="text-sm mt-1">
+                            Functionality: {ratingFunctionality || ""}
+                          </Label>
+                          <Label className="text-sm mt-1">
+                            Maintainability: {ratingMaintainability || ""}
+                          </Label>
+                          <Label className="text-sm mt-1">
+                            Portability: {ratingPortability || ""}
+                          </Label>
+                          <Label className="text-sm mt-1">
+                            efficiency: {ratingEfficiency || ""}
+                          </Label>
+                        </div>
+                        <div className=" items-center justify-center">
+                          {/* star rating functionality*/}
+                          <div className="mb-4">
+                            <div className="flex">
+                              <div>
+                                {/* Displaying the stars with colors based on starColors state */}
+                                {starColors.map((color, index) => (
+                                  <button
+                                    type="button"
+                                    key={index}
+                                    onClick={(event) =>
+                                      handleFunctionalityClick(
+                                        event,
+                                        `Star${index + 1}`
+                                      )
+                                    }
+                                    style={{ color: color }}
+                                  >
+                                    <Star size={44} weight="fill" />
+                                  </button>
+                                ))}
+                                <label>Rating: {ratingFunctionality}</label>
+                              </div>
+                            </div>
+
+                            <label htmlFor="functionality">Functionality</label>
+                          </div>
+                          {/* star rating maintainability */}
+                          <div className="mb-4">
+                            <div className="flex">
+                              <div>
+                                {/* Displaying the stars with colors based on starColors state */}
+                                {starColorsMaint.map((color, index) => (
+                                  <button
+                                    type="button"
+                                    key={index}
+                                    onClick={(event) =>
+                                      handleMaintainabilityClick(
+                                        event,
+                                        `Star${index + 1}main`
+                                      )
+                                    }
+                                    style={{ color: color }}
+                                  >
+                                    <Star size={44} weight="fill" />
+                                  </button>
+                                ))}
+                                <label>Rating: {ratingMaintainability}</label>
+                              </div>
+                            </div>
+
+                            <label htmlFor="maintainability">
+                              Maintainability
+                            </label>
+                          </div>
+                          {/* star rating portability */}
+                          <div className="mb-4">
+                            <div className="flex">
+                              <div>
+                                {/* Displaying the stars with colors based on starColors state */}
+                                {starColorsPort.map((color, index) => (
+                                  <button
+                                    type="button"
+                                    key={index}
+                                    onClick={(event) =>
+                                      handlePortabilityClick(
+                                        event,
+                                        `Star${index + 1}port`
+                                      )
+                                    }
+                                    style={{ color: color }}
+                                  >
+                                    <Star size={44} weight="fill" />
+                                  </button>
+                                ))}
+                                <label>Rating: {ratingPortability}</label>
+                              </div>
+                            </div>
+
+                            <label htmlFor="portability">Portability</label>
+                          </div>
+                          {/* star rating efficiency */}
+                          <div className="mb-4">
+                            <div className="flex">
+                              <div>
+                                {/* Displaying the stars with colors based on starColors state */}
+                                {StarColorsEffi.map((color, index) => (
+                                  <button
+                                    type="button"
+                                    key={index}
+                                    onClick={(event) =>
+                                      handleEfficiencyClick(
+                                        event,
+                                        `Star${index + 1}effi`
+                                      )
+                                    }
+                                    style={{ color: color }}
+                                  >
+                                    <Star size={44} weight="fill" />
+                                  </button>
+                                ))}
+                                <label>Rating: {ratingEfficiency}</label>
+                              </div>
+                            </div>
+
+                            <label htmlFor="efficiency">Efficiency</label>
+                          </div>
+                        </div>
+
+                        <div>
                           <button
                             type="submit"
-                            class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
+                            className="text-white  h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-[90%] sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                           >
-                            <svg
-                              class="w-5 h-5 rotate-90 rtl:-rotate-90"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="currentColor"
-                              viewBox="0 0 18 20"
-                            >
-                              <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
-                            </svg>
-                            <span class="sr-only">Send message</span>
+                            Next
                           </button>
                         </div>
                       </form>
-                    </div>
-                    {/* ______________________________________________________________________________________________________________________________ */}
-                    
+                    )}
+                    {/* ----------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+                    {phase === 2 && (
+                      <form
+                        onSubmit={handleSubmit}
+                        className="emoticon-input  items-center justify-center"
+                      >
+                        <h2>UP KEEP : Finale Grande!</h2>
+                        {/* Add your form fields for Phase 3 here */}
+                        <div>
+                          <div>
+                            <div className="flex flex-col items-center justify-center">
+                              <div>
+                                <label>Thank you for evaluating us  </label>
+                                <label> {user?.first_name} !</label>
+                                <p>Overall Evaluation:</p>
+                              </div>
+                              {/* ----------------- */}
+                              <div>
+                                <div>
+                                  <label>Evaluator :</label>
+                                  <input
+                                  disabled
+                                    type="text"
+                                    name="name"
+                                    value={ratingName}
+                                    onChange={handleNameChange}
+                                  />
+                                </div>
+                                <div>
+                                  <label>Email:</label>
+                                  <input
+                                  disabled
+                                    type="email"
+                                    name="email"
+                                    value={ratingEmail}
+                                    onChange={handleEmailChange}
+                                  />
+                                </div>
+                                {/* Displaying the stars with colors based on starColors state */}
+                                {starColorsoverall.map((color, index) => {
+                                  // Define an array of icon components to alternate
+                                  const icons = [
+                                    <HeartBreak size={62} weight="fill" />,
+                                    <SmileyAngry size={62} weight="fill" />,
+                                    <SmileyMeh size={62} weight="fill" />,
+                                    <Smiley size={62} weight="fill" />,
+                                    <Heart size={62} weight="fill" />,
+                                  ];
+
+                                  return (
+                                    <button
+                                      type="button"
+                                      key={index}
+                                      onClick={(event) =>
+                                        handleOverallClick(
+                                          event,
+                                          `Star${index + 1}over`
+                                        )
+                                      }
+                                      style={{ color: color }}
+                                    >
+                                      {icons[index]}{" "}
+                                      {/* Render the icon based on the index */}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                              <label>Rating: {ratingOverall}</label>
+                              {/* ---------------- */}
+                            </div>
+                          </div>
+                          <div>
+                            <p>What's on your mind?</p>
+                            <textarea
+                              required
+                              rows={4}
+                              name="opinion"
+                              //value={formData.opinion} // Bind textarea value to formData
+                              onChange={handleTextareaChange}
+                              cols={50} // Width of the textarea in characters
+                              placeholder="Write down your opinion here."
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[90%] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            />
+                          </div>
+                        </div>
+
+                        {/* End of Phase 3 form fields */}
+                        <div className="flex mt-5">
+                          <button
+                            type="button"
+                            onClick={handlePreviousPhase}
+                            className="text-black h-[3rem] bg-white border hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-[90%] sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          >
+                            Previous
+                          </button>
+                          <button
+                            type="submit"
+                            onClick={toggleFeedbackModal}
+                            className="text-white h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-[90%] sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </form>
+                    )}
                   </div>
+
+                  {/* Confirmation Modal */}
+
+                  {/* Toast Container for Notifications */}
                 </div>
               </div>
             </div>
@@ -155,281 +799,29 @@ function StudentAboutUs() {
         </div>
 
         <br />
-        <div className="flex flex-col items-center justify-center">
-          <div className="w-[95%] h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
-            <ul
-              className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
-              id="defaultTab"
-              role="tablist"
-            >
-              <li className="me-2">
-                <button
-                  onClick={() => handleTabClick("about")}
-                  type="button"
-                  role="tab"
-                  aria-controls="about"
-                  aria-selected={activeTab === "about"}
-                  className={`inline-block p-4 ${
-                    activeTab === "about"
-                      ? "text-blue-600"
-                      : "hover:text-gray-600"
-                  } rounded-ss-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500 dark:hover:text-gray-300`}
-                >
-                  About
-                </button>
-              </li>
-              <li className="me-2">
-                <button
-                  onClick={() => handleTabClick("services")}
-                  type="button"
-                  role="tab"
-                  aria-controls="services"
-                  aria-selected={activeTab === "services"}
-                  className={`inline-block p-4 ${
-                    activeTab === "services"
-                      ? "text-blue-600"
-                      : "hover:text-gray-600"
-                  } hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-300`}
-                >
-                  Services
-                </button>
-              </li>
-              <li className="me-2">
-                <button
-                  onClick={() => handleTabClick("statistics")}
-                  type="button"
-                  role="tab"
-                  aria-controls="statistics"
-                  aria-selected={activeTab === "statistics"}
-                  className={`inline-block p-4 ${
-                    activeTab === "statistics"
-                      ? "text-blue-600"
-                      : "hover:text-gray-600"
-                  } hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 dark:hover:text-gray-300`}
-                >
-                  Facility
-                </button>
-              </li>
-            </ul>
-            <div id="defaultTabContent">
-              <div
-                className={`p-4 bg-white rounded-lg md:p-8 ${
-                  activeTab === "about" ? "" : "hidden"
-                } dark:bg-gray-800`}
-                id="about"
-                role="tabpanel"
-                aria-labelledby="about-tab"
-              >
-                {/* Content for About tab */}
-                <h2 class="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-                  Quezon City University
-                </h2>
-                <p class="mb-3 text-gray-500 dark:text-gray-400">
-                  Empower Developers, IT Ops, and business teams to collaborate
-                  at high velocity. Respond to changes and deliver great
-                  customer and employee service experiences fast.
-                </p>
-                <a
-                  href="#"
-                  class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700"
-                >
-                  Learn more
-                  <svg
-                    class=" w-2.5 h-2.5 ms-2 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 6 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m1 9 4-4-4-4"
-                    />
-                  </svg>
-                </a>
-              </div>
-              <div
-                className={`p-4 bg-white rounded-lg md:p-8 ${
-                  activeTab === "services" ? "" : "hidden"
-                } dark:bg-gray-800`}
-                id="services"
-                role="tabpanel"
-                aria-labelledby="services-tab"
-              >
-                {/* Content for Services tab */}
-                <h2 class="mb-5 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-                  QCU Services
-                </h2>
-
-                {/* <!-- List --> */}
-
-                <div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-                  <div class="flex items-center justify-between mb-4">
-                    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">
-                      Admins and Staffs
-                    </h5>
-                    <a
-                      href="#"
-                      class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-                    >
-                      View all
-                    </a>
-                  </div>
-                  <div class="flow-root">
-                    <ul
-                      role="list"
-                      class="divide-y divide-gray-200 dark:divide-gray-700"
-                    >
-                      <li class="py-3 sm:py-4">
-                        <div class="flex items-center">
-                          <div class="flex-shrink-0">
-                            <img
-                              class="w-8 h-8 rounded-full"
-                              src="/docs/images/people/profile-picture-1.jpg"
-                              alt="Neil image"
-                            />
-                          </div>
-                          <div class="flex-1 min-w-0 ms-4">
-                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                              Neil Sims
-                            </p>
-                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                              email@windster.com
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                      <li class="py-3 sm:py-4">
-                        <div class="flex items-center ">
-                          <div class="flex-shrink-0">
-                            <img
-                              class="w-8 h-8 rounded-full"
-                              src="/docs/images/people/profile-picture-3.jpg"
-                              alt="Bonnie image"
-                            />
-                          </div>
-                          <div class="flex-1 min-w-0 ms-4">
-                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                              Bonnie Green
-                            </p>
-                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                              email@windster.com
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                      <li class="py-3 sm:py-4">
-                        <div class="flex items-center">
-                          <div class="flex-shrink-0">
-                            <img
-                              class="w-8 h-8 rounded-full"
-                              src="/docs/images/people/profile-picture-2.jpg"
-                              alt="Michael image"
-                            />
-                          </div>
-                          <div class="flex-1 min-w-0 ms-4">
-                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                              Michael Gough
-                            </p>
-                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                              email@windster.com
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                      <li class="py-3 sm:py-4">
-                        <div class="flex items-center ">
-                          <div class="flex-shrink-0">
-                            <img
-                              class="w-8 h-8 rounded-full"
-                              src="/docs/images/people/profile-picture-4.jpg"
-                              alt="Lana image"
-                            />
-                          </div>
-                          <div class="flex-1 min-w-0 ms-4">
-                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                              Lana Byrd
-                            </p>
-                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                              email@windster.com
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                      <li class="pt-3 pb-0 sm:pt-4">
-                        <div class="flex items-center ">
-                          <div class="flex-shrink-0">
-                            <img
-                              class="w-8 h-8 rounded-full"
-                              src="/docs/images/people/profile-picture-5.jpg"
-                              alt="Thomas image"
-                            />
-                          </div>
-                          <div class="flex-1 min-w-0 ms-4">
-                            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                              Thomes Lean
-                            </p>
-                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                              email@windster.com
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`p-4 bg-white rounded-lg md:p-8 ${
-                  activeTab === "statistics" ? "" : "hidden"
-                } dark:bg-gray-800`}
-                id="statistics"
-                role="tabpanel"
-                aria-labelledby="statistics-tab"
-              >
-                {/* Content for Statistics tab */}
-
-                <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
-                  <div class="flex flex-col">
-                    <dt class="mb-2 text-3xl font-extrabold">6</dt>
-                    <dd class="text-gray-500 dark:text-gray-400">Developers</dd>
-                  </div>
-                  <div class="flex flex-col">
-                    <dt class="mb-2 text-3xl font-extrabold">1</dt>
-                    <dd class="text-gray-500 dark:text-gray-400">
-                      Project Manager
-                    </dd>
-                  </div>
-                  <div class="flex flex-col">
-                    <dt class="mb-2 text-3xl font-extrabold">6</dt>
-                    <dd class="text-gray-500 dark:text-gray-400">
-                      System Analysts
-                    </dd>
-                  </div>
-                  <div class="flex flex-col">
-                    <dt class="mb-2 text-3xl font-extrabold">9</dt>
-                    <dd class="text-gray-500 dark:text-gray-400">
-                      Technical Writer
-                    </dd>
-                  </div>
-                  <div class="flex flex-col">
-                    <dt class="mb-2 text-3xl font-extrabold">7</dt>
-                    <dd class="text-gray-500 dark:text-gray-400">
-                      UI Designer
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div></div>
       </div>
+      <FeedbackCreateModal
+        isLoading={isLoading}
+        handleConfirmation={handleConfirmation}
+        modalPropsFeedback={{
+          openModalFeedback: openFeedbackModal,
+          onCloseModalFeedback: toggleFeedbackModal, // Close modal function
+
+          functionalityRating: ratingFunctionality, // Pass functionality rating as prop
+          maintainabilityRating: ratingMaintainability, // Pass maintainability rating as prop
+          portabilityRating: ratingPortability,
+          efficiencyRating: ratingEfficiency,
+          overallRating: ratingOverall,
+          opinionRating: ratingOpinion,
+          nameRating: ratingName,
+          emailRating: ratingEmail,
+
+          // Pass other props as needed
+        }}
+      />
     </div>
   );
-}
+};
 
 export default StudentAboutUs;
