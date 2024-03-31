@@ -158,7 +158,11 @@ const StaffProfilePage = () => {
               {user?.first_name} {user?.last_name}
             </p>
             <p className="">{user?.email}</p>
-            <p>Staff</p>
+            {userDetails && (
+              <p className="capitalize  text-sm">
+                Staff : <span>{userDetails?.user_details?.department}</span>
+              </p>
+            )}
           </div>
         </div>
       </div>

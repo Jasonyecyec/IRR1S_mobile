@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeSlash } from "@phosphor-icons/react";
+import { Eye, EyeSlash, CheckCircle } from "@phosphor-icons/react";
 import "../assets/css/activate-account.css";
 import BgEye from "../assets/images/bg_eye.png";
 import useUserStore from "../services/state/userStore";
@@ -11,7 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import QCULogo from "../assets/images/qcu_logo.png";
 import QCUImage from "../assets/images/qcu_image.jpg";
 import { validatePassword } from "../utils/utils";
-import { registerStudent } from "../services/api/authService";
+import { registerStudent, registerStaff } from "../services/api/authService";
 import { containsGmail } from "../utils/utils";
 import Loading from "../components/Loading";
 import "../index.css";
@@ -22,6 +22,7 @@ const ActivateAccountPage = () => {
   // const [emailError, setEmailError] = useState({ isError: false, message: "" });
   // const [userEmail, setUserEmail] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState("student");
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
 
@@ -29,9 +30,13 @@ const ActivateAccountPage = () => {
     first_name: "",
     last_name: "",
     email: "",
+    student_number: "",
+    contact_number: "",
+    status: "active",
     password: "",
+    department: "",
     confirm_password: "",
-    user_role: "student",
+    user_role: "",
     referral_code: null,
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -103,41 +108,117 @@ const ActivateAccountPage = () => {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      // if (form.referral_code === "") {
-      //   form.referral_code = null;
-      // }
-      const response = await registerStudent(form);
-      console.log("response", response);
-      setEmail(form.email);
+    if (currentFilter === "student") {
+      try {
+        setIsLoading(true);
+        // if (form.referral_code === "") {
+        //   form.referral_code = null;
+        // }
+        form.user_role = currentFilter;
+        const response = await registerStudent(form);
+        console.log("response", response);
+        setEmail(form.email);
 
-      navigate(response.route);
-    } catch (error) {
-      if (error.response.data.message) {
-        notify(error.response.data.message);
+        navigate(response.route);
+      } catch (error) {
+        if (error.response.data.message) {
+          notify(error.response.data.message);
+        }
+
+        if (
+          error.response.data.message &&
+          error.response.data.message.password
+        ) {
+          notify(error.response.data.message.password[0]);
+        }
+
+        console.log("error", error.response.data);
+      } finally {
+        setIsLoading(false);
       }
-
-      if (error.response.data.message && error.response.data.message.password) {
-        notify(error.response.data.message.password[0]);
-      }
-
-      console.log("error", error.response.data);
-    } finally {
-      setIsLoading(false);
     }
+
+    if (currentFilter === "staff") {
+      try {
+        setIsLoading(true);
+        // if (form.referral_code === "") {
+        //   form.referral_code = null;
+        // }
+        form.user_role = currentFilter;
+        const response = await registerStaff(form);
+        console.log("response", response);
+        setEmail(form.email);
+
+        navigate(response.route);
+      } catch (error) {
+        if (error.response.data.message) {
+          notify(error.response.data.message);
+        }
+
+        if (
+          error.response.data.message &&
+          error.response.data.message.password
+        ) {
+          notify(error.response.data.message.password[0]);
+        }
+
+        console.log("error", error.response.data);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    console.log("form", form);
   };
 
   return (
-    <div className=" h-screen w-screen bg-secondaryColor 2  flex flex-col p-8 pt-16 relative">
+    <div className=" h-screen w-screen bg-secondaryColor 2  flex flex-col p-8  relative">
       {isLoading && <Loading />}
       <div>
         <h1 className="text-black font-bold text-3xl text-center text-mainColor2">
           Create Account
         </h1>
+
+        <div className="w-full text-sm font-bold text-gray-700 space-x-5 flex mt-5">
+          <button
+            onClick={() => setCurrentFilter("student")}
+            className={`flex-1 rounded-md border bg-white p-2 relative ${
+              currentFilter === "student" && "border-mainColor2"
+            }`}
+          >
+            Student
+            {currentFilter === "student" && (
+              <span>
+                <CheckCircle
+                  size={22}
+                  weight="fill"
+                  className="text-mainColor2 absolute top-1.5 right-2"
+                />
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setCurrentFilter("staff")}
+            className={`flex-1 relative rounded-md border border-gray-300 bg-white p-2 ${
+              currentFilter === "staff" && "border-mainColor2"
+            }`}
+          >
+            Staff
+            {currentFilter === "staff" && (
+              <span>
+                <CheckCircle
+                  size={22}
+                  weight="fill"
+                  className="text-mainColor2 absolute top-1.5 right-2"
+                />
+              </span>
+            )}
+          </button>
+        </div>
         <Toaster />
+
         <form onSubmit={handleSubmit}>
-          <div className=" flex flex-col w-full space-y-7 mt-10">
+          <div className=" flex flex-col w-full space-y-5 mt-5 text-sm">
             <div className="flex space-x-5">
               <div className="space-y-2">
                 <label htmlFor="first_name" className="font-semibold">
@@ -172,6 +253,24 @@ const ActivateAccountPage = () => {
               </div>
             </div>
 
+            {currentFilter === "student" && (
+              <div className="space-y-2">
+                <label htmlFor="student_number" className="font-semibold">
+                  Student Number
+                </label>
+                <input
+                  type="text"
+                  id="student_number"
+                  name="student_number"
+                  value={form.student_number}
+                  onChange={handleInputChange}
+                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                  required
+                />
+              </div>
+            )}
+
             <div className="space-y-2">
               <label htmlFor="email" className="font-semibold">
                 Email
@@ -187,6 +286,43 @@ const ActivateAccountPage = () => {
                 required
               />
             </div>
+
+            {currentFilter === "staff" && (
+              <div className="space-y-2">
+                <label htmlFor="department" className="font-semibold">
+                  Department
+                </label>
+                <input
+                  type="text"
+                  id="department"
+                  name="department"
+                  value={form.department}
+                  onChange={handleInputChange}
+                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                  required
+                />
+              </div>
+            )}
+
+            {currentFilter === "staff" && (
+              <div className="space-y-2">
+                <label htmlFor="contact_number" className="font-semibold">
+                  Contact number
+                </label>
+                <input
+                  type="number"
+                  id="contact_number"
+                  name="contact_number"
+                  value={form.contact_number}
+                  onChange={handleInputChange}
+                  minLength={11}
+                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                  required
+                />
+              </div>
+            )}
 
             <div className="relative space-y-2">
               <label htmlFor="password">Password</label>
@@ -244,20 +380,22 @@ const ActivateAccountPage = () => {
               </button>
             </div>
 
-            <div className="relative space-y-2">
-              <label htmlFor="confirm_password">Referral Code</label>
-              <input
-                type="text"
-                id="referral_code"
-                name="referral_code"
-                value={form.referral_code}
-                className="border-gray uppercase-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+            {currentFilter === "student" && (
+              <div className="relative space-y-2">
+                <label htmlFor="confirm_password">Referral Code</label>
+                <input
+                  type="text"
+                  id="referral_code"
+                  name="referral_code"
+                  value={form.referral_code}
+                  className="border-gray uppercase-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
                 focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                onChange={handleInputChange}
-                placeholder="(Optional)"
-                min={8}
-              />
-            </div>
+                  onChange={handleInputChange}
+                  placeholder="(Optional)"
+                  min={8}
+                />
+              </div>
+            )}
 
             <button className=" w-full bg-mainColor2 text-white font-bold rounded-lg py-3">
               Submit

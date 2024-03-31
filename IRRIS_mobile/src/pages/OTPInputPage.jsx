@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { Spinner } from "flowbite-react";
 
 const OTPInputPage = () => {
-  const { email } = useUserStore();
+  const { email, setUser } = useUserStore();
   const [otp, setOtp] = useState("");
   const [seconds, setSeconds] = useState(0);
   const [isError, setIsError] = useState(false);
@@ -37,8 +37,10 @@ const OTPInputPage = () => {
   const notifyVerifyOTP = (email, otp) => {
     return toast.promise(verifyOTP(email, otp), {
       loading: "Verifying OTP ...",
+      id: "verify-otp",
       success: <b>OTP verified</b>,
       error: (error) => <b>{error.response.data.message}</b>,
+      stack: false,
     });
   };
 
@@ -71,6 +73,7 @@ const OTPInputPage = () => {
       console.log("email", email);
       const response = await notifyVerifyOTP(email, otp);
 
+      setUser(response.user);
       //set cookies from response.token
       Cookies.set("authToken", response.token, { expires: 7 });
       Cookies.set("user_id", response.user.id, { expires: 7 });
