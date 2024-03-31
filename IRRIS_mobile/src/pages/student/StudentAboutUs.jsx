@@ -78,7 +78,7 @@ const StudentAboutUs = () => {
   const [formData, setFormData] = useState({
     // Initialize form data here
     name: `${user?.first_name || ""} ${user?.last_name || ""}`, // Initialize overall rating
-    email:  user?.email || "", // Initialize overall rating
+    email: user?.email || "", // Initialize overall rating
     overall: "", // Initialize overall rating
     functionality: "", // Initialize functionality rating
     maintainability: "", // Initialize maintainability rating
@@ -471,7 +471,6 @@ const StudentAboutUs = () => {
 
   // const navigate = useNavigate();
 
-
   const handleConfirmation = async () => {
     setIsLoading(true);
     try {
@@ -527,46 +526,79 @@ const StudentAboutUs = () => {
           </Link>
         </div>
       </header>
-
-      <div className="h-[150vh]  overflow-y-auto pt-5 pb-5">
+      <div className="flex justify-center items-center">
+        <span className="text-2xl text-white rounded-[2.5rem] bg-blue-700 mt-[-2rem] w-[15rem] h-[3.5rem]  flex justify-center items-center">
+          Feedback Form
+        </span>
+      </div>
+      <div className="h-[150vh]  overflow-y-auto pt-1 pb-1">
         <div>
-          <div className="flex justify-center items-center mt-5 pt-5">
-            <div className="w-[95%] max-w-sm bg-white border border-gray-200 r shadow dark:bg-gray-800 dark:border-gray-700">
-              <div className="satisfactory-container  h-[40rem]">
-                <div className="flex justify-center items-center">
-                  <span className="text-2xl text-white rounded-[2.5rem] bg-blue-700 w-[15rem] h-[3.5rem] mt-[-1rem] flex justify-center items-center">
-                    Feedback Form
-                  </span>
-                </div>
-                <div className=" pb-4"></div>
+          <div className="flex justify-center items-center ">
+            <div className="w-[95%] max-w-sm bg-white dark:bg-gray-800 dark:border-gray-700">
+              <div className="satisfactory-container mt-[orem] h-[40rem]">
+                <div className=" pb-1"></div>
                 <div className=" overflow-y-auto">
                   {/* multi step form */}
                   <div className="container mx-auto">
                     {phase === 1 && (
-                      <form onSubmit={handleNextPhase}>
-                        <div>
-                          <h2>UP KEEP : System Evaluation</h2>
+                      <form onSubmit={handleNextPhase} className="space-y-6">
+                        <div className="flex flex-col justify-center items-center">
+                          <h2 className="text-2xl font-bold">
+                            UP KEEP : System Evaluation
+                          </h2>
                         </div>
-                        <div className="">
-                          <p>Please Evaluate the system CAREFULLY :</p>
+                        <div className="flex flex-col space-y-2 ">
                           {/* Selected option displayed */}
-                          <Label className="text-sm mt-1">
-                            Functionality: {ratingFunctionality || ""}
-                          </Label>
-                          <Label className="text-sm mt-1">
-                            Maintainability: {ratingMaintainability || ""}
-                          </Label>
-                          <Label className="text-sm mt-1">
-                            Portability: {ratingPortability || ""}
-                          </Label>
-                          <Label className="text-sm mt-1">
-                            efficiency: {ratingEfficiency || ""}
-                          </Label>
+                          <div className="flex ">
+                            <div className="flex items-center w-[50%] ">
+                              <Label className="text-sm w-[50%] font-bold text-gray-600">
+                                Functionality:
+                              </Label>
+                              <Label className="w-[50%] text-sm font-bold text-gray-400 ">
+                                {ratingFunctionality || ""}
+                              </Label>
+                            </div>
+                            <div className="flex  w-[50%] ">
+                              <Label className="w-[50%] text-sm font-bold text-gray-600 ">
+                                Maintainability:
+                              </Label>
+                              <Label className="w-[50%] ml-4 text-sm font-bold text-gray-400 ">
+                                {ratingMaintainability || ""}
+                              </Label>
+                            </div>
+                          </div>
+                          <div className="flex ">
+                            <div className="flex w-[50%]">
+                              {" "}
+                              <Label className="text-sm w-[50%] font-bold text-gray-600">
+                                Portability:
+                              </Label>
+                              <Label className="text-sm font-bold text-gray-400">
+                                {ratingPortability || ""}
+                              </Label>
+                            </div>
+                            <div className="flex items-center">
+                              <Label className="text-sm font-bold text-gray-600">
+                                Efficiency:
+                              </Label>
+                              <Label className="text-sm font-bold text-gray-400 ml-[2.8rem]">
+                                {ratingEfficiency || ""}
+                              </Label>
+                            </div>
+                          </div>
                         </div>
-                        <div className=" items-center justify-center">
+                        <div className="flex flex-col items-center justify-center">
                           {/* star rating functionality*/}
-                          <div className="mb-4">
-                            <div className="flex">
+                          <div className="starRating mb-4 border shadow w-[90%] flex flex-col items-center rounded-[1rem]">
+                            <div className="inner-layout flex flex-col">
+                              <div>
+                                <Label
+                                  htmlFor="functionality"
+                                  className=" text-lg bold text-blue-900"
+                                >
+                                  Functionality
+                                </Label>
+                              </div>
                               <div>
                                 {/* Displaying the stars with colors based on starColors state */}
                                 {starColors.map((color, index) => (
@@ -584,15 +616,26 @@ const StudentAboutUs = () => {
                                     <Star size={44} weight="fill" />
                                   </button>
                                 ))}
-                                <label>Rating: {ratingFunctionality}</label>
+                              </div>
+                              <div>
+                                <Label className="text-md bold text-gray-400">
+                                  Rating: {ratingFunctionality}
+                                </Label>
                               </div>
                             </div>
-
-                            <label htmlFor="functionality">Functionality</label>
                           </div>
+
                           {/* star rating maintainability */}
-                          <div className="mb-4">
-                            <div className="flex">
+                          <div className="starRating mb-4 border shadow w-[90%] flex flex-col items-center rounded-[1rem]">
+                            <div className="flex flex-col">
+                              <div>
+                                <Label
+                                  htmlFor="maintainability"
+                                  className=" text-lg bold text-blue-900"
+                                >
+                                  Maintainability
+                                </Label>
+                              </div>
                               <div>
                                 {/* Displaying the stars with colors based on starColors state */}
                                 {starColorsMaint.map((color, index) => (
@@ -610,17 +653,26 @@ const StudentAboutUs = () => {
                                     <Star size={44} weight="fill" />
                                   </button>
                                 ))}
-                                <label>Rating: {ratingMaintainability}</label>
+                              </div>
+                              <div>
+                                {" "}
+                                <Label className="text-md bold text-gray-400">
+                                  Rating: {ratingMaintainability}
+                                </Label>
                               </div>
                             </div>
-
-                            <label htmlFor="maintainability">
-                              Maintainability
-                            </label>
                           </div>
                           {/* star rating portability */}
-                          <div className="mb-4">
-                            <div className="flex">
+                          <div className="starRating mb-4 border shadow w-[90%] flex flex-col items-center rounded-[1rem]">
+                            <div className="flex flex-col">
+                              <div>
+                                <Label
+                                  htmlFor="portability"
+                                  className=" text-lg bold text-blue-900"
+                                >
+                                  Portability
+                                </Label>
+                              </div>
                               <div>
                                 {/* Displaying the stars with colors based on starColors state */}
                                 {starColorsPort.map((color, index) => (
@@ -638,15 +690,26 @@ const StudentAboutUs = () => {
                                     <Star size={44} weight="fill" />
                                   </button>
                                 ))}
-                                <label>Rating: {ratingPortability}</label>
+                              </div>
+                              <div>
+                                <Label className="text-md bold text-gray-400">
+                                  Rating: {ratingPortability}
+                                </Label>
                               </div>
                             </div>
-
-                            <label htmlFor="portability">Portability</label>
                           </div>
                           {/* star rating efficiency */}
-                          <div className="mb-4">
-                            <div className="flex">
+                          <div className="starRating mb-4 border shadow w-[90%] flex flex-col items-center rounded-[1rem]">
+                            <div className="flex flex-col">
+                              <div>
+                                {" "}
+                                <Label
+                                  htmlFor="efficiency"
+                                  className=" text-lg bold text-blue-900"
+                                >
+                                  Efficiency
+                                </Label>
+                              </div>
                               <div>
                                 {/* Displaying the stars with colors based on starColors state */}
                                 {StarColorsEffi.map((color, index) => (
@@ -664,18 +727,20 @@ const StudentAboutUs = () => {
                                     <Star size={44} weight="fill" />
                                   </button>
                                 ))}
-                                <label>Rating: {ratingEfficiency}</label>
+                              </div>
+                              <div>
+                                <Label className="text-md bold text-gray-400">
+                                  Rating: {ratingEfficiency}
+                                </Label>
                               </div>
                             </div>
-
-                            <label htmlFor="efficiency">Efficiency</label>
                           </div>
                         </div>
 
-                        <div>
+                        <div className="flex items-center">
                           <button
                             type="submit"
-                            className="text-white  h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-[90%] sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            className="text-white  h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-[100%] sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                           >
                             Next
                           </button>
@@ -688,73 +753,107 @@ const StudentAboutUs = () => {
                         onSubmit={handleSubmit}
                         className="emoticon-input  items-center justify-center"
                       >
-                        <h2>UP KEEP : Finale Grande!</h2>
+                        <div className="flex justify-center items-center">
+                          <h2 className="text-2xl  font-bold">
+                            UP KEEP : Finale Grande!
+                          </h2>
+                        </div>
                         {/* Add your form fields for Phase 3 here */}
                         <div>
                           <div>
                             <div className="flex flex-col items-center justify-center">
                               <div>
-                                <label>Thank you for evaluating us  </label>
-                                <label> {user?.first_name} !</label>
-                                <p>Overall Evaluation:</p>
-                              </div>
-                              {/* ----------------- */}
-                              <div>
                                 <div>
-                                  <label>Evaluator :</label>
+                                  <Label>Thank you for evaluating us </Label>
+                                  <Label> {user?.first_name} !</Label>
+                                </div>
+                                <div className="flex items-center justify-center">
+                                  <p>Overall Evaluation:</p>
+                                </div>
+                              </div>
+                              <br/>
+                              {/* ----------------- */}
+                              <div className="flex flex-col">
+                                <div className="flex justify-center items-center">
+                                  <Label className=" text-md">Evaluator :</Label>
                                   <input
-                                  disabled
+                                    disabled
                                     type="text"
                                     name="name"
                                     value={ratingName}
                                     onChange={handleNameChange}
+                                    className="border-none text-md font-extrabold ml-5"
                                   />
                                 </div>
-                                <div>
-                                  <label>Email:</label>
+                                <div className="flex  items-center ml-[1.6rem]">
+                                  <Label className="w-[20%] text-md">Email :</Label>
+                                  <div className="w-[80%] "> 
                                   <input
-                                  disabled
+                                    disabled
                                     type="email"
                                     name="email"
                                     value={ratingEmail}
                                     onChange={handleEmailChange}
+                                    className="border-none text-sm font-bold w-[20rem] ml-2"
                                   />
+                                  </div>
+                                  
                                 </div>
+                                <br />
+                                <br />
+                                <div className="flex flex-col items-center justify-center">
+                                  <Label className="text-lg bold text-gray-700">Rate Us Now!</Label>
+                                  <Label className="text-3xl font-extrabold text-blue-800">QCU : UP KEEP</Label>
+                                </div>
+                                <br />
                                 {/* Displaying the stars with colors based on starColors state */}
-                                {starColorsoverall.map((color, index) => {
-                                  // Define an array of icon components to alternate
-                                  const icons = [
-                                    <HeartBreak size={62} weight="fill" />,
-                                    <SmileyAngry size={62} weight="fill" />,
-                                    <SmileyMeh size={62} weight="fill" />,
-                                    <Smiley size={62} weight="fill" />,
-                                    <Heart size={62} weight="fill" />,
-                                  ];
+                                <div className="flex items-center justify-center">
+                                <div className="flex justify-center items-center border w-[67%] h-[5rem] rounded-[3rem] shadow">
+                                  {starColorsoverall.map((color, index) => {
+                                    // Define an array of icon components to alternate
+                                    const icons = [
+                                      <HeartBreak size={62} weight="fill" />,
+                                      <SmileyAngry size={62} weight="fill" />,
+                                      <SmileyMeh size={62} weight="fill" />,
+                                      <Smiley size={62} weight="fill" />,
+                                      <Heart size={62} weight="fill" />,
+                                    ];
 
-                                  return (
-                                    <button
-                                      type="button"
-                                      key={index}
-                                      onClick={(event) =>
-                                        handleOverallClick(
-                                          event,
-                                          `Star${index + 1}over`
-                                        )
-                                      }
-                                      style={{ color: color }}
-                                    >
-                                      {icons[index]}{" "}
-                                      {/* Render the icon based on the index */}
-                                    </button>
-                                  );
-                                })}
+                                    return (
+                                      <button
+                                       className=" "
+                                        type="button"
+                                        key={index}
+                                        onClick={(event) =>
+                                          handleOverallClick(
+                                            event,
+                                            `Star${index + 1}over`
+                                          )
+                                        }
+                                        style={{ color: color }}
+                                      >
+                                        {icons[index]}{" "}
+                                        {/* Render the icon based on the index */}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                                </div>
+                                
                               </div>
-                              <label>Rating: {ratingOverall}</label>
+                              <br />
+                              <div className="flex items-center ">
+                              <Label className="text-md  text-gray-700">Rating  : </Label>
+                              <Label className="text-md text-blue-700 ml-5">{ratingOverall}</Label>
+                              </div>
+                              
+                              <br />
                               {/* ---------------- */}
                             </div>
                           </div>
+
                           <div>
-                            <p>What's on your mind?</p>
+                            <p className="text-md font-semibold text-gray-700">What's on your mind?</p>
                             <textarea
                               required
                               rows={4}
@@ -763,17 +862,17 @@ const StudentAboutUs = () => {
                               onChange={handleTextareaChange}
                               cols={50} // Width of the textarea in characters
                               placeholder="Write down your opinion here."
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[90%] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              className="bg-gray-50 border shadow-blue-200 shadow-md border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[100%] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                           </div>
                         </div>
-
+                        <br />
                         {/* End of Phase 3 form fields */}
                         <div className="flex mt-5">
                           <button
                             type="button"
                             onClick={handlePreviousPhase}
-                            className="text-black h-[3rem] bg-white border hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-[90%] sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            className="text-black h-[3rem]  bg-gray-100 mr-2 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-[90%] sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                           >
                             Previous
                           </button>
