@@ -207,7 +207,7 @@ const StudentAboutUs = () => {
   //functionality stars------------------------------------------------------------------------------------
   const [selectedStarfunctionality, setSelectedStarfunctionality] =
     useState(null);
-  const [ratingFunctionality, setRatingfunctionality] = useState("tanginamo");
+  const [ratingFunctionality, setRatingfunctionality] = useState("Not Available");
 
   const handleFunctionalityClick = (event, func) => {
     setSelectedStarfunctionality(func);
@@ -262,7 +262,7 @@ const StudentAboutUs = () => {
   const [selectedStarmaintainability, setSelectedStarmaintainability] =
     useState(null);
   const [ratingMaintainability, setRatingMaintainability] =
-    useState("tanginamo");
+    useState("Not Available");
 
   const handleMaintainabilityClick = (event, maint) => {
     setSelectedStarmaintainability(maint);
@@ -324,7 +324,7 @@ const StudentAboutUs = () => {
 
   //portability stars----------------------------------------------------------------------------------
   const [selectedStarportability, setSelectedStarportability] = useState();
-  const [ratingPortability, setRatingPortability] = useState("tanginamo");
+  const [ratingPortability, setRatingPortability] = useState("Not Available");
 
   const handlePortabilityClick = (event, port) => {
     setSelectedStarportability(port);
@@ -382,7 +382,7 @@ const StudentAboutUs = () => {
 
   //efficiency stars----------------------------------------------------------------------------------
   const [selectedStarefficiency, setSelectedStarefficiency] = useState();
-  const [ratingEfficiency, setRatingEffieciency] = useState("tanginamo");
+  const [ratingEfficiency, setRatingEffieciency] = useState("Not Available");
 
   const handleEfficiencyClick = (event, effi) => {
     setSelectedStarmaintainability(effi);
