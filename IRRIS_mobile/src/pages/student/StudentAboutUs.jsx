@@ -9,9 +9,8 @@ import {
   ArrowLeft,
   Heart,
   HeartBreak,
-  SmileyWink,
-  SmileyBlank,
   Star,
+  UsersThree,
 } from "@phosphor-icons/react";
 import { Label, Textarea } from "flowbite-react";
 import { Modal } from "flowbite-react";
@@ -62,15 +61,9 @@ const StudentAboutUs = () => {
   const handleTextareaChange = (event) => {
     const { name, value } = event.target;
 
-    // setRatingOpinion(newRatingOpinion);
     setRatingOpinion(value); // Update the ratingOpinion state
 
     handleChange(event); // Call handleChange to update formData
-    // setTextareaValue(event.target.value);
-    // setFormData({
-    //   ...formData,
-    //   opinion: newRatingOpinion,
-    // });
   };
 
   // multistep
@@ -132,14 +125,13 @@ const StudentAboutUs = () => {
   };
 
   //OOOOOOOOOOOOVVVVVVVVVVVVVVVVVVVEEEEEEEEEEEEERRRRRRRRRRRAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLL----------------
+  const [overallRatingMeaning, setOverallRatingMeaning] = useState("");
+
   const [selectedEmoticonOverall, setSelectedEmoticonOverall] = useState(null);
-  const [ratingOverall, setRatingOverall] = useState(
-    "Heart kita, Kaya i-Heart mo ako!"
-  );
+  const [ratingOverall, setRatingOverall] = useState("0");
 
   const handleOverallClick = (event, over) => {
     setSelectedEmoticonOverall(over);
-
     // Update the color of each star based on its position relative to the selected star
     const starsOver = [
       "Star1over",
@@ -154,22 +146,17 @@ const StudentAboutUs = () => {
       // Update the color of each emoticon based on the selected emoticon
       switch (over) {
         case "Star1over":
-          return "Poor";
-
+          return "1";
         case "Star2over":
-          return "Fair";
-
+          return "2";
         case "Star3over":
-          return "Good";
-
+          return "3";
         case "Star4over":
-          return "Very Good";
-
+          return "4";
         case "Star5over":
-          return "Excellent";
-
+          return "5";
         default:
-          return "None";
+          return "0";
       }
     })();
 
@@ -207,7 +194,7 @@ const StudentAboutUs = () => {
   //functionality stars------------------------------------------------------------------------------------
   const [selectedStarfunctionality, setSelectedStarfunctionality] =
     useState(null);
-  const [ratingFunctionality, setRatingfunctionality] = useState("Not Available");
+  const [ratingFunctionality, setRatingfunctionality] = useState("0");
 
   const handleFunctionalityClick = (event, func) => {
     setSelectedStarfunctionality(func);
@@ -219,17 +206,17 @@ const StudentAboutUs = () => {
     const newRatingFunctionality = (() => {
       switch (func) {
         case "Star1":
-          return "Poor";
+          return "1";
         case "Star2":
-          return "Fair";
+          return "2";
         case "Star3":
-          return "Good";
+          return "3";
         case "Star4":
-          return "Very Good";
+          return "4";
         case "Star5":
-          return "Excellent";
+          return "5";
         default:
-          return "None";
+          return "0";
       }
     })();
 
@@ -261,8 +248,7 @@ const StudentAboutUs = () => {
   //maintainabiity stars----------------------------------------------------------------------------------
   const [selectedStarmaintainability, setSelectedStarmaintainability] =
     useState(null);
-  const [ratingMaintainability, setRatingMaintainability] =
-    useState("Not Available");
+  const [ratingMaintainability, setRatingMaintainability] = useState("0");
 
   const handleMaintainabilityClick = (event, maint) => {
     setSelectedStarmaintainability(maint);
@@ -280,17 +266,17 @@ const StudentAboutUs = () => {
     const newRatingMaintainability = (() => {
       switch (maint) {
         case "Star1main":
-          return "Poor";
+          return "1";
         case "Star2main":
-          return "Fair";
+          return "2";
         case "Star3main":
-          return "Good";
+          return "3";
         case "Star4main":
-          return "Very Good";
+          return "4";
         case "Star5main":
-          return "Excellent";
+          return "5";
         default:
-          return "None";
+          return "0";
       }
     })();
 
@@ -324,7 +310,7 @@ const StudentAboutUs = () => {
 
   //portability stars----------------------------------------------------------------------------------
   const [selectedStarportability, setSelectedStarportability] = useState();
-  const [ratingPortability, setRatingPortability] = useState("Not Available");
+  const [ratingPortability, setRatingPortability] = useState("0");
 
   const handlePortabilityClick = (event, port) => {
     setSelectedStarportability(port);
@@ -342,17 +328,17 @@ const StudentAboutUs = () => {
     const newRatingPortability = (() => {
       switch (port) {
         case "Star1port":
-          return "Poor";
+          return "1";
         case "Star2port":
-          return "Fair";
+          return "2";
         case "Star3port":
-          return "Good";
+          return "3";
         case "Star4port":
-          return "Very Good";
+          return "4";
         case "Star5port":
-          return "Excellent";
+          return "5";
         default:
-          return "None";
+          return "0";
       }
     })();
 
@@ -382,7 +368,7 @@ const StudentAboutUs = () => {
 
   //efficiency stars----------------------------------------------------------------------------------
   const [selectedStarefficiency, setSelectedStarefficiency] = useState();
-  const [ratingEfficiency, setRatingEffieciency] = useState("Not Available");
+  const [ratingEfficiency, setRatingEffieciency] = useState("0");
 
   const handleEfficiencyClick = (event, effi) => {
     setSelectedStarmaintainability(effi);
@@ -400,17 +386,17 @@ const StudentAboutUs = () => {
     const newRatingEfficiency = (() => {
       switch (effi) {
         case "Star1effi":
-          return "Poor";
+          return "1";
         case "Star2effi":
-          return "Fair";
+          return "2";
         case "Star3effi":
-          return "Good";
+          return "3";
         case "Star4effi":
-          return "Very Good";
+          return "4";
         case "Star5effi":
-          return "Excellent";
+          return "5";
         default:
-          return "None";
+          return "0";
       }
     })();
 
@@ -520,9 +506,12 @@ const StudentAboutUs = () => {
   return (
     <div className="container mx-auto">
       <header className="  bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
-        <div className="backbutton  w-[2rem] ml-2 mt-1">
-          <Link to="/student/profile" className="text-white  ">
+        <div className="backbutton  w-[100%] ml-2 mt-1 flex justify-between">
+          <Link to="/student/profile" className="text-white">
             <ArrowLeft size={32} />
+          </Link>
+          <Link to="#">
+            <UsersThree size={36} color="#fcfcfc" weight="fill" />
           </Link>
         </div>
       </header>
@@ -541,13 +530,13 @@ const StudentAboutUs = () => {
                   {/* multi step form */}
                   <div className="container mx-auto">
                     {phase === 1 && (
-                      <form onSubmit={handleNextPhase} className="space-y-6">
-                        <div className="flex flex-col justify-center items-center">
-                          <h2 className="text-2xl font-bold">
+                      <form onSubmit={handleNextPhase} className="space-y-3">
+                        <div className="flex flex-col justify-center ">
+                          <h2 className="text-1xl font-semibold text-blue-800">
                             UP KEEP : System Evaluation
                           </h2>
                         </div>
-                        <div className="flex flex-col space-y-2 ">
+                        <div className="flex flex-col  ">
                           {/* Selected option displayed */}
                           <div className="flex ">
                             <div className="flex items-center w-[50%] ">
@@ -555,7 +544,7 @@ const StudentAboutUs = () => {
                                 Functionality:
                               </Label>
                               <Label className="w-[50%] text-sm font-bold text-gray-400 ">
-                                {ratingFunctionality || ""}
+                                {ratingFunctionality || ""} Stars
                               </Label>
                             </div>
                             <div className="flex  w-[50%] ">
@@ -563,7 +552,7 @@ const StudentAboutUs = () => {
                                 Maintainability:
                               </Label>
                               <Label className="w-[50%] ml-4 text-sm font-bold text-gray-400 ">
-                                {ratingMaintainability || ""}
+                                {ratingMaintainability || ""} Stars
                               </Label>
                             </div>
                           </div>
@@ -574,7 +563,7 @@ const StudentAboutUs = () => {
                                 Portability:
                               </Label>
                               <Label className="text-sm font-bold text-gray-400">
-                                {ratingPortability || ""}
+                                {ratingPortability || ""} Stars
                               </Label>
                             </div>
                             <div className="flex items-center">
@@ -582,7 +571,7 @@ const StudentAboutUs = () => {
                                 Efficiency:
                               </Label>
                               <Label className="text-sm font-bold text-gray-400 ml-[2.8rem]">
-                                {ratingEfficiency || ""}
+                                {ratingEfficiency || ""} Stars
                               </Label>
                             </div>
                           </div>
@@ -594,7 +583,7 @@ const StudentAboutUs = () => {
                               <div>
                                 <Label
                                   htmlFor="functionality"
-                                  className=" text-lg bold text-blue-900"
+                                  className=" text-md bold text-blue-900"
                                 >
                                   Functionality
                                 </Label>
@@ -613,13 +602,13 @@ const StudentAboutUs = () => {
                                     }
                                     style={{ color: color }}
                                   >
-                                    <Star size={44} weight="fill" />
+                                    <Star size={35} weight="fill" />
                                   </button>
                                 ))}
                               </div>
                               <div>
                                 <Label className="text-md bold text-gray-400">
-                                  Rating: {ratingFunctionality}
+                                  Rating: {ratingFunctionality} Stars
                                 </Label>
                               </div>
                             </div>
@@ -631,7 +620,7 @@ const StudentAboutUs = () => {
                               <div>
                                 <Label
                                   htmlFor="maintainability"
-                                  className=" text-lg bold text-blue-900"
+                                  className=" text-md bold text-blue-900"
                                 >
                                   Maintainability
                                 </Label>
@@ -650,14 +639,14 @@ const StudentAboutUs = () => {
                                     }
                                     style={{ color: color }}
                                   >
-                                    <Star size={44} weight="fill" />
+                                    <Star size={35} weight="fill" />
                                   </button>
                                 ))}
                               </div>
                               <div>
                                 {" "}
                                 <Label className="text-md bold text-gray-400">
-                                  Rating: {ratingMaintainability}
+                                  Rating: {ratingMaintainability} Stars
                                 </Label>
                               </div>
                             </div>
@@ -668,7 +657,7 @@ const StudentAboutUs = () => {
                               <div>
                                 <Label
                                   htmlFor="portability"
-                                  className=" text-lg bold text-blue-900"
+                                  className=" text-md bold text-blue-900"
                                 >
                                   Portability
                                 </Label>
@@ -687,13 +676,13 @@ const StudentAboutUs = () => {
                                     }
                                     style={{ color: color }}
                                   >
-                                    <Star size={44} weight="fill" />
+                                    <Star size={35} weight="fill" />
                                   </button>
                                 ))}
                               </div>
                               <div>
                                 <Label className="text-md bold text-gray-400">
-                                  Rating: {ratingPortability}
+                                  Rating: {ratingPortability} Stars
                                 </Label>
                               </div>
                             </div>
@@ -705,7 +694,7 @@ const StudentAboutUs = () => {
                                 {" "}
                                 <Label
                                   htmlFor="efficiency"
-                                  className=" text-lg bold text-blue-900"
+                                  className=" text-md bold text-blue-900"
                                 >
                                   Efficiency
                                 </Label>
@@ -724,13 +713,13 @@ const StudentAboutUs = () => {
                                     }
                                     style={{ color: color }}
                                   >
-                                    <Star size={44} weight="fill" />
+                                    <Star size={35} weight="fill" />
                                   </button>
                                 ))}
                               </div>
                               <div>
                                 <Label className="text-md bold text-gray-400">
-                                  Rating: {ratingEfficiency}
+                                  Rating: {ratingEfficiency} Stars
                                 </Label>
                               </div>
                             </div>
@@ -753,107 +742,116 @@ const StudentAboutUs = () => {
                         onSubmit={handleSubmit}
                         className="emoticon-input  items-center justify-center"
                       >
-                        <div className="flex justify-center items-center">
-                          <h2 className="text-2xl  font-bold">
+                        <div className="flex items-center ">
+                          <h2 className="text-1xl  font-bold">
                             UP KEEP : Finale Grande!
                           </h2>
                         </div>
                         {/* Add your form fields for Phase 3 here */}
                         <div>
                           <div>
-                            <div className="flex flex-col items-center justify-center">
+                            <div className="flex flex-col justify-center">
                               <div>
                                 <div>
                                   <Label>Thank you for evaluating us </Label>
                                   <Label> {user?.first_name} !</Label>
                                 </div>
-                                <div className="flex items-center justify-center">
+                                <div className="flex items-center ">
                                   <p>Overall Evaluation:</p>
                                 </div>
                               </div>
-                              <br/>
+                              <br />
                               {/* ----------------- */}
                               <div className="flex flex-col">
-                                <div className="flex justify-center items-center">
-                                  <Label className=" text-md">Evaluator :</Label>
+                                <div className="flex ">
+                                  <Label className=" w-[20%] text-md ">
+                                    Evaluator :
+                                  </Label>
                                   <input
                                     disabled
                                     type="text"
                                     name="name"
                                     value={ratingName}
                                     onChange={handleNameChange}
-                                    className="border-none text-md font-extrabold ml-5"
+                                    className="border-none text-sm w-[80%] font-extrabold mt-[-0.3rem]"
                                   />
                                 </div>
-                                <div className="flex  items-center ml-[1.6rem]">
-                                  <Label className="w-[20%] text-md">Email :</Label>
-                                  <div className="w-[80%] "> 
+                                <div className="flex ">
+                                  <Label className=" w-[20%] text-md ">
+                                    Email :
+                                  </Label>
                                   <input
                                     disabled
-                                    type="email"
+                                    type="text"
                                     name="email"
                                     value={ratingEmail}
-                                    onChange={handleEmailChange}
-                                    className="border-none text-sm font-bold w-[20rem] ml-2"
+                                    onChange={handleNameChange}
+                                    className="border-none text-sm w-[80%] font-extrabold mt-[-0.3rem]"
                                   />
-                                  </div>
-                                  
                                 </div>
-                                <br />
                                 <br />
                                 <div className="flex flex-col items-center justify-center">
-                                  <Label className="text-lg bold text-gray-700">Rate Us Now!</Label>
-                                  <Label className="text-3xl font-extrabold text-blue-800">QCU : UP KEEP</Label>
+                                  <Label className="text-lg bold text-gray-700">
+                                    Rate Us Now!
+                                  </Label>
+                                  <Label className="text-4xl font-extrabold text-blue-800">
+                                    QCU : UP KEEP
+                                  </Label>
                                 </div>
-                                <br />
                                 {/* Displaying the stars with colors based on starColors state */}
                                 <div className="flex items-center justify-center">
-                                <div className="flex justify-center items-center border w-[67%] h-[5rem] rounded-[3rem] shadow">
-                                  {starColorsoverall.map((color, index) => {
-                                    // Define an array of icon components to alternate
-                                    const icons = [
-                                      <HeartBreak size={62} weight="fill" />,
-                                      <SmileyAngry size={62} weight="fill" />,
-                                      <SmileyMeh size={62} weight="fill" />,
-                                      <Smiley size={62} weight="fill" />,
-                                      <Heart size={62} weight="fill" />,
-                                    ];
+                                  <div className="flex justify-center items-center border w-[67%] h-[5rem] rounded-[3rem] shadow">
+                                    {starColorsoverall.map((color, index) => {
+                                      // Define an array of icon components to alternate
+                                      const icons = [
+                                        <HeartBreak size={62} weight="fill" />,
+                                        <SmileyAngry size={62} weight="fill" />,
+                                        <SmileyMeh size={62} weight="fill" />,
+                                        <Smiley size={62} weight="fill" />,
+                                        <Heart size={62} weight="fill" />,
+                                      ];
 
-                                    return (
-                                      <button
-                                       className=" "
-                                        type="button"
-                                        key={index}
-                                        onClick={(event) =>
-                                          handleOverallClick(
-                                            event,
-                                            `Star${index + 1}over`
-                                          )
-                                        }
-                                        style={{ color: color }}
-                                      >
-                                        {icons[index]}{" "}
-                                        {/* Render the icon based on the index */}
-                                      </button>
-                                    );
-                                  })}
+                                      return (
+                                        <button
+                                          className=" "
+                                          type="button"
+                                          key={index}
+                                          onClick={(event) =>
+                                            handleOverallClick(
+                                              event,
+                                              `Star${index + 1}over`
+                                            )
+                                          }
+                                          style={{ color: color }}
+                                        >
+                                          {icons[index]}{" "}
+                                          {/* Render the icon based on the index */}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
                                 </div>
+                              </div>
+                              <div className="flex justify-center">
+                                <div className="flex items-center ">
+                                  <Label className="text-md  text-gray-700">
+                                    Rating :{" "}
+                                  </Label>
+                                  <Label className="text-md text-blue-700 ml-5">
+                                    {ratingOverall} Emotes
+                                  </Label>
                                 </div>
-                                
                               </div>
-                              <br />
-                              <div className="flex items-center ">
-                              <Label className="text-md  text-gray-700">Rating  : </Label>
-                              <Label className="text-md text-blue-700 ml-5">{ratingOverall}</Label>
-                              </div>
-                              
+
                               <br />
                               {/* ---------------- */}
                             </div>
                           </div>
 
                           <div>
-                            <p className="text-md font-semibold text-gray-700">What's on your mind?</p>
+                            <p className="text-md font-semibold text-gray-700">
+                              What's on your mind?
+                            </p>
                             <textarea
                               required
                               rows={4}
