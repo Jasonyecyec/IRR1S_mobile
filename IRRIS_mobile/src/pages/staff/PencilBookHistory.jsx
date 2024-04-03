@@ -6,9 +6,11 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { formatDateTime, getImageUrl } from "@/src/utils/utils";
 import StatusBadge from "@/src/components/StatusBadge";
+import { useNavigate } from "react-router-dom";
 
 const PencilBookHistory = () => {
   const [currentFilter, setCurrentFilter] = useState("all");
+  const navigate = useNavigate();
   const { user, setUser } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
@@ -58,7 +60,10 @@ const PencilBookHistory = () => {
 
   return (
     <div className="w-screen h-screen flex flex-col">
-      <PageTitle title="Pencil Book History" />
+      <PageTitle
+        title="Pencil Book History"
+        closeFunction={() => navigate(`/${user?.user_role}/home`)}
+      />
 
       <div className=" flex-1 p-2 space-y-5 mt-3">
         <div className="flex justify-end">
