@@ -60,8 +60,8 @@ const AvailableFacility = () => {
     <div className="w-screen h-screen   flex flex-col">
       <PageTitle title="AVAILABLE FACILITY" />
 
-      <div className="p-5 pt-14">
-        <div className="space-y-10">
+      <div className="p-5 pt-10">
+        <div className="space-y-8">
           <div className="space-y-2">
             <label>Enter facility name:</label>
             <div className="flex space-x-5">
@@ -79,12 +79,12 @@ const AvailableFacility = () => {
           </div>
 
           <div className="rounded-md">
-            <div className="font-bold flex p-2 items-center bg-mainColor text-white rounded-t-md">
-              <p className="w-24  text-center ">Facility</p>
+            <div className="font-semibold flex p-2 items-center bg-mainColor2 text-white rounded-t-md text-sm">
+              <p className="w-24  text-center ">Image</p>
               <p className="px-5">Description</p>
             </div>
 
-            <div className=" h-[33rem] overflow-y-auto space-y-8 flex flex-col items-center  rounded-lg py-2">
+            <div className=" h-[33rem] overflow-y-auto space-y-5 flex flex-col items-center  rounded-lg py-2">
               {isLoading ? (
                 <Spinner
                   aria-label="Large spinner example"
@@ -101,22 +101,39 @@ const AvailableFacility = () => {
                     to={`/staff/pencil-book/${facility.qr_code}`}
                     className="w-full"
                   >
-                    <div className=" shadow-md border  p-3 flex w-full">
+                    <div className=" rounded-md border  p-2 flex w-full">
                       <div>
                         <img
                           src={getImageUrl(facility.facilities_image)}
                           alt="facility-img"
-                          className="w-24 h-20 bg-red-200 rounded-md"
+                          className="w-24 h-24 bg-red-200 rounded-md"
                         />
                       </div>
-                      <div className="pl-5">
-                        <p className="font-semibold">
+                      <div className="pl-5 space-y-1">
+                        <p className="font-semibold capitalize">
                           {facility.facilities_name}
                         </p>
-                        <p>Building: {facility.location}</p>
+                        <p className="text-sm">
+                          Description: {facility.description}
+                        </p>
 
+                        {facility.building_id !== null && (
+                          <>
+                            <p className="text-sm">
+                              <span>Building: </span>{" "}
+                              <span>{facility.building?.building_name}</span>
+                            </p>
+                            <p className="text-sm">
+                              <span>Floor: </span> <span>{facility.floor}</span>
+                            </p>
+                          </>
+                        )}
+                        <p className="text-sm">
+                          <span>Capacity:</span>{" "}
+                          <span>{facility.capacity}</span>
+                        </p>
                         <p>
-                          <span className="capitalize font-semibold text-green-500">
+                          <span className="capitalize text-sm font-semibold bg-green-100 p-1 rounded-md px-2 text-green-500">
                             {facility.status}{" "}
                           </span>
                         </p>
