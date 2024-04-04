@@ -13,7 +13,7 @@ const studentProfile = [
     icon: SealCheck,
   },
   {
-    title: "About Us",
+    title: "Give Feedback",
     route: "/student/about",
     icon: Info,
   },
