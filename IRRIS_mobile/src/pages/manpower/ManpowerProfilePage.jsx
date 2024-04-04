@@ -62,7 +62,7 @@ const ManpowerProfilePage = () => {
   };
 
   const handleCloseProfile = () => {
-    navigate(-1);
+    navigate(`/${user?.user_role}/home`);
   };
 
   const onCloseModal = () => {

@@ -33,7 +33,7 @@ const StaffProfilePage = () => {
   const [userDetails, setUserDetails] = useState(null);
 
   const handleCloseProfile = () => {
-    navigate(-1);
+    navigate(`/${user?.user_role}/home`);
   };
 
   const fetchUserDetails = async () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   Button,
   Checkbox,
@@ -12,6 +12,10 @@ import {
 import StudentAboutUs from "./StudentAboutUs";
 import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
 import { Link } from "react-router-dom"; // Import useHistory
+
+import { getUserDetails } from "@/src/services/api/sharedService";
+import useUserStore from "../../services/state/userStore";
+
 
 const ConfirmationFeedbackModal = ({
   modalPropsFeedback,
@@ -31,6 +35,35 @@ const ConfirmationFeedbackModal = ({
     emailRating,
     // Other ratings values if needed
   } = modalPropsFeedback;
+
+ //get the user details ()
+ const { user, setUser } = useUserStore((state) => ({
+  user: state.user,
+  setUser: state.setUser,
+}));
+const [isLoadingUser, setIsLoadingUser] = useState(false);
+const [userDetails, setUserDetails] = useState(null);
+
+const fetchUserDetails = async () => {
+  setIsLoadingUser(true);
+  try {
+    const { user_details } = await getUserDetails(user?.id);
+    console.log("user details", user_details);
+    setUserDetails(user_details);
+
+    // Set the ratingName and ratingEmail states with user details
+    setRatingName(user_details.first_name + " " + user_details.last_name);
+    setRatingEmail(user_details.email);
+  } catch (error) {
+    console.log("error", error);
+  } finally {
+    setIsLoadingUser(false);
+  }
+};
+
+useEffect(() => {
+  fetchUserDetails(user?.id);
+}, []);
 
   const handleConfirmAndClose = () => {
     handleConfirmation();
@@ -138,7 +171,7 @@ const ConfirmationFeedbackModal = ({
             onClick={handleConfirmAndClose} // Call handleConfirmAndClose on button click
             className="bg-mainColor h-[3rem] w-[50%] m-2 shadow-lg flex justify-center items-center text-white text-lg font-bold rounded-md p-1 px-3"
           >
-            <Link to="/student/profile" className="text-white">
+            <Link to={`/${user?.user_role}/profile`} className="text-white">
               Confirm
             </Link>
           </button>

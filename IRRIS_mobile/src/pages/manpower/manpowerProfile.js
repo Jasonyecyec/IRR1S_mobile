@@ -4,7 +4,7 @@ const manpowerProfile = [
  
   {
     title: "Account Setting",
-    route: "",
+    route: "/student/account-setting",
     icon: GearSix,
   },
   {
@@ -14,7 +14,7 @@ const manpowerProfile = [
   },
   {
     title: "About Us",
-    route: "",
+    route: "/student/about",
     icon: Info,
   },
 ];
