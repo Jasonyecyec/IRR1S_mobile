@@ -39,7 +39,7 @@ const StudentAccountSettingPage = () => {
     <div>
       <header className="bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
         <div className="backbutton w-[2rem] ml-2 mt-1">
-          <Link to="/student/profile" className="text-white">
+          <Link to={`/${user?.user_role}/profile`} className="text-white">
             <ArrowLeft size={32} />
           </Link>
         </div>
@@ -84,7 +84,7 @@ const StudentAccountSettingPage = () => {
             </p>          
             <p className="text-base">{user?.email}</p>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              QCU student
+              QCU {user?.user_role}
             </span>
             <div className="flex mt-4 md:mt-6"></div>
           </div>

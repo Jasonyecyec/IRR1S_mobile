@@ -507,7 +507,7 @@ const StudentAboutUs = () => {
     <div className="container mx-auto">
       <header className="  bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
         <div className="backbutton  w-[100%] ml-2 mt-1 flex justify-between">
-          <Link to="/student/profile" className="text-white">
+          <Link to={`/${user?.user_role}/profile`} className="text-white">
             <ArrowLeft size={32} />
           </Link>
           <Link to="#">
@@ -764,7 +764,7 @@ const StudentAboutUs = () => {
                               {/* ----------------- */}
                               <div className="flex flex-col">
                                 <div className="flex ">
-                                  <Label className=" w-[20%] text-md ">
+                                  <Label className=" w-[30%] text-md ">
                                     Evaluator :
                                   </Label>
                                   <input
@@ -773,11 +773,11 @@ const StudentAboutUs = () => {
                                     name="name"
                                     value={ratingName}
                                     onChange={handleNameChange}
-                                    className="border-none text-sm w-[80%] font-extrabold mt-[-0.3rem]"
+                                    className="border-none text-sm w-[70%] font-extrabold mt-[-0.3rem]"
                                   />
                                 </div>
                                 <div className="flex ">
-                                  <Label className=" w-[20%] text-md ">
+                                  <Label className=" w-[30%] text-md ">
                                     Email :
                                   </Label>
                                   <input
@@ -786,7 +786,7 @@ const StudentAboutUs = () => {
                                     name="email"
                                     value={ratingEmail}
                                     onChange={handleNameChange}
-                                    className="border-none text-sm w-[80%] font-extrabold mt-[-0.3rem]"
+                                    className="border-none text-sm w-[70%] font-extrabold mt-[-0.3rem]"
                                   />
                                 </div>
                                 <br />
