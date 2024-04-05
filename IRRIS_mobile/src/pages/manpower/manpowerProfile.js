@@ -7,11 +7,11 @@ const manpowerProfile = [
     route: "/student/account-setting",
     icon: GearSix,
   },
-  {
-    title: "Terms & Conditions",
-    route: "/terms-and-conditions",
-    icon: SealCheck,
-  },
+  // {
+  //   title: "Terms & Conditions",
+  //   route: "/terms-and-conditions",
+  //   icon: SealCheck,
+  // },
   {
     title: "Give Feedback",
     route: "/student/about",
