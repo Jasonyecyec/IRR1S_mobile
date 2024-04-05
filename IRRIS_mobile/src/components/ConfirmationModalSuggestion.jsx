@@ -1,18 +1,48 @@
 import React from "react";
 import { X, WarningCircle } from "@phosphor-icons/react";
 import { Spinner } from "flowbite-react";
+import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
+import { Link } from "react-router-dom";
+import SuccessModal from "../components/SuccessModal";
 
 const ConfirmationModalSuggestion = ({
   isLoading,
-  onCloseModal,
+  handleCloseButton,
   handleConfirmButton,
   content,
 }) => {
+
+  // Custom toast function with options
+  const showSuccessToast = (message) => {
+    toast.success(message, {
+      duration: 6000, // Duration of the toast in milliseconds
+      position: "top-center", // Position of the toast on the screen
+      style: {
+        background: "#4CAF50", // Background color of the toast
+        color: "#FFFFFF", // Text color of the toast
+      },
+    });
+  };
+
+  const handleConfirm = () => {
+    // Call the handleConfirmButton function passed as a prop
+    handleConfirmButton();
+
+    // Show the success toast
+    showSuccessToast("Suggestion reported successfully!");
+  };
+
   return (
     <div
       className="fixed z-20 inset-0 bg-gray-800 bg-opacity-50 p-5 overflow-y-auto h-full w-full flex justify-center items-center"
       id="my-modal"
     >
+      {isSuccess && (
+        <SuccessModal
+          message="Suggested Successfully!"
+          handleCloseButton={() => navigate("/login")}
+        />
+      )}
       <div className="p-5 border w-full space-y-5 shadow-lg rounded-md bg-white relative">
         <button
           onClick={onCloseModal}

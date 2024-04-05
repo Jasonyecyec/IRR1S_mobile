@@ -22,7 +22,7 @@ const SuccessModal = ({ title = null, message, handleCloseButton }) => {
           {title && (
             <p className="font-semibold text-center text-lg">{title}</p>
           )}
-          <p className="text-center text-sm text-gray-500 ">{message}</p>
+          <p className="text-center text-md font-semibold text-gray-500 ">{message}</p>
         </div>
         <div className="flex w-full items-center justify-center">
           <button

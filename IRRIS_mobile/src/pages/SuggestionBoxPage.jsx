@@ -8,6 +8,8 @@ import ConfirmationModalSuggestion from "../components/ConfirmationModal";
 import useUserStore from "../services/state/userStore";
 import Cookies from "js-cookie";
 import { reportSuggestion } from "../services/api/sharedService";
+import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
+import SuccessModal from "../components/SuccessModal";
 
 import {
   ArrowLeft,
@@ -41,7 +43,7 @@ function IssueCategoryDropdown({ onSelect, issueCategoriesData }) {
   );
 }
 
-function SuggestionBoxPage() {
+const SuggestionBoxPage = () => {
   //reportissue
   const location = useLocation();
   const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -49,10 +51,11 @@ function SuggestionBoxPage() {
   const [imageFile, setImageFile] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [isOpenModal, setisOpenModal] = useState(false);
   const [openModalSubmit, setOpenModalSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [issueType, setIssueType] = useState(""); // Combined issue type
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // clear the form inputs when the form is submitted or canceled
   const facilityIdInputRef = useRef(null);
@@ -66,7 +69,7 @@ function SuggestionBoxPage() {
     room: "",
     location: "",
     description: "",
-   // issue_type: "",
+    // issue_type: "",
     status: "pending",
   });
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -89,36 +92,6 @@ function SuggestionBoxPage() {
       // other issues...
     },
   };
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-    setSelectedIssue(""); // Reset selected issue when category changes
-  };
-  const handleIssueSelect = (issue) => {
-    console.log("Selected issue:", issue);
-    setSelectedIssue(issue);
-    // Combine selected category and issue to form the issue type
-    const newIssueType = selectedCategory
-      ? `${selectedCategory} - ${issue}`
-      : issue;
-    // Update the form state with the new issue type
-    setForm((prevForm) => ({
-      ...prevForm,
-      issue_type: newIssueType,
-    }));
-  };
-  // Update issue type whenever selected category or issue changes
-  useEffect(() => {
-    let newIssueType = "";
-    if (selectedCategory && selectedIssue) {
-      newIssueType = `${selectedCategory} - ${selectedIssue}`;
-    } else if (selectedCategory) {
-      newIssueType = selectedCategory;
-    }
-    // Update the issueType state with the new value
-    setIssueType(newIssueType);
-    // Log the input value for the useEffect hook
-    console.log("Input for useEffect:", selectedCategory, selectedIssue);
-  }, [selectedCategory, selectedIssue]);
 
   const navigate = useNavigate();
 
@@ -188,7 +161,7 @@ function SuggestionBoxPage() {
     setForm({
       facility_id: "",
       image_before: null,
-     // issue_type: "",
+      // issue_type: "",
       room: "",
       location: "",
       issues: "",
@@ -209,15 +182,28 @@ function SuggestionBoxPage() {
   const onCloseModalSubmit = () => {
     setOpenModalSubmit(false);
   };
+  const [isError, setIsError] = useState({
+    error: false,
+    message: "",
+  });
+  const handleCloseButton = () => {
+    setIsError({
+      error: false,
+      message: "",
+    });
+  };
   const handleConfirmButton = () => {
+    setIsSuccess(true);
+
     setImageFile(null);
     setImageSrc(null);
-    onCloseModal();
+    // onCloseModal();
+    handleCloseButton();
     // Clear the form data
     setForm({
       facility_id: "",
       image_before: null,
-     // issue_type: "",
+      // issue_type: "",
       room: "",
       location: "",
       issues: "",
@@ -234,6 +220,20 @@ function SuggestionBoxPage() {
     setImageFile(null);
     setOpenModal(false);
   };
+  // Define showSuccessToast function
+  const showSuccessToast = (message) => {
+    console.log("Showing success toast with message:", message); // Log message to console
+
+    toast.success(message, {
+      duration: 6000,
+      position: "top-center",
+      style: {
+        background: "#4CAF50",
+        color: "#FFFFFF",
+      },
+    });
+  };
+
   const handleConfirmButtonSubmit = async () => {
     setIsLoading(true);
     try {
@@ -241,7 +241,7 @@ function SuggestionBoxPage() {
       formDataReport.append("facility_id", form.facility_id);
       formDataReport.append("room", form.room);
       formDataReport.append("location", form.location);
-     // formDataReport.append("issue_type", form.issueType);
+      // formDataReport.append("issue_type", form.issueType);
       formDataReport.append("description", form.description);
       formDataReport.append("status", form.status);
       // Append the file if it exists
@@ -251,9 +251,15 @@ function SuggestionBoxPage() {
         console.log("Appended image file:", imageFile);
       }
       setOpenModalSubmit(false);
+
+      // Show the success toast message
+      showSuccessToast("Suggestion reported successfully!");
       console.log("form", form);
       const response = await reportSuggestion(formDataReport);
+      setisOpenModal(true);
+
       navigate(response.route);
+      console.log("Navigating to:", response.route);
     } catch (error) {
       console.error(error);
       navigate(error.response.data.route, {
@@ -360,6 +366,13 @@ function SuggestionBoxPage() {
         />
       )}
 
+      {isOpenModal && (
+        <SuccessModal
+          message="Suggestion Reported Successfully!"
+          handleCloseButton={() => navigate("/login")}
+        />
+      )}
+
       {openModalSubmit && (
         <ConfirmationModalSuggestion
           isLoading={isLoading}
@@ -368,6 +381,8 @@ function SuggestionBoxPage() {
           content="Do you confirm that the details are correct?"
         />
       )}
+
+     
 
       {isCameraOpen && (
         <div className="absolute top-0  left-0 bg-gray-700 bg-opacity-70 z-10 w-full h-full ">
@@ -580,6 +595,6 @@ function SuggestionBoxPage() {
       </div>
     </div>
   );
-}
+};
 
 export default SuggestionBoxPage;
