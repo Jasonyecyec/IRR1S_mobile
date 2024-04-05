@@ -281,4 +281,23 @@
     }
   };
 
+  export const changePasswordUser = async ({ userId, currentPassword, newPassword, confirmPassword }) => {
+    try {
+      // Make the API request to change the password
+      const response = await api.post('/change-password-user', {
+        user_id: userId,
+        current_password: currentPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword
+      });
+  
+      // Return the response data
+      console.log('change-password-user response:', response);
+      return response.data;
+    } catch (error) {
+      // Handle any errors
+      throw error;
+    }
+  };
+
 
