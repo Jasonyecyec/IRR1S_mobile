@@ -38,7 +38,10 @@ const ScanFacilityPage = () => {
 
   const handleSubmit = async () => {
     if (qrCode == "") {
-      setQrCodeError({ isError: true, message: "Please input qr code." });
+      setQrCodeError({
+        isError: true,
+        message: "Please input Facility ID/Name",
+      });
       return;
     }
 

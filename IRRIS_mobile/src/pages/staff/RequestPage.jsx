@@ -128,7 +128,7 @@ const RequestPage = () => {
 
           <div className="space-y-2 flex flex-col">
             <label for="date-due" className="text-sm font-semibold">
-              Due Date
+              Date and Time
             </label>
 
             <input
@@ -143,7 +143,7 @@ const RequestPage = () => {
             />
           </div>
 
-          <div className="space-x-3  flex items-center py-3">
+          {/* <div className="space-x-3  flex items-center py-3">
             <input
               type="checkbox"
               id="urgency"
@@ -158,7 +158,7 @@ const RequestPage = () => {
             <span id="urgencyText" className="text-sm text-gray-500 italic">
               *This request is urgent.
             </span>
-          </div>
+          </div> */}
 
           <div className="space-y-2">
             <label for="message" className="font-semibold">

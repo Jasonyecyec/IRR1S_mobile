@@ -7,6 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { formatDateTime, getImageUrl } from "@/src/utils/utils";
 import StatusBadge from "@/src/components/StatusBadge";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const PencilBookHistory = () => {
   const [currentFilter, setCurrentFilter] = useState("all");
@@ -112,6 +113,9 @@ const PencilBookHistory = () => {
                     <span className="font-semibold capitalize">
                       {item.event_name}
                     </span>{" "}
+                    {/* <button className="text-red-500 rounded-md bg-red-100 p-1 px-2">
+                        Cancel
+                      </button> */}
                     <StatusBadge status={item.status} />
                   </p>
 
@@ -123,13 +127,16 @@ const PencilBookHistory = () => {
                   </p>
 
                   <p className="text-gray-500 text-sm">
-                    Purpose: {item.description}{" "}
-                  </p>
-                  <p className="text-gray-500 text-sm">
                     Date start: {formatDateTime(item.start_date)}
                   </p>
-                  <p className="text-gray-500 text-sm">
-                    Date end: {formatDateTime(item.end_date)}
+                  <p className="text-gray-500 text-sm flex justify-between">
+                    <span> Date end: {formatDateTime(item.end_date)}</span>
+
+                    <button className="text-sm text-mainColor2 font-semibold">
+                      <Link to={`/staff/pencil-book-details/${item.id}`}>
+                        View
+                      </Link>
+                    </button>
                   </p>
                 </div>
               </div>

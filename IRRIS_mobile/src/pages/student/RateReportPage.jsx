@@ -12,6 +12,7 @@ import ErrorModal from "@/src/components/ErrorModal";
 import SuccessModal from "@/src/components/SuccessModal";
 import { rateReport } from "@/src/services/api/StudentService";
 import toast, { Toaster } from "react-hot-toast";
+import useUserStore from "@/src/services/state/userStore";
 
 const RatingInput = ({ value, onChange }) => {
   return (
@@ -27,6 +28,9 @@ const RatingInput = ({ value, onChange }) => {
 const RateReportPage = () => {
   const navigate = useNavigate();
   const { reportId } = useParams();
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
   const [reportData, setReportData] = useState(null);
   const [currentImage, setCurrentImage] = useState(null);
   const [comments, setComments] = useState(null);
@@ -137,7 +141,7 @@ const RateReportPage = () => {
   }, []);
 
   return (
-    <div className="h-screen w-screen background">
+    <div className="h-screen w-screen bg-secondaryColor">
       <Toaster />
       {isError.error && (
         <ErrorModal
@@ -148,32 +152,32 @@ const RateReportPage = () => {
 
       {isSuccess && (
         <SuccessModal
-          message={"Rate Succesfully! +10 points"}
+          message={user?.user_role === 'student' ? "Rate Succesfully! +10 points" : "Rate Succesfully!"}
           handleCloseButton={() => navigate("/report-history")}
         />
       )}
       <PageTitle title="RATE & REVIEW" />
 
-      <div className=" p-3 pt-12">
-        <div className="bg-white rounded-md p-3 space-y-5 shadow-md">
+      <div className=" p-3 pt-5">
+        <div className=" rounded-md p-3 space-y-5 ">
           <div>
             {/* <p>asdasdsad</p>
             <p>asdasdsad</p>
             <p>asdasdsad</p> */}
 
-            <div className="flex justify-center space-x-5 font-semibold">
+            <div className="flex justify-center space-x-10 font-semibold">
               {openImageModal && (
                 <ImageModal
                   imgSrc={currentImage}
                   onCloseModal={() => setOpenImageModal(false)}
                 />
               )}
-              <div>
+              <div className="text-center">
                 <p>Before</p>
                 <img
                   alt="img-before"
                   src={getImageUrl(reportData?.image_before)}
-                  className="w-16 h-16 bg-gray-200 rounded-md"
+                  className="w-20 h-20 bg-gray-200 rounded-md"
                   onClick={() => {
                     setOpenImageModal(true);
                     setCurrentImage(reportData?.image_before);
@@ -181,7 +185,7 @@ const RateReportPage = () => {
                 />
               </div>
 
-              <div>
+              <div className="text-center">
                 <p>After</p>
                 <img
                   alt="img-after"
@@ -190,7 +194,7 @@ const RateReportPage = () => {
                     setOpenImageModal(true);
                     setCurrentImage(reportData?.image_after);
                   }}
-                  className="w-16 h-16 bg-gray-200 rounded-md"
+                  className="w-20 h-20 bg-gray-200 rounded-md"
                 />
               </div>
             </div>
@@ -207,12 +211,12 @@ const RateReportPage = () => {
                   value={rating[category]}
                   onChange={(value) => handleRatingChange(category, value)}
                 />
-                <p>{ratingLabels[rating[category]]}</p>
+                <p className="">{ratingLabels[rating[category]]}</p>
               </div>
             ))}
           </div>
 
-          <div className="">
+          <div className="space-y-1">
             <label for="comments ">Additional comments:</label>
 
             <textarea
@@ -220,7 +224,7 @@ const RateReportPage = () => {
               name="comments"
               value={comments}
               onChange={handleCommentsChange}
-              placeholder="Share more thoughts on the facility to help facility improvements"
+              placeholder="Provide additional feedback on the report for better insights"
               rows="5"
               cols="33"
               className="w-full rounded-md bg-gray-50"
@@ -229,7 +233,7 @@ const RateReportPage = () => {
 
           <div className="text-right">
             <button
-              className="bg-mainColor text-white font-bold text-xl px-10 py-2 rounded-md "
+              className="bg-mainColor2 text-white font-bold text-xl px-10 py-2 rounded-md "
               onClick={() => setIsShowConfirmation(true)}
             >
               Submit
