@@ -185,11 +185,11 @@ const Login = () => {
                 emailError.isError ? "border-rose-500" : ""
               } rounded-md p-3 w-full focus:outline-none focus:border-mainColor border-slate-500  border`}
             />
-            <p className={`text-red-400 italic `}>
+            <p className={`text-red-400  `}>
               <span className={`${emailError.isError ? "hidden" : "none"}`}>
                 .
               </span>
-              {emailError.isError && `*${emailError.message}`}
+              {emailError.isError && `${emailError.message}`}
             </p>
           </div>
 
@@ -204,11 +204,11 @@ const Login = () => {
                 passwordError.isError ? "border-rose-500" : ""
               } rounded-md p-3 w-full focus:outline-none focus:border-mainColor border-slate-500  border`}
             />
-            <p className={`text-red-400 italic `}>
+            <p className={`text-red-400  `}>
               <span className={`${passwordError.isError ? "hidden" : "none"}`}>
                 .
               </span>
-              {passwordError.isError && `*${passwordError.message}`}
+              {passwordError.isError && `${passwordError.message}`}
             </p>
 
             <button
@@ -230,7 +230,7 @@ const Login = () => {
         <div className="w-full text-center">
           <button
             onClick={handleSubmit}
-            className="py-4 bg-[#16425B] rounded-lg text-white font-semibold flex justify-center text-xl w-full inline-block"
+            className="py-4 bg-mainColor2 rounded-lg text-white font-semibold flex justify-center text-xl w-full inline-block"
           >
             {isLoading ? (
               <p className="flex items-center ">

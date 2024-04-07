@@ -16,8 +16,8 @@ const FacilityInputModal = ({
     >
       <div className="p-5 border w-full space-y-5 shadow-lg rounded-md bg-white relative">
         <div className="flex justify-between items-center">
-          <h4 className="text-2xl font-bold text-center mt-8 w-full">
-            ENTER FACILITY ID
+          <h4 className="text-lg font-bold text-center mt-8 w-full uppercase">
+            facility id/name
           </h4>
           <button
             onClick={onCloseModal}
@@ -32,17 +32,17 @@ const FacilityInputModal = ({
             type="text"
             name="qrCode"
             value={qrCode}
-            placeholder="Facility ID"
+            placeholder="Enter Facility ID/Name"
             className=" w-full rounded-md"
             onChange={handleOnChange}
           />
           <p
-            className={`text-red-500 italic text-center text-xl font-semibold mt-2`}
+            className={`text-red-500  text-center text-base font-semibold mt-2`}
           >
             <span className={`${qrCodeError.isError ? "hidden" : "none"}`}>
               .
             </span>
-            {qrCodeError.isError && `*${qrCodeError.message}`}
+            {qrCodeError.isError && `${qrCodeError.message}`}
           </p>
         </div>
         <div className="">

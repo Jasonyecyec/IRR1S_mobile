@@ -43,6 +43,7 @@ const PencilBookPage = () => {
     sound_setup: null,
     chairs: null,
     tables: null,
+    request_file: null,
   });
 
   const fetchFacility = async () => {
@@ -100,6 +101,15 @@ const PencilBookPage = () => {
   };
 
   const handleSoundSetup = (value) => {
+    if (currentSoundSetup === value) {
+      setCurrentSoundSetup("");
+      setForm((prev) => ({
+        ...prev,
+        sound_setup: null,
+      }));
+      return;
+    }
+
     setCurrentSoundSetup(value);
 
     setForm((prev) => ({
@@ -120,6 +130,21 @@ const PencilBookPage = () => {
     try {
       form.user_id = user?.id;
       form.facility_id = facility?.id;
+      const formData = new FormData();
+      formData.append("user_id", user?.id);
+      formData.append("facility_id", facility?.id);
+      formData.append("description", form.description);
+      formData.append("dateStart", form.dateStart);
+      formData.append("dateEnd", form.dateEnd);
+      formData.append("status", form.status);
+      formData.append("event_name", form.event_name);
+      formData.append("event_type", form.event_type);
+      formData.append("attendees", form.attendees);
+      formData.append("sound_setup", form.sound_setup);
+      formData.append("chairs", form.chairs);
+      formData.append("tables", form.tables);
+      formData.append("request_file", form.request_file);
+
       const response = await reserveFacilities(form);
       setIsSuccessModal(true);
       console.log("reserve response", response);
@@ -146,6 +171,14 @@ const PencilBookPage = () => {
       console.log("dateName", dateName);
       //   console.log("Updated dateStart:", selectedDate);
     }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]; // Get the first selected file
+    setForm((prev) => ({
+      ...prev,
+      request_file: file,
+    }));
   };
 
   return (
@@ -489,11 +522,31 @@ const PencilBookPage = () => {
               name="description"
               value={form.description}
               onChange={handleChange}
-              required
             ></textarea>
           </div>
 
-          <div className="flex space-x-5 font-semibold text-lg pt-5">
+          <div className="space-y-2">
+            <label
+              htmlFor="request_file"
+              className="font-semibold flex flex-col"
+            >
+              Reservation request letter
+              <span className="font-normal text-sm text-gray-500">
+                upload your reservation request letter here in pdf format
+              </span>
+            </label>
+
+            <input
+              type="file"
+              id="request_file"
+              name="request_file"
+              accept=".pdf"
+              onChange={handleFileChange}
+              className="border w-full text-sm rounded-md "
+            />
+          </div>
+
+          <div className="flex space-x-5 font-semibold text-lg pt-7">
             <button
               className="flex-1 border-2 text-black rounded-md font-semibold "
               onClick={(e) => {
