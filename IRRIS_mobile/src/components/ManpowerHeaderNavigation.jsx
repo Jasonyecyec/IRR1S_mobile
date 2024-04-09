@@ -26,10 +26,12 @@ const ManpowerHeaderNavigation = ({
 
       {title && <p className=" text-white text-lg">{title}</p>}
 
-      {showBell && (
+      {showBell ? (
         <button>
           <Bell size={30} color="#FFFFFF" />
         </button>
+      ) : (
+        <button></button>
       )}
     </div>
   );

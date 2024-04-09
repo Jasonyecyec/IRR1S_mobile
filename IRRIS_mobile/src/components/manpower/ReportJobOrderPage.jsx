@@ -85,13 +85,19 @@ const ReportJobOrderPage = ({
 
       {taskInProgress.status === "assigned" && (
         <div className="space-y-5">
-          <p className="text-center font-bold text-lg">
-            Task{" "}
+          <p className=" font-semibold text-base flex flex-col">
+            {/* Task{" "}
             {task === "report"
               ? "Report"
               : task === "request"
               ? "Request"
-              : "Daily"}
+              : "Daily"} */}
+
+            <span> Upload image</span>
+            <span className="text-sm font-normal text-gray-500">
+              {" "}
+              Upload image first before starting the task.
+            </span>
           </p>
           <div className="flex justify-center space-x-5 ">
             <button

@@ -70,7 +70,11 @@ const TasksPage = () => {
   const fullname = user?.first_name + " " + user?.last_name;
   return (
     <div className="h-full flex flex-col">
-      <ManpowerHeaderNavigation navigateTo={"home"} title={"Job Orders"} />
+      <ManpowerHeaderNavigation
+        navigateTo={"home"}
+        title={"Job Orders"}
+        showBell={false}
+      />
       <div className="p-5 space-y-3  flex flex-col flex-1">
         <div className="flex justify-end">
           <div className=" relative">

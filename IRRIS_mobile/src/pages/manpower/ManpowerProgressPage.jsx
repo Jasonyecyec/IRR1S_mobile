@@ -40,6 +40,7 @@ import RequestJobOrderPage from "@/src/components/manpower/RequestJobOrderPage";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../../index.css";
+import ManpowerHeaderNavigation from "@/src/components/ManpowerHeaderNavigation";
 
 const ManpowerProgressPage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -562,7 +563,13 @@ const ManpowerProgressPage = () => {
         return;
       }
 
-      navigate(`/manpower/rate/${taskInProgress?.id}`);
+      console.log("taskInProgress", taskInProgress);
+
+      if (taskInProgress.report_id === null) {
+        navigate(`/manpower/tasks`);
+      } else {
+        navigate(`/manpower/rate/${taskInProgress?.id}`);
+      }
     } else {
       navigate(`/manpower/tasks`);
     }
@@ -750,18 +757,11 @@ const ManpowerProgressPage = () => {
           </div>
         </div>
       )}
-
-      <div className="flex justify-between items-center bg-mainColor p-5">
-        <button onClick={handleProfileButton}>
-          <img src={UserSample} className="w-12 h-12 rounded-full " />
-        </button>
-
-        <button>
-          <Link to={`/manpower/notification/${user?.id}`}>
-            <img src={NotificationIcon} className="w-10 h-10 " />
-          </Link>
-        </button>
-      </div>
+      <ManpowerHeaderNavigation
+        navigateTo={"home"}
+        title={"Current Job Order"}
+        showBell={false}
+      />
 
       <div className="p-5 flex-1 flex flex-col  space-y-5">
         <h1 className="capitalize text-lg">

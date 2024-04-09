@@ -148,8 +148,10 @@ const HomePage = () => {
       user_role: user_roleCookie,
       referral_code: referralCode_Cookie,
     });
-    initializePusherBeams();
-    listenToNotification();
+
+    // initializePusherBeams();
+    // listenToNotification();
+
     fetchReport();
     fetchStudentPoints();
   }, []);
