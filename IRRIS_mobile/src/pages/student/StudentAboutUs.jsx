@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useNavigate } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom"; // Import useHistory
 import {
   SkipBack,
   SmileyAngry,
@@ -245,7 +245,7 @@ const StudentAboutUs = () => {
   };
   const [starColors, setStarColors] = useState(["", "", "", "", ""]);
 
-  //maintainabiity stars----------------------------------------------------------------------------------
+  //TODO: maintainabiity stars----------------------------------------------------------------------------------
   const [selectedStarmaintainability, setSelectedStarmaintainability] =
     useState(null);
   const [ratingMaintainability, setRatingMaintainability] = useState("0");
@@ -455,7 +455,7 @@ const StudentAboutUs = () => {
     //clear all the formdata
   };
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleConfirmation = async () => {
     setIsLoading(true);
@@ -486,7 +486,7 @@ const StudentAboutUs = () => {
       toast.success("Feedback submitted successfully!");
 
       // Once submitted successfully, close the confirmation modal
-      setShowConfirmationModal(false);
+      // setShowConfirmationModal(false);
       console.log("showConfirmationModal:", showConfirmationModal); // Log to track the modal's visibility
 
       // Show toaster notification
@@ -899,23 +899,21 @@ const StudentAboutUs = () => {
         <div></div>
       </div>
       <FeedbackCreateModal
-        isLoading={isLoading}
-        handleConfirmation={handleConfirmation}
         modalPropsFeedback={{
           openModalFeedback: openFeedbackModal,
-          onCloseModalFeedback: toggleFeedbackModal, // Close modal function
-
-          functionalityRating: ratingFunctionality, // Pass functionality rating as prop
-          maintainabilityRating: ratingMaintainability, // Pass maintainability rating as prop
+          onCloseModalFeedback: toggleFeedbackModal,
+          functionalityRating: ratingFunctionality,
+          maintainabilityRating: ratingMaintainability,
           portabilityRating: ratingPortability,
           efficiencyRating: ratingEfficiency,
           overallRating: ratingOverall,
           opinionRating: ratingOpinion,
           nameRating: ratingName,
           emailRating: ratingEmail,
-
-          // Pass other props as needed
         }}
+        isLoading={isLoading}
+        handleConfirmation={handleConfirmation}
+        onClose={toggleFeedbackModal} // Pass the onClose function here
       />
     </div>
   );

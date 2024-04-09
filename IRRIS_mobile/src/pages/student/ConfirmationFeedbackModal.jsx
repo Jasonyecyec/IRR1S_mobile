@@ -1,95 +1,129 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
-  Checkbox,
   Label,
   Modal,
-  TextInput,
-  Dropdown,
-  FileInput,
-  Spinner,
 } from "flowbite-react";
-import StudentAboutUs from "./StudentAboutUs";
-import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
-import { Link } from "react-router-dom"; // Import useHistory
+
+import { toast } from "react-hot-toast"; 
+import { Link, useNavigate } from "react-router-dom"; 
 
 import { getUserDetails } from "@/src/services/api/sharedService";
 import useUserStore from "../../services/state/userStore";
-
+import SuccessModal from "../../components/SuccessModal";
+import ErrorModal from "../../components/ErrorModal";
 
 const ConfirmationFeedbackModal = ({
   modalPropsFeedback,
-  isLoading,
   handleConfirmation,
+  onClose,
 }) => {
   const {
-    openModalFeedback,
-    onCloseModalFeedback,
-    functionalityRating,
-    maintainabilityRating,
-    portabilityRating,
-    efficiencyRating,
-    overallRating,
-    opinionRating,
-    nameRating,
-    emailRating,
-    // Other ratings values if needed
-  } = modalPropsFeedback;
+    openModalFeedback,onCloseModalFeedback,functionalityRating,maintainabilityRating,portabilityRating,efficiencyRating,
+    overallRating,opinionRating,nameRating,emailRating,} = modalPropsFeedback;
 
- //get the user details ()
- const { user, setUser } = useUserStore((state) => ({
-  user: state.user,
-  setUser: state.setUser,
-}));
-const [isLoadingUser, setIsLoadingUser] = useState(false);
-const [userDetails, setUserDetails] = useState(null);
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
 
-const fetchUserDetails = async () => {
-  setIsLoadingUser(true);
-  try {
-    const { user_details } = await getUserDetails(user?.id);
-    console.log("user details", user_details);
-    setUserDetails(user_details);
+  const [isLoadingUser, setIsLoadingUser] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isError, setIsError] = useState(false); // Define isError state
 
-    // Set the ratingName and ratingEmail states with user details
-    setRatingName(user_details.first_name + " " + user_details.last_name);
-    setRatingEmail(user_details.email);
-  } catch (error) {
-    console.log("error", error);
-  } finally {
-    setIsLoadingUser(false);
-  }
-};
+  const navigate = useNavigate();
 
-useEffect(() => {
-  fetchUserDetails(user?.id);
-}, []);
-
-  const handleConfirmAndClose = () => {
-    handleConfirmation();
-    onCloseModalFeedback();
-    showSuccessToast("Feedback submitted successfully!"); // Call the custom toast function
+  const fetchUserDetails = async () => {
+    setIsLoadingUser(true);
+    try {
+      const { user_details } = await getUserDetails(user?.id);
+      const hasSubmittedFeedbackWithinLast3Months = false; 
+      if (hasSubmittedFeedbackWithinLast3Months) {
+        setIsError(true);
+        setErrorMessage(
+          "You have already submitted feedback within the last 3 months."
+        );
+      }
+      // setUserDetails(user_details); // You might want to set userDetails here if needed
+    } catch (error) {
+      setIsError(true); // Set isError to true if there's an error
+      setErrorMessage("Error fetching user details"); // Set error message
+      console.log("Error fetching user details:", error);
+    } finally {
+      setIsLoadingUser(false);
+    }
   };
 
-  // Custom toast function with options
+  useEffect(() => {
+    fetchUserDetails(user?.id);
+  }, []);
+
+  const handleConfirmAndClose = async () => {
+    handleConfirmation();
+    try {
+      const feedbackSubmissionResult = await submitFeedback();
+      if (feedbackSubmissionResult.success) {
+        showSuccessToast("Feedback submitted successfully!");
+        handleOpenModal(true);
+      } else {
+        setIsError(true);
+        setErrorMessage(feedbackSubmissionResult.error);
+        handleOpenModal(false);
+      }
+    } catch (error) {
+      setIsError(true);
+      setErrorMessage("You already evaluated our system! Please come back again after 3 months.");
+      handleOpenModal(false);
+    }
+  };
+
   const showSuccessToast = (message) => {
     toast.success(message, {
-      duration: 6000, // Duration of the toast in milliseconds
-      position: "top-center", // Position of the toast on the screen
+      duration: 6000,
+      position: "top-center",
       style: {
-        background: "#4CAF50", // Background color of the toast
-        color: "#FFFFFF", // Text color of the toast
+        background: "#4CAF50",
+        color: "#FFFFFF",
       },
     });
   };
+
+  const handleOpenModal = (isSuccess) => {
+    setIsSuccess(isSuccess);
+  };
+
+  const handleCloseErrorModal = () => {
+    setIsError(false);
+    setErrorMessage("");
+  };
+
   return (
     <Modal
       show={modalPropsFeedback.openModalFeedback}
-      onClose={modalPropsFeedback.onCloseModalFeedback}
+      onClose={onCloseModalFeedback}
       size="lg"
       popup
       className="pt-[10rem]"
     >
+      {isSuccess && (
+        <SuccessModal
+          message="Feedback submitted successfully!"
+          handleCloseButton={() => {
+            setIsSuccess(false);
+            onClose(onCloseModalFeedback);
+            navigate(`/${user?.user_role}/profile`);
+          }}
+        />
+      )}
+      {isError && (
+        <div>
+          {console.log("Error modal shown: ", isError)}
+          <ErrorModal
+            message={errorMessage}
+            handleCloseButton={handleCloseErrorModal}
+          />
+        </div>
+      )}
       <Modal.Header className="bg-mainColor text-white p-3 rounded-t-lg">
         <Label
           value="Thank You for the Evaluation!"
@@ -97,9 +131,7 @@ useEffect(() => {
         />
       </Modal.Header>
       <Modal.Body>
-        {/* Your modal content goes here */}
         <div className="mb-5 mt-[1rem]">
-          {" "}
           <Label className="text-lg text-gray-600 ">
             Are you sure you want to confirm?
           </Label>
@@ -155,31 +187,31 @@ useEffect(() => {
               </Label>
             </div>
             <div className="flex flex-row">
-              <Label className="text-md text-gray-800 w-[40%]">
-                Opinion :
-              </Label>
+              <Label className="text-md text-gray-800 w-[40%]">Opinion :</Label>
               <Label className="text-md text-gray-800 w-[60%]">
                 {opinionRating}
               </Label>
             </div>
           </div>
         </div>
-
         <div className="flex justify-center align-items-center mt-6">
           <button
             type="submit"
-            onClick={handleConfirmAndClose} // Call handleConfirmAndClose on button click
+            onClick={handleConfirmAndClose}
             className="bg-mainColor h-[3rem] w-[50%] m-2 shadow-lg flex justify-center items-center text-white text-lg font-bold rounded-md p-1 px-3"
           >
-            <Link to={`/${user?.user_role}/profile`} className="text-white">
-              Confirm
-            </Link>
+            Confirm
           </button>
           <button
             className="bg-white  h-[3rem] w-[50%] m-2 shadow-lg flex justify-center items-center border border-gray-300  rounded-md p-1 px-3"
             onClick={modalPropsFeedback.onCloseModalFeedback}
           >
-            Cancel
+            <Link
+              to={`/${user?.user_role}/profile`}
+              className="text-black font-bold"
+            >
+              Cancel
+            </Link>
           </button>
         </div>
       </Modal.Body>
