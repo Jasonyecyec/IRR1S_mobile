@@ -58,7 +58,6 @@ const ManpowerHomePage = () => {
     setIsLoading(true);
     try {
       const { job_order } = await getJobOrder(user?.id);
-      console.log("fetch recent job order response", job_order);
       setRecentJobOrder(job_order);
     } catch (error) {
       console.log(error);
@@ -90,6 +89,7 @@ const ManpowerHomePage = () => {
   };
 
   const listenToJobOrder = () => {
+    console.log("listening");
     const userIdCookie = Cookies.get("user_id");
 
     const jobOrderChannel = window.Echo.channel(
@@ -100,7 +100,7 @@ const ManpowerHomePage = () => {
       `job-order-request-channel-${userIdCookie}`
     );
 
-    // LISTEN TO REPORT
+    //   // LISTEN TO REPORT
     jobOrderChannel.listen("JobOrderNotification", (notification) => {
       console.log(
         "Successfully subscribed to job-order-channel:",
@@ -111,6 +111,8 @@ const ManpowerHomePage = () => {
         notification.jobOrder &&
         Array.isArray(notification.jobOrder)
       ) {
+        console.log("job order recieved");
+
         notification.jobOrder.forEach((job) => {
           if (job.assigned_manpower === parseInt(userIdCookie, 10)) {
             console.log("setting job order");
@@ -193,9 +195,9 @@ const ManpowerHomePage = () => {
       });
     }
 
-    initializePusherBeams();
+    // initializePusherBeams();
 
-    listenToJobOrder();
+    // listenToJobOrder();
 
     fetchRecentJobOrder();
   }, []);
@@ -272,8 +274,7 @@ const ManpowerHomePage = () => {
                 <span className="absolute top-[-5px] right-[-5px] flex h-6 w-6 ">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-xs justify-center items-center text-white">
-                    {jobOrderDetails && <p> {jobOrderDetails.length}</p>}
-                    {console.log(jobOrderDetails)}
+                    !
                   </span>
                 </span>
                 // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
@@ -290,14 +291,19 @@ const ManpowerHomePage = () => {
               {isJobOrderRequestNotif && (
                 <span className="absolute top-[-5px] right-[-5px] flex h-6 w-6 ">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-xs justify-center items-center text-white"></span>
+                  <span className="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-xs justify-center items-center text-white">
+                    !
+                  </span>
                 </span>
                 // <span className="absolute top-[-3px] right-[-3px] bg-red-600  animate-pulse rounded-full w-4 h-4"></span>
               )}
               {console.log("job order requesst", isJobOrderRequestNotif)}
             </button>
 
-            <button className="bg-white shadow space-y-1  flex flex-col items-center justify-center w-28 h-28 rounded-md">
+            <button
+              onClick={() => navigate("/manpower/report-form")}
+              className="bg-white shadow space-y-1  flex flex-col items-center justify-center w-28 h-28 rounded-md"
+            >
               <Notepad className="text-[#0f59cb] w-10 h-10" />
               <span className="text-sm font-semibold text-[#0f59cb]">
                 {" "}

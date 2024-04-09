@@ -86,62 +86,62 @@ const StaffHomepage = () => {
     }
   };
 
-  const initializePusherBeams = async () => {
-    try {
-      const client = await beamsClient.start();
-      const userIdCookie = Cookies.get("user_id");
+  // const initializePusherBeams = async () => {
+  //   try {
+  //     const client = await beamsClient.start();
+  //     const userIdCookie = Cookies.get("user_id");
 
-      console.log("Pusher Beams initialized successfully", client);
+  //     console.log("Pusher Beams initialized successfully", client);
 
-      // Set user ID if needed
-      // await client.setUserId("USER_ID");
+  //     // Set user ID if needed
+  //     // await client.setUserId("USER_ID");
 
-      // Subscribe to push notifications
-      await client.setDeviceInterests([`notification-channel-${userIdCookie}`]);
-      console.log("Device interests have been set");
+  //     // Subscribe to push notifications
+  //     await client.setDeviceInterests([`notification-channel-${userIdCookie}`]);
+  //     console.log("Device interests have been set");
 
-      // Get and log device interests
-      const interests = await client.getDeviceInterests();
-      console.log("Device interests:", interests);
-    } catch (error) {
-      console.error("Error initializing Pusher Beams:", error);
-    }
-  };
+  //     // Get and log device interests
+  //     const interests = await client.getDeviceInterests();
+  //     console.log("Device interests:", interests);
+  //   } catch (error) {
+  //     console.error("Error initializing Pusher Beams:", error);
+  //   }
+  // };
 
-  const listenToNotification = () => {
-    const userIdCookie = Cookies.get("user_id");
+  // const listenToNotification = () => {
+  //   const userIdCookie = Cookies.get("user_id");
 
-    const notificationChannel = window.Echo.channel(
-      `notification-channel-${userIdCookie}`
-    );
+  //   const notificationChannel = window.Echo.channel(
+  //     `notification-channel-${userIdCookie}`
+  //   );
 
-    notificationChannel.listen("UserNotification", (notification) => {
-      console.log(
-        "Successfully subscribed to notification-channel:",
-        notification
-      );
+  //   notificationChannel.listen("UserNotification", (notification) => {
+  //     console.log(
+  //       "Successfully subscribed to notification-channel:",
+  //       notification
+  //     );
 
-      if (notification) {
-        setNotification(true);
-        // Check if there is a notification in local storage
-        const storedNotification = JSON.parse(
-          localStorage.getItem("notification")
-        );
+  //     if (notification) {
+  //       setNotification(true);
+  //       // Check if there is a notification in local storage
+  //       const storedNotification = JSON.parse(
+  //         localStorage.getItem("notification")
+  //       );
 
-        if (!storedNotification) {
-          // If there is no stored notification, store the received notification
-          setNotificationDetails(notification);
+  //       if (!storedNotification) {
+  //         // If there is no stored notification, store the received notification
+  //         setNotificationDetails(notification);
 
-          // Store the notification in local storage
-          localStorage.setItem("notification", JSON.stringify(notification));
-        }
-      } else {
-        // Update the state and store the updated notification in local storage
-        setNotificationDetails(notification);
-        localStorage.setItem("notification", JSON.stringify(notification));
-      }
-    });
-  };
+  //         // Store the notification in local storage
+  //         localStorage.setItem("notification", JSON.stringify(notification));
+  //       }
+  //     } else {
+  //       // Update the state and store the updated notification in local storage
+  //       setNotificationDetails(notification);
+  //       localStorage.setItem("notification", JSON.stringify(notification));
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
     if (user === null) {
@@ -160,9 +160,9 @@ const StaffHomepage = () => {
         user_role: user_roleCookie,
       });
     }
-    initializePusherBeams();
+    // initializePusherBeams();
 
-    listenToNotification();
+    // listenToNotification();
 
     fetchReport();
   }, []);

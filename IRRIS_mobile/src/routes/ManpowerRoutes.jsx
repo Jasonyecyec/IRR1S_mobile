@@ -8,6 +8,7 @@ import ManpowerNotificationPage from "../pages/manpower/ManpowerNotificationPage
 import ManpowerProgressPage from "../pages/manpower/ManpowerProgressPage";
 import ManpowerRatingPage from "../pages/manpower/ManpowerRatingPage";
 import ManpowerProfilePage from "../pages/manpower/ManpowerProfilePage";
+import ReportForm from "../pages/manpower/ReportForm";
 
 const ManpowerRoutes = [
   <Route
@@ -83,6 +84,16 @@ const ManpowerRoutes = [
     element={
       <TransitionWrapper location={location}>
         <ManpowerProfilePage />
+      </TransitionWrapper>
+    }
+  />,
+
+  <Route
+    key="manpowerRoute8"
+    path="/manpower/report-form"
+    element={
+      <TransitionWrapper location={location}>
+        <ReportForm />
       </TransitionWrapper>
     }
   />,

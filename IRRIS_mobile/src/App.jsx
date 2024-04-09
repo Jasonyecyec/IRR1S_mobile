@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import reactLogo from './assets/react.svg';
 import viteLogo from "/vite.svg";
 import {
@@ -50,15 +50,232 @@ import AchievementPage from "./pages/student/AchievementPage";
 import AchievementDetailsPage from "./pages/student/AchievementDetailsPage";
 import RewardsQualifiedPage from "./pages/student/RewardsQualifiedPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
+import useNotificationStore from "@/src/services/state/notificationStore";
+import beamsClient from "@/src/pushNotificationConfig";
+import Cookies from "js-cookie";
+import useUserStore from "./services/state/userStore";
+import useJobOrderStore from "./services/state/jobOrderStore";
 import "./index.css";
 
 function App() {
   const [scannedCode, setScannedCode] = useState("");
+  const { notification, setNotification, setNotificationDetails } =
+    useNotificationStore((state) => ({
+      notification: state.notification,
+      setNotification: state.setNotification,
+      setNotificationDetails: state.setNotificationDetails,
+    }));
+
+  const {
+    isJobOrderNotif,
+    isJobOrderRequestNotif,
+    jobOrderDetails,
+    jobOrderRequestDetails,
+    setjobOrderNotif,
+    setjobOrderRequestNotif,
+    setJobOrderDetails,
+    setJobOrderRequestDetails,
+  } = useJobOrderStore((state) => ({
+    isJobOrderNotif: state.isJobOrderNotif,
+    isJobOrderRequestNotif: state.isJobOrderRequestNotif,
+    jobOrderDetails: state.jobOrderDetails,
+    jobOrderRequestDetails: state.jobOrderRequestDetails,
+    setjobOrderNotif: state.setjobOrderNotif,
+    setjobOrderRequestNotif: state.setjobOrderRequestNotif,
+    setJobOrderDetails: state.setJobOrderDetails,
+    setJobOrderRequestDetails: state.setJobOrderRequestDetails,
+  }));
+
+  const { user, setUser } = useUserStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+  }));
+
   // const location = useLocation();
 
   const handleScan = (data) => {
     setScannedCode(data);
   };
+
+  useEffect(() => {
+    const initializePusherBeamsJobOrder = async () => {
+      try {
+        const client = await beamsClient.start();
+        const userIdCookie = Cookies.get("user_id");
+
+        console.log("Pusher Beams initialized successfully", client);
+
+        // Set user ID if needed
+        // await client.setUserId("USER_ID");
+
+        // Subscribe to push notifications
+        await client.setDeviceInterests([`job-order-${userIdCookie}`]);
+        console.log("Device interests have been set");
+
+        // Get and log device interests
+        const interests = await client.getDeviceInterests();
+        console.log("Device interests:", interests);
+      } catch (error) {
+        console.error("Error initializing Pusher Beams:", error);
+      }
+    };
+
+    const initializePusherBeams = async () => {
+      try {
+        const client = await beamsClient.start();
+        const userIdCookie = Cookies.get("user_id");
+
+        console.log("Pusher Beams initialized successfully", client);
+
+        // Set user ID if needed
+        // await client.setUserId("USER_ID");
+
+        // Subscribe to push notifications
+        await client.setDeviceInterests([
+          `notification-channel-${userIdCookie}`,
+        ]);
+        console.log("Device interests have been set");
+
+        // Get and log device interests
+        const interests = await client.getDeviceInterests();
+        console.log("Device interests:", interests);
+      } catch (error) {
+        console.error("Error initializing Pusher Beams:", error);
+      }
+    };
+
+    const listenToNotification = () => {
+      const userIdCookie = Cookies.get("user_id");
+
+      const notificationChannel = window.Echo.channel(
+        `notification-channel-${userIdCookie}`
+      );
+
+      notificationChannel.listen("UserNotification", (notification) => {
+        console.log(
+          "Successfully subscribed to notification-channel:",
+          notification
+        );
+
+        if (notification) {
+          console.log("recieved notif");
+          setNotification(true);
+          // Check if there is a notification in local storage
+          const storedNotification = JSON.parse(
+            localStorage.getItem("notification")
+          );
+
+          if (!storedNotification) {
+            // If there is no stored notification, store the received notification
+            setNotificationDetails(notification);
+
+            // Store the notification in local storage
+            localStorage.setItem("notification", JSON.stringify(notification));
+          }
+        } else {
+          // Update the state and store the updated notification in local storage
+          setNotificationDetails(notification);
+          localStorage.setItem("notification", JSON.stringify(notification));
+        }
+      });
+    };
+
+    const listenToJobOrder = () => {
+      console.log("listening");
+      const userIdCookie = Cookies.get("user_id");
+
+      const jobOrderChannel = window.Echo.channel(
+        `job-order-channel-${userIdCookie}`
+      );
+
+      const jobOrderRequestChannel = window.Echo.channel(
+        `job-order-request-channel-${userIdCookie}`
+      );
+
+      //   // LISTEN TO REPORT
+      jobOrderChannel.listen("JobOrderNotification", (notification) => {
+        console.log(
+          "Successfully subscribed to job-order-channel:",
+          notification
+        );
+        if (
+          notification &&
+          notification.jobOrder &&
+          Array.isArray(notification.jobOrder)
+        ) {
+          console.log("job order recieved");
+
+          notification.jobOrder.forEach((job) => {
+            // if (job.assigned_manpower === parseInt(userIdCookie, 10)) {
+            console.log("setting job order");
+            setjobOrderNotif(true);
+
+            setJobOrderDetails((prev) => {
+              const updatedJobOrderDetails = { ...prev, job };
+              console.log("updatedJobOrderDetails", updatedJobOrderDetails);
+
+              // set the job order to local storage
+              localStorage.setItem(
+                "job_order",
+                JSON.stringify(updatedJobOrderDetails)
+              );
+              return updatedJobOrderDetails;
+            });
+            // }
+          });
+        }
+      });
+
+      // LISTEN TO REQUEST
+      jobOrderRequestChannel.listen(
+        "JobOrderRequestNotification",
+        (notification) => {
+          console.log(
+            "Successfully subscribed to job-order-request-channel:",
+            notification
+          );
+          setjobOrderRequestNotif(true);
+
+          if (
+            notification &&
+            notification.jobOrderRequest &&
+            Array.isArray(notification.jobOrderRequest)
+          ) {
+            notification.jobOrderRequest.forEach((job) => {
+              setjobOrderRequestNotif(true);
+
+              setJobOrderRequestDetails((prev) => {
+                const updatedJobOrderDetails = { ...prev, job };
+                console.log("updatedJobOrderDetails", updatedJobOrderDetails);
+                // set the job order to local storage
+                localStorage.setItem(
+                  "job_order_request",
+                  JSON.stringify(updatedJobOrderDetails)
+                );
+                return updatedJobOrderDetails;
+              });
+            });
+          }
+        }
+      );
+    };
+
+    if (user && user.user_role === "manpower") {
+      initializePusherBeamsJobOrder();
+      listenToJobOrder();
+    }
+
+    if (user && user.user_role === "student") {
+      initializePusherBeams();
+      listenToNotification();
+    }
+
+    if (user && user.user_role === "staff") {
+      initializePusherBeams();
+      listenToNotification();
+    }
+  }, [user]);
+
   return (
     <>
       <Routes>
