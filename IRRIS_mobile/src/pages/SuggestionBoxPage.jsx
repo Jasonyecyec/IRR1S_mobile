@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { reportSuggestion } from "../services/api/sharedService";
 import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
 import SuccessModal from "../components/SuccessModal";
+import ErrorModal from "../components/ErrorModal";
 
 import {
   ArrowLeft,
@@ -74,24 +75,6 @@ const SuggestionBoxPage = () => {
   });
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedIssue, setSelectedIssue] = useState("");
-
-  const issueCategoriesData = {
-    "Maintenance and Repairs": {
-      "Roof Leaks": "carpentry",
-      "Window Breaks": "carpentry",
-      // other issues...
-    },
-    "Cleanliness and Sanitation": {
-      "Restroom Cleanliness": "maintenance",
-      "Garbage Disposal": "maintenance",
-      // other issues...
-    },
-    "Temperature and Ventilation": {
-      "HVAC Problems": "electrical",
-      "Heating/Cooling": "electrical",
-      // other issues...
-    },
-  };
 
   const navigate = useNavigate();
 
@@ -182,16 +165,32 @@ const SuggestionBoxPage = () => {
   const onCloseModalSubmit = () => {
     setOpenModalSubmit(false);
   };
+
   const [isError, setIsError] = useState({
     error: false,
     message: "",
   });
+  const [errorMessage, setErrorMessage] = useState(""); // State variable to store the error message
+
+  const handleOpenModal = (isSuccess) => {
+    setIsSuccess(isSuccess);
+  };
+  // Define a function to handle closing the error modal
+  const handleCloseErrorModal = () => {
+    setIsError({
+      error: false,
+      message: "Please come again",
+    });
+    navigate("/login");
+  };
+
   const handleCloseButton = () => {
     setIsError({
       error: false,
       message: "",
     });
   };
+
   const handleConfirmButton = () => {
     setIsSuccess(true);
 
@@ -233,7 +232,6 @@ const SuggestionBoxPage = () => {
       },
     });
   };
-
   const handleConfirmButtonSubmit = async () => {
     setIsLoading(true);
     try {
@@ -241,34 +239,103 @@ const SuggestionBoxPage = () => {
       formDataReport.append("facility_id", form.facility_id);
       formDataReport.append("room", form.room);
       formDataReport.append("location", form.location);
-      // formDataReport.append("issue_type", form.issueType);
       formDataReport.append("description", form.description);
       formDataReport.append("status", form.status);
-      // Append the file if it exists
+
       if (imageFile) {
-        formDataReport.append("image_before", imageFile); // Append image file to form data
-        // Log the appended image file
-        console.log("Appended image file:", imageFile);
+        formDataReport.append("image_before", imageFile);
       }
+
       setOpenModalSubmit(false);
 
-      // Show the success toast message
-      showSuccessToast("Suggestion reported successfully!");
-      console.log("form", form);
       const response = await reportSuggestion(formDataReport);
-      setisOpenModal(true);
 
+      // const {anonymousSubmissionResult} = await submitAnonymous();
+      // if (response.message) {
+      //   showSuccessToast("Suggestion submitted successfully!");
+      //   console.log("SuccessModal is rendered"); // Add console log statement
+
+      //   handleOpenModal(true);
+      // } else {
+      //   setIsError(true);
+      //   setErrorMessage(response.message);
+      //   console.log("ErrorModal is rendered"); // Add console log statement
+
+      //   handleOpenModal(false);
+      // }
+      // setisOpenModal(true);
+      if (response.message) {
+        showSuccessToast("Suggestion submitted successfully!");
+        // Open success modal
+        setOpenModalSubmit(false); // Close the confirmation modal
+        setOpenModal(true); // Open the success modal
+      } else {
+        // Set error state
+        setIsError({
+          error: true,
+          message:
+            "You already anonymously reported. Please try again after 7 days.",
+        });
+      }
       navigate(response.route);
-      console.log("Navigating to:", response.route);
+      // showSuccessToast("Suggestion reported successfully!");
     } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        // If the error contains a custom message from the server
+        setIsError({ error: true, message: error.response.data.error });
+      } else {
+        // If the error doesn't contain a custom message, use a generic error message
+        setIsError({
+          error: true,
+          message:
+            "You already anonymously reported. Please try again after 7 days.",
+        });
+      }
       console.error(error);
-      navigate(error.response.data.route, {
-        state: { errorMessage: error.response.data.error },
-      });
     } finally {
       setIsLoading(false);
     }
   };
+
+  // const handleConfirmButtonSubmit = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const formDataReport = new FormData();
+  //     formDataReport.append("facility_id", form.facility_id);
+  //     formDataReport.append("room", form.room);
+  //     formDataReport.append("location", form.location);
+  //     // formDataReport.append("issue_type", form.issueType);
+  //     formDataReport.append("description", form.description);
+  //     formDataReport.append("status", form.status);
+  //     // Append the file if it exists
+  //     if (imageFile) {
+  //       formDataReport.append("image_before", imageFile); // Append image file to form data
+  //       // Log the appended image file
+  //       console.log("Appended image file:", imageFile);
+  //     }
+  //     setOpenModalSubmit(false);
+
+  //     // Show the success toast message
+  //     showSuccessToast("Suggestion reported successfully!");
+  //     console.log("form", form);
+  //     const response = await reportSuggestion(formDataReport);
+  //     setisOpenModal(true);
+
+  //     navigate(response.route);
+  //     console.log("Navigating to:", response.route);
+  //   } catch (error) {
+  //     setIsError({
+  //       error: true,
+  //       message: "Error submitting suggestion: " + error.message,
+  //     });
+  //     console.error(error);
+  //     navigate(error.response.data.route, {
+  //       state: { errorMessage: error.response.data.error },
+  //     });
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const handleSubmitButton = (e) => {
     e.preventDefault();
     console.log("Form data:", form); // Check if issue_type is included in form data
@@ -350,9 +417,9 @@ const SuggestionBoxPage = () => {
     setImageSrc(null); // Reset the image source
   };
 
-  //------------------------------------------------------------------------------------------------------------------
+  //!------------------------------------------------------------------------------------------------------------------
 
-  //camera open functions
+  //TODO: camera open functions
 
   return (
     // content of the page
@@ -366,13 +433,33 @@ const SuggestionBoxPage = () => {
         />
       )}
 
-      {isOpenModal && (
+      {/* {isOpenModal && (
         <SuccessModal
           message="Suggestion Reported Successfully!"
           handleCloseButton={() => navigate("/login")}
         />
+      )} */}
+      {/* Render the ErrorModal component if isError is true */}
+      {/* {isError.error && (
+        <ErrorModal
+          message={isError.message}
+          handleCloseButton={handleCloseErrorModal} // Pass the function to close the error modal
+        />
+      )} */}
+      {openModal && (
+        <SuccessModal
+          message="Suggestion Reported Successfully!"
+          handleCloseButton={() => navigate("/login")}
+          
+        />
       )}
-
+      {/* Render the ErrorModal component if isError is true */}
+      {isError.error && (
+        <ErrorModal
+          message={isError.message}
+          handleCloseButton={handleCloseErrorModal}
+        />
+      )}
       {openModalSubmit && (
         <ConfirmationModalSuggestion
           isLoading={isLoading}
@@ -381,8 +468,6 @@ const SuggestionBoxPage = () => {
           content="Do you confirm that the details are correct?"
         />
       )}
-
-     
 
       {isCameraOpen && (
         <div className="absolute top-0  left-0 bg-gray-700 bg-opacity-70 z-10 w-full h-full ">
