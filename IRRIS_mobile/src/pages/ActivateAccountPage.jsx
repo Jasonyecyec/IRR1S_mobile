@@ -143,6 +143,12 @@ const ActivateAccountPage = () => {
       return;
     }
 
+    // Check if password meets strength requirements
+  if (passwordValidationMessage !== "Password Strength: Strong") {
+    notify("Password must meet strength requirements.");
+    return;
+  }
+
     if (currentFilter === "student") {
       try {
         setIsLoading(true);
