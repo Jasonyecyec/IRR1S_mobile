@@ -34,30 +34,49 @@ const ActivateAccountPage = () => {
   const handlePasswordChange = (event) => {
     const { value } = event.target;
     const { isValid, errors } = validatePassword(value);
+    const trimmedValue = value.trim(); // Trim whitespace from the input value
+
+    
+     // Check if password is empty or only whitespace
+  if (trimmedValue === "") {
+    setPasswordValidationMessage("Enter your Password.");
+  } else {
+    // Validate password strength
+    const { isValid, errors } = validatePassword(trimmedValue);
     if (!isValid) {
       setPasswordValidationMessage(errors);
     } else {
       setPasswordValidationMessage("Password Strength: Strong");
     }
+  }
     setForm({ ...form, password: value });
 
     //check if the confirm password match also
     // Check if passwords match when password changes
-    if (form.confirm_password === value) {
-      setPasswordMatchMessage("Passwords match.");
-    } else {
-      setPasswordMatchMessage("Passwords don't match.");
-    }
+   // Check if passwords match when password changes
+  if (form.confirm_password.trim() !== "" && form.confirm_password !== value) {
+    setPasswordMatchMessage("Passwords don't match.");
+  } else {
+    setPasswordMatchMessage(""); // Reset message if confirm password is empty or matches
+  }
   };
 
   const handleConfirmPasswordChange = (event) => {
     const { value } = event.target;
+    const trimmedValue = value.trim(); // Trim whitespace from the input value
+
     // Check if passwords match
-    if (value !== form.password) {
+     // Check if password is empty or only whitespace
+  if (trimmedValue === "") {
+    setPasswordMatchMessage("Enter a password first.");
+  } else {
+    // Check if passwords match
+    if (trimmedValue !== form.password) {
       setPasswordMatchMessage("Passwords don't match.");
     } else {
       setPasswordMatchMessage("Passwords match.");
     }
+  }
     setForm({ ...form, confirm_password: value });
   };
 
@@ -144,10 +163,10 @@ const ActivateAccountPage = () => {
     }
 
     // Check if password meets strength requirements
-  if (passwordValidationMessage !== "Password Strength: Strong") {
-    notify("Password must meet strength requirements.");
-    return;
-  }
+    if (passwordValidationMessage !== "Password Strength: Strong") {
+      notify("Password must meet strength requirements.");
+      return;
+    }
 
     if (currentFilter === "student") {
       try {
