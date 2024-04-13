@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Label,
-  Modal,
-} from "flowbite-react";
+import { Button, Label, Modal } from "flowbite-react";
 
-import { toast } from "react-hot-toast"; 
-import { Link, useNavigate } from "react-router-dom"; 
+import { toast } from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 import { getUserDetails } from "@/src/services/api/sharedService";
 import useUserStore from "../../services/state/userStore";
@@ -19,8 +15,17 @@ const ConfirmationFeedbackModal = ({
   onClose,
 }) => {
   const {
-    openModalFeedback,onCloseModalFeedback,functionalityRating,maintainabilityRating,portabilityRating,efficiencyRating,
-    overallRating,opinionRating,nameRating,emailRating,} = modalPropsFeedback;
+    openModalFeedback,
+    onCloseModalFeedback,
+    functionalityRating,
+    maintainabilityRating,
+    portabilityRating,
+    efficiencyRating,
+    overallRating,
+    opinionRating,
+    nameRating,
+    emailRating,
+  } = modalPropsFeedback;
 
   const { user } = useUserStore((state) => ({
     user: state.user,
@@ -28,8 +33,11 @@ const ConfirmationFeedbackModal = ({
 
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(
+    "You already Evaluated our system, please try again after 60 days"
+  );
   const [isError, setIsError] = useState(false); // Define isError state
+  const [isLoading, setIsLoading] = useState(false); // Define isLoading state
 
   const navigate = useNavigate();
 
@@ -37,7 +45,7 @@ const ConfirmationFeedbackModal = ({
     setIsLoadingUser(true);
     try {
       const { user_details } = await getUserDetails(user?.id);
-      const hasSubmittedFeedbackWithinLast3Months = false; 
+      const hasSubmittedFeedbackWithinLast3Months = false;
       if (hasSubmittedFeedbackWithinLast3Months) {
         setIsError(true);
         setErrorMessage(
@@ -58,22 +66,61 @@ const ConfirmationFeedbackModal = ({
     fetchUserDetails(user?.id);
   }, []);
 
+  // const handleConfirmAndClose = async () => {
+  //   handleConfirmation();
+  //   try {
+  //     const feedbackSubmissionResult = await submitFeedback();
+  //     if (feedbackSubmissionResult.success) {
+  //       showSuccessToast("Feedback submitted successfully!");
+  //       handleOpenModal(true);
+  //       // Reset isError state when submission is successful
+  //     setIsError(false);
+  //     setErrorMessage("");
+  //     } else {
+  //       setIsError(true);
+  //       setErrorMessage(feedbackSubmissionResult.error);
+  //       handleOpenModal(false);
+  //     }
+  //   } catch (error) {
+  //     setIsError(true);
+  //     setErrorMessage("You already evaluated our system! Please come back again after 3 months.");
+  //     handleOpenModal(false);
+  //   }
+  // };
+
   const handleConfirmAndClose = async () => {
-    handleConfirmation();
+    setIsLoading(true);
     try {
-      const feedbackSubmissionResult = await submitFeedback();
-      if (feedbackSubmissionResult.success) {
+      const response = await handleConfirmation(); // Wait for handleConfirmation function to complete and return response
+      if (response.message) {
         showSuccessToast("Feedback submitted successfully!");
-        handleOpenModal(true);
+        setIsSuccess(true);
+
+        // You may want to close the modal here
+        // onClose(); // Close the modal
       } else {
-        setIsError(true);
-        setErrorMessage(feedbackSubmissionResult.error);
-        handleOpenModal(false);
+        setIsSuccess(false);
+        // Set error state
+        setIsError({
+          error: true,
+          message: "You already evaluated . Please try again after 60 days.",
+        });
       }
     } catch (error) {
-      setIsError(true);
-      setErrorMessage("You already evaluated our system! Please come back again after 3 months.");
-      handleOpenModal(false);
+      if (error.response && error.response.data && error.response.data.error) {
+        // If the error contains a custom message from the server
+        setIsError({ error: true, message: error.response.data.error });
+      } else {
+        // If the error doesn't contain a custom message, use a generic error message
+        setIsError({
+          error: true,
+          message:
+            "You already evaluated our system. Please try again after 60 days.",
+        });
+      }
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -95,6 +142,8 @@ const ConfirmationFeedbackModal = ({
   const handleCloseErrorModal = () => {
     setIsError(false);
     setErrorMessage("");
+    onClose();
+    navigate(`/${user?.user_role}/profile`);
   };
 
   return (
