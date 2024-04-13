@@ -26,6 +26,41 @@ const ActivateAccountPage = () => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
 
+  //password validation
+  const [passwordValidationMessage, setPasswordValidationMessage] =
+    useState("");
+  const [passwordMatchMessage, setPasswordMatchMessage] = useState("");
+
+  const handlePasswordChange = (event) => {
+    const { value } = event.target;
+    const { isValid, errors } = validatePassword(value);
+    if (!isValid) {
+      setPasswordValidationMessage(errors);
+    } else {
+      setPasswordValidationMessage("Password Strength: Strong");
+    }
+    setForm({ ...form, password: value });
+
+    //check if the confirm password match also
+    // Check if passwords match when password changes
+    if (form.confirm_password === value) {
+      setPasswordMatchMessage("Passwords match.");
+    } else {
+      setPasswordMatchMessage("Passwords don't match.");
+    }
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    const { value } = event.target;
+    // Check if passwords match
+    if (value !== form.password) {
+      setPasswordMatchMessage("Passwords don't match.");
+    } else {
+      setPasswordMatchMessage("Passwords match.");
+    }
+    setForm({ ...form, confirm_password: value });
+  };
+
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -170,6 +205,8 @@ const ActivateAccountPage = () => {
 
     console.log("form", form);
   };
+
+  //Password validation
 
   return (
     <div className=" h-screen w-screen bg-secondaryColor 2  flex flex-col p-8  relative">
@@ -333,9 +370,18 @@ const ActivateAccountPage = () => {
                 value={form.password}
                 className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
                 focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                onChange={handleInputChange}
+                onChange={handlePasswordChange}
                 required
               />
+              <p
+                className={
+                  passwordValidationMessage === "Password Strength: Strong"
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+              >
+                {passwordValidationMessage}
+              </p>
 
               <button
                 className="absolute right-2 top-8 "
@@ -361,9 +407,18 @@ const ActivateAccountPage = () => {
                 value={form.confirm_password}
                 className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
                 focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                onChange={handleInputChange}
+                onChange={handleConfirmPasswordChange}
                 required
               />
+              <p
+                className={
+                  passwordMatchMessage === "Passwords match."
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+              >
+                {passwordMatchMessage}
+              </p>
 
               <button
                 className="absolute right-2 top-8 "
