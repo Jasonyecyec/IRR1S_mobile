@@ -486,12 +486,14 @@ const StudentAboutUs = () => {
       toast.success("Feedback submitted successfully!");
 
       // Once submitted successfully, close the confirmation modal
-      // setShowConfirmationModal(false);
+      // setShowConfirmationModal(false);   
       console.log("showConfirmationModal:", showConfirmationModal); // Log to track the modal's visibility
 
       // Show toaster notification
 
       const response = await feedbackEvaluation(formDataFeedback);
+      return response; // Return the response from the server
+
       //navigate(response.route);
     } catch (error) {
       console.error(error);
