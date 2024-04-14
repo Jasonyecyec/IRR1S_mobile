@@ -37,11 +37,11 @@ const ActivateAccountPage = () => {
     }, 800);
   }, []);
 
-   // Function to handle closing the modal
-   const handleCloseModal = () => {
+  // Function to handle closing the modal
+  const handleCloseModal = () => {
     setTermsAndConditions(false);
   };
-  
+
   //password validation
   const [passwordValidationMessage, setPasswordValidationMessage] =
     useState("");
@@ -171,8 +171,15 @@ const ActivateAccountPage = () => {
     }
   };
 
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+
+  const handleCheckboxChange = (e) => {
+    setIsCheckboxChecked(e.target.checked);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isCheckboxChecked) return;
 
     //check if password the same
     if (form.password !== form.confirm_password) {
@@ -495,7 +502,27 @@ const ActivateAccountPage = () => {
               </div>
             )}
 
-            <button className=" w-full bg-mainColor2 text-white font-bold rounded-lg py-3">
+            <div className="flex items-center mb-5">
+              <input
+                type="checkbox"
+                id="termsCheckbox"
+                checked={isCheckboxChecked}
+                onChange={handleCheckboxChange}
+                className="mr-2"
+              />
+              <label htmlFor="termsCheckbox" className="text-sm">
+                I agree to the{" "}
+                <Link to="#" onClick={() => setTermsAndConditions(true)}>
+                  Terms and Conditions
+                </Link>
+              </label>
+            </div>
+            <button
+              disabled={!isCheckboxChecked}
+              className={`text-white h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center ${
+                !isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
               Submit
             </button>
           </div>
@@ -512,7 +539,12 @@ const ActivateAccountPage = () => {
           </span>
         </p>
       </div>
-      {termsAndConditions && <TermsAndCondition handleCloseModal={handleCloseModal} isLoading={isLoading}  />}
+      {termsAndConditions && (
+        <TermsAndCondition
+          handleCloseModal={handleCloseModal}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   );
 };
