@@ -55,6 +55,7 @@ import beamsClient from "@/src/pushNotificationConfig";
 import Cookies from "js-cookie";
 import useUserStore from "./services/state/userStore";
 import useJobOrderStore from "./services/state/jobOrderStore";
+import ForgotPassword from "./components/ui/ForgotPassword";
 import "./index.css";
 
 function App() {
@@ -572,6 +573,14 @@ function App() {
           element={
             <TransitionWrapper location={location}>
               <SuggestionBoxPage />
+            </TransitionWrapper>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <TransitionWrapper location={location}>
+              <ForgotPassword />
             </TransitionWrapper>
           }
         />

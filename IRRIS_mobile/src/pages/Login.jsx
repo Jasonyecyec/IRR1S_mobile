@@ -167,12 +167,12 @@ const Login = () => {
     <div className=" h-screen w-screen flex flex-col items-center justify-center   relative">
       <Toaster />
 
-      <div className="bg-white rounded-md w-[80%] flex flex-col items-center justify-center space-y-8 h-[27rem]  px-5 py-10 z-10 shadow-lg relative mb-20">
+      <div className="bg-white rounded-md w-[80%] flex flex-col items-center justify-center space-y-8 h-[30rem]  px-5 py-10 z-10 shadow-lg relative mb-20">
         <div className="absolute top-[-3rem] rounded-full bg-white shadow-md">
           <img src={QCULogo} alt="qcu-logo" className="w-24 h-24" />
         </div>
 
-        <div className="relative w-full items-center space-y-8">
+        <div className="relative w-full items-center space-y-8 pt-10 ">
           <div>
             {" "}
             <input
@@ -242,15 +242,36 @@ const Login = () => {
             )}
           </button>
 
-          <p className="mt-5 text-sm text-end text-slate-700">
-            Doesn't have an account?{" "}
-            <Link to="/activate">
-              <span className="font-bold text-[#16425B]">Register</span>
-            </Link>
-          </p>
+          <div className="flex justify-between mt-5">
+            <p className="text-sm text-end mt-1 text-slate-700">
+              <Link to="/forgot-password">
+                <span className="font-bold text-[#16425B]">
+                  Forgot Password?
+                </span>
+              </Link>
+            </p>
+            <div className="flex flex-col items-end">
+              {" "}
+              {/* Adjusted flex direction and alignment */}
+              <Link to="/activate" className="">
+                {" "}
+                {/* Added mt-1 class */}
+                <span className="font-bold text-sm text-[#16425B]">
+                  Register
+                </span>
+              </Link>
+              <p className="text-xs text-slate-700">
+                {" "}
+                {/* Removed mt-5 class */}
+                Don't have an account?{" "}
+              </p>
+             
+            </div>
+          </div>
+
           <div className="flex justify-end mt-5 ">
             <Link to="/suggestion-box">
-              <span className="font-bold text-[#16425B]">Suggestion</span>
+              <span className="font-bold text-sm text-[#16425B]">Suggestion</span>
             </Link>
           </div>
         </div>
