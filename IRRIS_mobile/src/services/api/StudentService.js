@@ -20,11 +20,11 @@ export const verifyOTP = async (email, otp) => {
   }
 };
 
-export const getReportStudent = async (userId,status = null) => {
+export const getReportStudent = async (userId, status = null) => {
   try {
     const params = status !== null ? { status } : {};
-    const response = await api.get(`/report-student/${userId}`,{params});
-    console.log("Report response",response)
+    const response = await api.get(`/report-student/${userId}`, { params });
+    console.log("Report response", response);
     return response.data;
   } catch (error) {
     console.error("Get Report  error", error.response);
@@ -32,7 +32,20 @@ export const getReportStudent = async (userId,status = null) => {
   }
 };
 
+export const getCouponDetails = async (id) => {
+  try {
+    const response = await api.get(`/coupon-details/${id}`);
 
+    console.log("Fetch coupon-details response:", response);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Fetch coupon-details error:",
+      error.response || error.message
+    );
+    throw error;
+  }
+};
 
 // export const getUser = async (email, otp) => {
 //   try {
@@ -68,10 +81,10 @@ export const createPassword = async (email, password, confirmPassword) => {
   }
 };
 
-export const rateReport = async (id,form) => {
+export const rateReport = async (id, form) => {
   try {
-    const response = await api.post(`/rate-report-student/${id}`,form);
-    console.log("Rate report successfully",response)
+    const response = await api.post(`/rate-report-student/${id}`, form);
+    console.log("Rate report successfully", response);
     return response.data;
   } catch (error) {
     console.error("Rate report  error", error.response);
@@ -79,11 +92,10 @@ export const rateReport = async (id,form) => {
   }
 };
 
-
 export const getStudentPoints = async (id) => {
   try {
     const response = await api.get(`/student-points/${id}`);
-    console.log("Student  points",response)
+    console.log("Student  points", response);
     return response.data;
   } catch (error) {
     console.error("Get Student  error", error.response);
@@ -91,14 +103,17 @@ export const getStudentPoints = async (id) => {
   }
 };
 
-export const getStudentPointsReceived= async (id) => {
+export const getStudentPointsReceived = async (id) => {
   try {
     const response = await api.get(`/student-points-received/${id}`);
 
-    console.log('Fetch student points receivedresponse:', response);
+    console.log("Fetch student points receivedresponse:", response);
     return response.data;
   } catch (error) {
-    console.error('Fetch student points receivedresponse error:', error.response || error.message);
+    console.error(
+      "Fetch student points receivedresponse error:",
+      error.response || error.message
+    );
     throw error;
   }
 };
@@ -107,22 +122,28 @@ export const getStudentAchievements = async (id) => {
   try {
     const response = await api.get(`/student-achievements/${id}`);
 
-    console.log('Fetch student-achievements response:', response);
+    console.log("Fetch student-achievements response:", response);
     return response.data;
   } catch (error) {
-    console.error('Fetch student-achievements response error:', error.response || error.message);
+    console.error(
+      "Fetch student-achievements response error:",
+      error.response || error.message
+    );
     throw error;
   }
 };
 
-export const getStudentCertificate= async (id) => {
+export const getStudentCertificate = async (id) => {
   try {
     const response = await api.get(`/student-certificate/${id}`);
 
-    console.log('Fetch student-certificate response:', response);
+    console.log("Fetch student-certificate response:", response);
     return response.data;
   } catch (error) {
-    console.error('Fetch student-certificate response error:', error.response || error.message);
+    console.error(
+      "Fetch student-certificate response error:",
+      error.response || error.message
+    );
     throw error;
   }
 };
@@ -131,100 +152,152 @@ export const getQualifiedStudents = async (id) => {
   try {
     const response = await api.get(`/qualified-students/${id}`);
 
-    console.log('Fetch qualified-students dresponse:', response);
+    console.log("Fetch qualified-students dresponse:", response);
     return response.data;
   } catch (error) {
-    console.error('Fetch qualified-students response error:', error.response || error.message);
+    console.error(
+      "Fetch qualified-students response error:",
+      error.response || error.message
+    );
     throw error;
   }
-}; 
-
+};
 
 export const getRewardDetails = async (id) => {
   try {
     const response = await api.get(`/reward-details/${id}`);
 
-    console.log('Fetch reward-details dresponse:', response);
+    console.log("Fetch reward-details dresponse:", response);
     return response.data;
   } catch (error) {
-    console.error('Fetch reward-details response error:', error.response || error.message);
+    console.error(
+      "Fetch reward-details response error:",
+      error.response || error.message
+    );
     throw error;
   }
-}; 
+};
 
+export const getClaimCoupon = async (id) => {
+  try {
+    const response = await api.get(`/claim-coupon/${id}`, {
+      responseType: "blob", // Set the response type to blob
+    });
 
-export const generateCertificate = async (id,studentId) => {
+    // Get the current date
+    const currentDate = new Date();
+
+    // Format the date as "mm/dd/yyyy"
+    const formattedDate = `${(currentDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${currentDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${currentDate.getFullYear()}`;
+
+    // Create the filename with "REPORT_" prefix and ".pdf" extension
+    const filename = `Voucher_${formattedDate}.pdf`;
+
+    if (response.status === 200) {
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      console.log("Fetch generate-certificate response:", response);
+    } else {
+      console.error("Failed to fetch PDF:", response.statusText);
+    }
+
+    console.log("Fetch claim-coupon response:", response);
+    return response.data;
+  } catch (error) {
+    console.error("Fetch claim-coupon error:", error.response || error.message);
+    throw error;
+  }
+};
+
+export const generateCertificate = async (id, studentId) => {
   try {
     const response = await api.get(`/generate-certificate/${id}/${studentId}`, {
-      responseType: 'blob', // Set the response type to blob
+      responseType: "blob", // Set the response type to blob
     });
 
     // Get the current date
     const currentDate = new Date();
 
-          // Format the date as "mm/dd/yyyy"
-     const formattedDate = `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+    // Format the date as "mm/dd/yyyy"
+    const formattedDate = `${(currentDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${currentDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${currentDate.getFullYear()}`;
 
-          // Create the filename with "REPORT_" prefix and ".pdf" extension
+    // Create the filename with "REPORT_" prefix and ".pdf" extension
     const filename = `Certificate_${formattedDate}.pdf`;
 
     if (response.status === 200) {
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const blob = new Blob([response.data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = filename;
       a.click();
-      console.log('Fetch generate-certificate response:', response);
-
+      console.log("Fetch generate-certificate response:", response);
     } else {
-      console.error('Failed to fetch PDF:', response.statusText);
+      console.error("Failed to fetch PDF:", response.statusText);
     }
 
     return response.data;
   } catch (error) {
-    console.error('Fetch generate-certificate response error:', error.response || error.message);
+    console.error(
+      "Fetch generate-certificate response error:",
+      error.response || error.message
+    );
     throw error;
   }
+};
 
-}; 
-
-
-export const getDownloadCertificate = async (id,studentId) => {
+export const getDownloadCertificate = async (id, studentId) => {
   try {
     const response = await api.get(`/download-certificate/${id}/${studentId}`, {
-      responseType: 'blob', // Set the response type to blob
+      responseType: "blob", // Set the response type to blob
     });
 
     // Get the current date
     const currentDate = new Date();
 
-          // Format the date as "mm/dd/yyyy"
-     const formattedDate = `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+    // Format the date as "mm/dd/yyyy"
+    const formattedDate = `${(currentDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${currentDate
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${currentDate.getFullYear()}`;
 
-          // Create the filename with "REPORT_" prefix and ".pdf" extension
+    // Create the filename with "REPORT_" prefix and ".pdf" extension
     const filename = `Certificate_${formattedDate}.pdf`;
 
     if (response.status === 200) {
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const blob = new Blob([response.data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = filename;
       a.click();
-      console.log('Fetch download-certificate response:', response);
-
+      console.log("Fetch download-certificate response:", response);
     } else {
-      console.error('Failed to fetch PDF:', response.statusText);
+      console.error("Failed to fetch PDF:", response.statusText);
     }
 
     return response.data;
   } catch (error) {
-    console.error('Fetch download-certificate response error:', error.response || error.message);
+    console.error(
+      "Fetch download-certificate response error:",
+      error.response || error.message
+    );
     throw error;
   }
-
-}; 
-
-
-
+};

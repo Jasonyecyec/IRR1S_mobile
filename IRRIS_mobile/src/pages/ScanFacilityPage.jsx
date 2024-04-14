@@ -64,7 +64,7 @@ const ScanFacilityPage = () => {
 
   return (
     <div className="bg-secondaryColor h-screen w-screen relative ">
-      <PageTitle title="ENTER FACILITY ID" closeFunction={navigateToHome} />
+      <PageTitle title="SCAN FACILITY CODE" closeFunction={navigateToHome} />
 
       <div className=" h-full flex flex-col space-y-5  items-center w-full mt-32 p-10">
         <div className="bg-white p-3 shadow rounded-lg space-y-1">
