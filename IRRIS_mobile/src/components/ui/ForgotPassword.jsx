@@ -31,9 +31,14 @@ const ForgotPassword = () => {
     setIsPasswordVisible((prev) => !prev);
   };
 
+  // const toggleConfirmPasswordVisibility = () => {
+  //   setIsConfirmPasswordVisible((prev) => !prev);
+  // };
+
   const toggleConfirmPasswordVisibility = () => {
     setIsConfirmPasswordVisible((prev) => !prev);
   };
+  
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -340,17 +345,21 @@ const ForgotPassword = () => {
                     className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2 pr-10" // Add pr-10 for padding on the right to accommodate the button
                     required
                   />
+
                   <button
                     onClick={togglePasswordVisibility}
                     className="absolute inset-y-0 right-0 h-full pt-7 px-3 flex items-center"
                   >
                     {isPasswordVisible ? (
-                      <EyeSlash size={32} />
+                      <EyeSlash size={30} />
                     ) : (
-                      <Eye size={32} />
+                      <Eye size={30} />
                     )}
                   </button>
                   {/* Display password validation message */}
+                </div>
+                <div>
+                  {" "}
                   <p
                     className={
                       passwordValidationMessage === "Password Strength: Strong"
@@ -381,17 +390,11 @@ const ForgotPassword = () => {
                     className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2 pr-10" // Add pr-10 for padding on the right to accommodate the button
                     required
                   />
-                  <button
-                    onClick={toggleConfirmPasswordVisibility}
-                    className="absolute inset-y-0 right-0 h-full pt-7 px-3 flex items-center"
-                  >
-                    {isConfirmPasswordVisible ? (
-                      <EyeSlash size={32} />
-                    ) : (
-                      <Eye size={32} />
-                    )}
-                  </button>
+
+                 
                   {/* Display password match message */}
+                </div>
+                <div>
                   <p
                     className={
                       passwordMatchMessage === "Passwords match."
