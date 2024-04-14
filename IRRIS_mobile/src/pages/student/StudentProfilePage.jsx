@@ -207,7 +207,7 @@ const StudentProfilePage = () => {
 
         <div className="flex flex-col items-center w-full space-y-1">
           <p className="font-semibold uppercase text-xl relative">
-            {user.referral_code}
+            {user?.referral_code}
             <span
               className="absolute top-0 right-[-18px]"
               onClick={handleCopyToClipboard}

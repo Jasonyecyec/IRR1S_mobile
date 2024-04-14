@@ -177,3 +177,17 @@ export const isTaskDurationValid = (dateStarted) => {
   // Check if the time difference is greater than or equal to 3 minutes (180,000 milliseconds)
   return timeDifference >= 120000;
 };
+
+export const isNotPastDueDate = (dateString) => {
+  // Extract the date part from the date string
+  var datePart = dateString.split(" ")[0];
+
+  // Convert the date part to a Date object
+  var date = new Date(datePart.replace(/-/g, "/")); // Replace '-' with '/' for cross-browser compatibility
+
+  // Get the current date
+  var currentDate = new Date();
+
+  // Check if the given date is not in the past
+  return date.getTime() <= currentDate.getTime();
+};
