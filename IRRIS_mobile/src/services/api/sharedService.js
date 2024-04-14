@@ -310,17 +310,55 @@ export const uploadProfileImage = async (form) => {
   }
 };
 
-export const getUserDetails = async (id) => {
-  try {
-    const response = await api.get(`/user-details/${id}`);
+  export const getUserDetails = async (id) => {
+    try {
+  
+      const response = await api.get(`/user-details/${id}`);
+  
+      console.log('Get user-details response:', response);
+      return response.data;
+    } catch (error) {
+      console.error('Get user-details  error:', error.response || error.message);
+      throw error;
+    }
+  };
 
-    console.log("Get user-details response:", response);
-    return response.data;
-  } catch (error) {
-    console.error("Get user-details  error:", error.response || error.message);
-    throw error;
-  }
-};
+  export const getUserDetailsByEmail = async (email) => {
+    try {
+      const response = await api.post(`/get-user-details-by-email`, { email });
+      if (response.status === 200) {
+        // Request was successful
+        console.log('User details:', response.data);
+        return response.data;
+      } else {
+        // Request was unsuccessful
+        throw new Error('Failed to fetch user details');
+      }
+    } catch (error) {
+      // Error occurred during the request
+      console.error('Error fetching user details:', error);
+      throw error; // Rethrow the error to handle it elsewhere if needed
+    }
+  };
+  
+
+  export const forgotPassword2 = async ({ email, newPassword, confirmPassword }) => {
+    try {
+      // Make the API request to change the password
+      const response = await api.post('/forgot-password-user', {
+        email: email,
+        new_password: newPassword,
+        confirm_password: confirmPassword
+      });
+  
+      // Return the response data
+      console.log('forgot-password-user response:', response);
+      return response.data;
+    } catch (error) {
+      // Handle any errors
+      throw error;
+    }
+  };
 
 export const changePasswordUser = async ({
   userId,

@@ -6,10 +6,11 @@ import BgEye from "../assets/images/bg_eye.png";
 import useUserStore from "../services/state/userStore";
 import { activateStudent } from "../services/api/StudentService";
 import { useNavigate } from "react-router-dom";
-import { Spinner } from "flowbite-react";
+import { Spinner, Modal, Label } from "flowbite-react";
 import toast, { Toaster } from "react-hot-toast";
 import QCULogo from "../assets/images/qcu_logo.png";
 import QCUImage from "../assets/images/qcu_image.jpg";
+import TermsAndCondition from "../components/ui/TermsAndCondition";
 import { validatePassword } from "../utils/utils";
 import { registerStudent, registerStaff } from "../services/api/authService";
 import { containsGmail } from "../utils/utils";
@@ -26,6 +27,21 @@ const ActivateAccountPage = () => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
 
+  // Add a state for termsAndConditions and initialize it as false
+  const [termsAndConditions, setTermsAndConditions] = useState(false);
+
+  useEffect(() => {
+    // Load the modal when the component mounts
+    setTimeout(() => {
+      setTermsAndConditions(true); // Change to false after 2 seconds
+    }, 800);
+  }, []);
+
+   // Function to handle closing the modal
+   const handleCloseModal = () => {
+    setTermsAndConditions(false);
+  };
+  
   //password validation
   const [passwordValidationMessage, setPasswordValidationMessage] =
     useState("");
@@ -36,29 +52,31 @@ const ActivateAccountPage = () => {
     const { isValid, errors } = validatePassword(value);
     const trimmedValue = value.trim(); // Trim whitespace from the input value
 
-    
-     // Check if password is empty or only whitespace
-  if (trimmedValue === "") {
-    setPasswordValidationMessage("Enter your Password.");
-  } else {
-    // Validate password strength
-    const { isValid, errors } = validatePassword(trimmedValue);
-    if (!isValid) {
-      setPasswordValidationMessage(errors);
+    // Check if password is empty or only whitespace
+    if (trimmedValue === "") {
+      setPasswordValidationMessage("Enter your Password.");
     } else {
-      setPasswordValidationMessage("Password Strength: Strong");
+      // Validate password strength
+      const { isValid, errors } = validatePassword(trimmedValue);
+      if (!isValid) {
+        setPasswordValidationMessage(errors);
+      } else {
+        setPasswordValidationMessage("Password Strength: Strong");
+      }
     }
-  }
     setForm({ ...form, password: value });
 
     //check if the confirm password match also
     // Check if passwords match when password changes
-   // Check if passwords match when password changes
-  if (form.confirm_password.trim() !== "" && form.confirm_password !== value) {
-    setPasswordMatchMessage("Passwords don't match.");
-  } else {
-    setPasswordMatchMessage(""); // Reset message if confirm password is empty or matches
-  }
+    // Check if passwords match when password changes
+    if (
+      form.confirm_password.trim() !== "" &&
+      form.confirm_password !== value
+    ) {
+      setPasswordMatchMessage("Passwords don't match.");
+    } else {
+      setPasswordMatchMessage(""); // Reset message if confirm password is empty or matches
+    }
   };
 
   const handleConfirmPasswordChange = (event) => {
@@ -66,17 +84,17 @@ const ActivateAccountPage = () => {
     const trimmedValue = value.trim(); // Trim whitespace from the input value
 
     // Check if passwords match
-     // Check if password is empty or only whitespace
-  if (trimmedValue === "") {
-    setPasswordMatchMessage("Enter a password first.");
-  } else {
-    // Check if passwords match
-    if (trimmedValue !== form.password) {
-      setPasswordMatchMessage("Passwords don't match.");
+    // Check if password is empty or only whitespace
+    if (trimmedValue === "") {
+      setPasswordMatchMessage("Enter a password first.");
     } else {
-      setPasswordMatchMessage("Passwords match.");
+      // Check if passwords match
+      if (trimmedValue !== form.password) {
+        setPasswordMatchMessage("Passwords don't match.");
+      } else {
+        setPasswordMatchMessage("Passwords match.");
+      }
     }
-  }
     setForm({ ...form, confirm_password: value });
   };
 
@@ -494,6 +512,7 @@ const ActivateAccountPage = () => {
           </span>
         </p>
       </div>
+      {termsAndConditions && <TermsAndCondition handleCloseModal={handleCloseModal} isLoading={isLoading}  />}
     </div>
   );
 };

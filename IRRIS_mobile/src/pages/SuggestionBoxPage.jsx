@@ -12,6 +12,9 @@ import { toast } from "react-hot-toast"; // Import toast from react-hot-toast
 import SuccessModal from "../components/SuccessModal";
 import ErrorModal from "../components/ErrorModal";
 
+import Loading from "../components/Loading";
+import TermsAndCondition from "../components/ui/TermsAndCondition";
+
 import {
   ArrowLeft,
   Aperture,
@@ -57,6 +60,18 @@ const SuggestionBoxPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [isSuccess, setIsSuccess] = useState(false);
+  // Add a state for termsAndConditions and initialize it as false
+  const [termsAndConditions, setTermsAndConditions] = useState(false);
+  useEffect(() => {
+    // Load the modal when the component mounts
+    setTimeout(() => {
+      setTermsAndConditions(true); // Change to false after 2 seconds
+    }, 800);
+  }, []);
+  // Function to handle closing the modal
+  const handleCloseModal = () => {
+    setTermsAndConditions(false);
+  };
 
   // clear the form inputs when the form is submitted or canceled
   const facilityIdInputRef = useRef(null);
@@ -538,7 +553,7 @@ const SuggestionBoxPage = () => {
         <div className="banner w-[17rem] h-[3.2rem] pt-1 rounded-full bg-blue-700 flex justify-center align-center  mt-[-2rem]">
           {" "}
           <p className="text-3xl font-medium  text-white dark:text-white">
-            Suggestion Box
+            Suggestion
           </p>
         </div>
       </div>
@@ -678,6 +693,8 @@ const SuggestionBoxPage = () => {
           </button>
         </form>
       </div>
+      {termsAndConditions && <TermsAndCondition handleCloseModal={handleCloseModal} isLoading={isLoading}  />}
+
     </div>
   );
 };
