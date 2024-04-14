@@ -31,7 +31,7 @@ const moreItems = [
     label: "Rate & Review ",
     icon: MagnifyingGlass,
   },
-  { to: "/staff/calendar", label: "Calendar", icon: Calendar },
+  // { to: "/staff/calendar", label: "Calendar", icon: Calendar },
   { to: "/leaderboards", label: "Leaderboards", icon: Trophy },
   { to: "/student/rewards", label: "Rewards ", icon: Gift },
   { to: "/achievements", label: "Achievements ", icon: Certificate },
