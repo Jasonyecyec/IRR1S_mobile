@@ -58,6 +58,7 @@ const SuggestionBoxPage = () => {
   const [isOpenModal, setisOpenModal] = useState(false);
   const [openModalSubmit, setOpenModalSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
 
   const [isSuccess, setIsSuccess] = useState(false);
   // Add a state for termsAndConditions and initialize it as false
@@ -72,6 +73,16 @@ const SuggestionBoxPage = () => {
   const handleCloseModal = () => {
     setTermsAndConditions(false);
   };
+
+  const handleCheckboxChange = (e) => {
+    setIsCheckboxChecked(e.target.checked);
+  };
+  // const handleSubmitButton = (e) => {
+  //   e.preventDefault();
+  //   if (!isCheckboxChecked) return;
+
+  //   setOpenModalSubmit(true);
+  // };
 
   // clear the form inputs when the form is submitted or canceled
   const facilityIdInputRef = useRef(null);
@@ -354,6 +365,8 @@ const SuggestionBoxPage = () => {
   const handleSubmitButton = (e) => {
     e.preventDefault();
     console.log("Form data:", form); // Check if issue_type is included in form data
+    if (!isCheckboxChecked) return;
+
     setOpenModalSubmit(true);
   };
   const captureImage = () => {
@@ -465,7 +478,6 @@ const SuggestionBoxPage = () => {
         <SuccessModal
           message="Suggestion Reported Successfully!"
           handleCloseButton={() => navigate("/login")}
-          
         />
       )}
       {/* Render the ErrorModal component if isError is true */}
@@ -685,16 +697,38 @@ const SuggestionBoxPage = () => {
           </div>
 
           <br />
+          <div className="flex items-center mb-5">
+            <input
+              type="checkbox"
+              id="termsCheckbox"
+              checked={isCheckboxChecked}
+              onChange={handleCheckboxChange}
+              className="mr-2"
+            />
+            <label htmlFor="termsCheckbox" className="text-sm">
+              I agree to the{" "}
+              <Link to="#" onClick={() => setTermsAndConditions(true)}>
+                Terms and Conditions
+              </Link>
+            </label>
+          </div>
           <button
-            type="submit"
-            className="text-white  h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Report Now
-          </button>
+        type="submit"
+        disabled={!isCheckboxChecked}
+        className={`text-white h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center ${
+          !isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+      >
+        Report Now
+      </button>
         </form>
       </div>
-      {termsAndConditions && <TermsAndCondition handleCloseModal={handleCloseModal} isLoading={isLoading}  />}
-
+      {termsAndConditions && (
+        <TermsAndCondition
+          handleCloseModal={handleCloseModal}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   );
 };
