@@ -177,11 +177,20 @@ const QRScannerPage = ({ onScan }) => {
   return (
     <div className="h-screen w-screen relative">
       <PageTitle title="QR Scanner" closeFunction={handleStopClick} />
-      <div className="h-full w-full  flex  flex-col pt-10 ">
+      <div className="h-full w-full flex flex-col pt-10">
+        <p className="p-5 font-bold">
+          Reminder :
+        </p>
         <p className="p-5">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat non
-          corrupti cupiditate quo excepturi quidem maxime. Id eos voluptas
-          illum.
+          Student and Staff are encouraged to scan the QR code.
+        </p>
+        <p className="p-5">
+          If the camera isn't functioning properly or if they encounter any
+          issues, they can <b>Manually</b> report it by <b>Entering the ID</b>{" "}
+          associated with the QR code.
+        </p>
+        <p className="p-5 font-bold">
+          Please wait while we load your camera...
         </p>
         <div
           id={qrBoxId}
