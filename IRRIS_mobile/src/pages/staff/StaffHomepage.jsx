@@ -46,7 +46,8 @@ const servicesItems = [
   },
   {
     to: "/staff/pencil-book-history",
-    label: "Pencil Book History",
+    label: "Pencil Book",
+    label2: "History",
     icon: Notepad,
   },
 ];
@@ -226,9 +227,9 @@ const StaffHomepage = () => {
         </div>
 
         {/* MORE SERVICES */}
-        <div className=" flex justify-center flex-wrap gap-x-5 gap-y-5 ">
+        <div className=" flex justify-center items-center flex-wrap gap-x-5 gap-y-5  ">
           {servicesItems.map((item, index) => (
-            <Link className="" key={index} to={item.to}>
+            <Link className="bg-blue-100 hover:bg-white w-[26%] h-[48%] rounded-lg" key={index} to={item.to}>
               <div
                 key={index}
                 className="flex p-2 flex-col space-y-2 items-center "
@@ -237,11 +238,15 @@ const StaffHomepage = () => {
                  */}
                 {item.icon &&
                   React.createElement(item.icon, {
-                    size: "1.8rem",
+                    size: "2.3rem",
                     // color: "#",
                     className: "text-[#0f59cb]",
                   })}
-                <p className="font-semibold text-[#0f59cb]">{item.label}</p>{" "}
+                <p className="font-semibold text-xs text-[#0f59cb]">{item.label}</p>{" "}
+                <div>
+                <p className="font-semibold mt-[-0.5rem] text-xs text-[#0f59cb]">{item.label2}</p>{" "}
+
+                </div>
               </div>
             </Link>
           ))}

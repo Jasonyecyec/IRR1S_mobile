@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PageTitle from "@/src/components/PageTitle";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { findFacility } from "@/src/services/api/sharedService";
 import TextInput from "@/src/components/TextInput";
 import useUserStore from "@/src/services/state/userStore";
@@ -10,7 +10,8 @@ import SuccessModal from "@/src/components/SuccessModal";
 import ErrorModal from "@/src/components/ErrorModal";
 import Loading from "@/src/components/Loading";
 import { Spinner } from "flowbite-react";
-import { CheckCircle } from "@phosphor-icons/react";
+import { CheckCircle, Info } from "@phosphor-icons/react";
+import PencilBookInfoModal from "@/src/components/ui/PencilBookInfoModal";
 
 const PencilBookPage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -181,6 +182,16 @@ const PencilBookPage = () => {
     }));
   };
 
+  const [showInfoModal, setShowInfoModal] = useState(false); // State to manage the visibility of the info modal
+  // Function to handle the click event of the info icon
+  const handleInfoClick = () => {
+    setShowInfoModal(true); // Set the state to true to show the modal
+  };
+  // Function to handle modal close event
+  const handleCloseModal = () => {
+    setShowInfoModal(false);
+  };
+
   return (
     <div className="w-screen h-screen flex flex-col  ">
       {isShowConfirmation && (
@@ -209,6 +220,9 @@ const PencilBookPage = () => {
         />
       )}
 
+      {/* Conditionally render the info modal */}
+      {showInfoModal && <PencilBookInfoModal onCloseModal={handleCloseModal} />}
+
       <PageTitle title="PENCIL BOOK" />
       <div className="flex-1  p-5 pb-20">
         <form className="space-y-5 text-sm" onSubmit={handleSubmit}>
@@ -220,7 +234,13 @@ const PencilBookPage = () => {
             disabled={true}
           />
 
-          <p className="font-semibold">Event type</p>
+          <div className="flex justify-between items-center">
+            <p className="font-semibold">Event type</p>
+            <Link onClick={handleInfoClick}>
+              <Info size={40} color="#787878" weight="fill" />
+            </Link>
+          </div>
+
           <div className="w-full flex justify-center font-semibold  space-x-3">
             <div
               className={`w-40 ease-in-out duration-150 hover:bg-gray-50 cursor-pointer p-4 rounded-md border flex justify-center items-center relative ${

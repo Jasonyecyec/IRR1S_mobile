@@ -5,6 +5,7 @@ import {
   CaretRight,
   LockKeyOpen,
   Trash,
+  UserSquare
 } from "@phosphor-icons/react";
 
 import UserSample from "../../assets/images/user_sample.jpg";
@@ -50,7 +51,11 @@ const StudentAccountSettingPage = () => {
   }, []);
 
   return (
-    <div className={isChangePasswordModalOpen ? 'backdrop-filter backdrop-blur-lg' : ''}>
+    <div
+      className={
+        isChangePasswordModalOpen ? "backdrop-filter backdrop-blur-lg" : ""
+      }
+    >
       <header className="bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
         <div className="backbutton w-[2rem] ml-2 mt-1">
           <Link to={`/${user?.user_role}/profile`} className="text-white">
@@ -100,22 +105,40 @@ const StudentAccountSettingPage = () => {
             <span className="text-sm text-gray-500 dark:text-gray-400">
               QCU {user?.user_role}
             </span>
+            {userDetails && (
+              <p className="capitalize  text-sm">
+                 <span>{userDetails?.user_details?.department}</span>
+                 <span>{userDetails?.user_details?.specialty}</span>
+              </p>
+            )}
             <div className="flex mt-4 md:mt-6"></div>
           </div>
 
           <div>
             <div className="w-full p-4 text-center bg-white rounded-lg sm:p-8 dark:bg-gray-800 ">
               <div className="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
+                
+                <button
+                  className="flex items-center justify-between w-full sm:w-auto bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                >
+                  <div className="flex items-center">
+                    <UserSquare className="me-3 w-7 h-7" />
+                    <div>
+                      <div className="mt-1 font-sans text-sm font-semibold">
+                        Personal Information
+                      </div>
+                    </div>
+                  </div>
+                  <CaretRight size={32} />
+                </button>
                 <button
                   onClick={handleOpenChangePasswordModal}
-
                   className="flex items-center justify-between w-full sm:w-auto bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                 >
                   <div className="flex items-center">
                     <LockKeyOpen className="me-3 w-7 h-7" />
                     <div>
-                      <div className="mb-1 text-xs pr-7">Do you want to</div>
-                      <div className="-mt-1 font-sans text-sm font-semibold">
+                      <div className="mt-1 font-sans text-sm font-semibold">
                         Change Password
                       </div>
                     </div>
@@ -123,29 +146,30 @@ const StudentAccountSettingPage = () => {
                   <CaretRight size={32} />
                 </button>
 
-                {/* <button
+                <button
                   
                   className="flex items-center justify-between w-full sm:w-auto bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                 >
                   <div className="flex items-center">
                     <Trash className="me-3 w-7 h-7" />
                     <div>
-                      <div className="mb-1 text-xs">See yah fella!</div>
-                      <div className="-mt-1 font-sans text-sm font-semibold">
-                        Deactivate
+                      <div className="mt-1 font-sans text-sm font-semibold">
+                        Deactivate Account
                       </div>
                     </div>
                   </div>
                   <CaretRight size={32} />
-                </button> */}
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-     
+
       {/* Render the ChangePasswordModal component conditionally based on isChangePasswordModalOpen state */}
-      {isChangePasswordModalOpen && <ChangePassword onClose={() => setIsChangePasswordModalOpen(false)} />}
+      {isChangePasswordModalOpen && (
+        <ChangePassword onClose={() => setIsChangePasswordModalOpen(false)} />
+      )}
     </div>
   );
 };
