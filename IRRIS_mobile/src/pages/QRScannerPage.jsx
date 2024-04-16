@@ -6,6 +6,7 @@ import { Html5Qrcode } from "html5-qrcode";
 import "../styles/qrscanner/qrscanner.css";
 import { findFacility } from "../services/api/sharedService";
 import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 
 const QRScannerPage = ({ onScan }) => {
   const qrBoxId = "qr-box"; // Define a unique ID for the div
@@ -98,49 +99,109 @@ const QRScannerPage = ({ onScan }) => {
     // });
 
     // Define a function to start the QR scanner
+    // const startScanner = async () => {
+    //   if (isScanning) return; // If already scanning, do not start again.
+
+    //   const cameras = await Html5Qrcode.getCameras();
+    //   if (cameras && cameras.length) {
+    //     const cameraId =
+    //       cameras.find((camera) => camera.facingMode === "environment")?.id ||
+    //       cameras[0].id;
+    //     // Create an instance of Html5Qrcode
+    //     const html5QrCode = new Html5Qrcode(qrBoxId);
+    //     // Assign it to the ref
+    //     html5QrCodeRef.current = html5QrCode;
+
+    //     // Start scanning
+    //     await html5QrCode.start(
+    //       { facingMode: { exact: "environment" } },
+    //       config,
+    //       async (decodedText, decodedResult) => {
+    //         console.log(decodedText);
+    //         // You can call stop here if you want to stop scanning after a successful scan
+    //         setIsLoading(true);
+    //         try {
+    //           await html5QrCodeRef.current.stop(); // Stop the scanner immediately after a QR code is detected.
+    //           setIsScanning(false); // Update the scanning state.
+    //           setIsScanning(true);
+    //           // const data = await findFacilityByQrCode(decodedText); // Now you can use await here
+    //           const response = await findFacility(decodedText);
+    //           const facility = response.facility;
+
+    //           if (response) {
+    //             navigate("/report-issue", { state: { facility } });
+    //           }
+    //         } catch (error) {
+    //           console.log("cant find facility");
+    //           navigate("/facility-not-found");
+    //         } finally {
+    //           // await html5QrCodeRef.current.stop();
+    //           setIsLoading(false);
+    //         }
+    //       }
+    //     );
+    //   } else {
+    //     throw new Error("No cameras found.");
+    //   }
+    // };
+
     const startScanner = async () => {
-      if (isScanning) return; // If already scanning, do not start again.
+      try {
+        // Your existing code for starting the scanner
+        const cameras = await Html5Qrcode.getCameras();
+        if (cameras && cameras.length) {
+          const cameraId =
+            cameras.find((camera) => camera.facingMode === "environment")?.id ||
+            cameras[0].id;
+          // Create an instance of Html5Qrcode
+          const html5QrCode = new Html5Qrcode(qrBoxId);
+          // Assign it to the ref
+          html5QrCodeRef.current = html5QrCode;
 
-      const cameras = await Html5Qrcode.getCameras();
-      if (cameras && cameras.length) {
-        const cameraId =
-          cameras.find((camera) => camera.facingMode === "environment")?.id ||
-          cameras[0].id;
-        // Create an instance of Html5Qrcode
-        const html5QrCode = new Html5Qrcode(qrBoxId);
-        // Assign it to the ref
-        html5QrCodeRef.current = html5QrCode;
+          // Start scanning
+          await html5QrCode.start(
+            { facingMode: { exact: "environment" } },
+            config,
+            async (decodedText, decodedResult) => {
+              console.log(decodedText);
+              // You can call stop here if you want to stop scanning after a successful scan
+              setIsLoading(true);
+              try {
+                await html5QrCodeRef.current.stop(); // Stop the scanner immediately after a QR code is detected.
+                setIsScanning(false); // Update the scanning state.
+                setIsScanning(true);
+                // const data = await findFacilityByQrCode(decodedText); // Now you can use await here
+                const response = await findFacility(decodedText);
+                const facility = response.facility;
 
-        // Start scanning
-        await html5QrCode.start(
-          { facingMode: { exact: "environment" } },
-          config,
-          async (decodedText, decodedResult) => {
-            console.log(decodedText);
-            // You can call stop here if you want to stop scanning after a successful scan
-            setIsLoading(true);
-            try {
-              await html5QrCodeRef.current.stop(); // Stop the scanner immediately after a QR code is detected.
-              setIsScanning(false); // Update the scanning state.
-              setIsScanning(true);
-              // const data = await findFacilityByQrCode(decodedText); // Now you can use await here
-              const response = await findFacility(decodedText);
-              const facility = response.facility;
-
-              if (response) {
-                navigate("/report-issue", { state: { facility } });
+                if (response) {
+                  navigate("/report-issue", { state: { facility } });
+                }
+              } catch (error) {
+                console.log("cant find facility");
+                navigate("/facility-not-found");
+              } finally {
+                // await html5QrCodeRef.current.stop();
+                setIsLoading(false);
               }
-            } catch (error) {
-              console.log("cant find facility");
-              navigate("/facility-not-found");
-            } finally {
-              // await html5QrCodeRef.current.stop();
-              setIsLoading(false);
             }
-          }
-        );
-      } else {
-        throw new Error("No cameras found.");
+          );
+        } else {
+          throw new Error("No cameras found.");
+        }
+      } catch (error) {
+        if (error.name === "NotAllowedError") {
+          // Permission denied
+          toast.error("Please set the permission first");
+          setTimeout(() => {
+            navigate("/");
+          }, 2000); // 2000 milliseconds = 2 seconds
+        } else {
+          console.error("Error starting QR scanner: ", error);
+          setTimeout(() => {
+            navigate("/");
+          }, 2000); // 2000 milliseconds = 2 seconds
+        }
       }
     };
 
@@ -178,9 +239,7 @@ const QRScannerPage = ({ onScan }) => {
     <div className="h-screen w-screen relative">
       <PageTitle title="QR Scanner" closeFunction={handleStopClick} />
       <div className="h-full w-full flex flex-col pt-10">
-        <p className="p-5 font-bold">
-          Reminder :
-        </p>
+        <p className="p-5 font-bold">Reminder :</p>
         <p className="p-5">
           Student and Staff are encouraged to scan the QR code.
         </p>

@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeSlash, CheckCircle } from "@phosphor-icons/react";
+import {
+  Eye,
+  EyeSlash,
+  CheckCircle,
+  UserCircle,
+  UserCircleGear,
+} from "@phosphor-icons/react";
 import "../assets/css/activate-account.css";
 import BgEye from "../assets/images/bg_eye.png";
 import useUserStore from "../services/state/userStore";
@@ -23,9 +29,39 @@ const ActivateAccountPage = () => {
   // const [emailError, setEmailError] = useState({ isError: false, message: "" });
   // const [userEmail, setUserEmail] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState("student");
+  const [showButtons, setShowButtons] = useState(true);
+
+  // const [currentFilter, setCurrentFilter] = useState("student");
+  const [currentFilter, setCurrentFilter] = useState(null);
+  const [reloadRole, setReloadRole] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
+
+  const [showForm, setShowForm] = useState(false);
+
+  const handleReloadRegister = () => {
+    setShowButtons(true);
+    setShowForm(false);
+    setCurrentFilter(null);
+  };
+
+  const handleStudentButtonClick = (filter) => {
+    setCurrentFilter("student");
+    // Set a timeout to show the form after 1 second
+    // setTimeout(() => {
+    setShowForm(true);
+    setShowButtons(false);
+    // }, 2000);
+  };
+
+  const handleStaffButtonClick = (filter) => {
+    setCurrentFilter("staff");
+    // Set a timeout to show the form after 1 second
+    // setTimeout(() => {
+    setShowForm(true);
+    setShowButtons(false);
+    // }, 2000);
+  };
 
   // Add a state for termsAndConditions and initialize it as false
   const [termsAndConditions, setTermsAndConditions] = useState(false);
@@ -33,7 +69,7 @@ const ActivateAccountPage = () => {
   useEffect(() => {
     // Load the modal when the component mounts
     setTimeout(() => {
-      setTermsAndConditions(true); // Change to false after 2 seconds
+      setTermsAndConditions(false); // Change to false after 2 seconds
     }, 800);
   }, []);
 
@@ -266,9 +302,10 @@ const ActivateAccountPage = () => {
           Create Account
         </h1>
 
-        <div className="w-full text-sm font-bold text-gray-700 space-x-5 flex mt-5">
+        {/* <div className="w-full text-sm font-bold text-gray-700 space-x-5 flex mt-5">
           <button
-            onClick={() => setCurrentFilter("student")}
+            // onClick={() => setCurrentFilter("student")}
+            onClick={handleStudentButtonClick}
             className={`flex-1 rounded-md border bg-white p-2 relative ${
               currentFilter === "student" && "border-mainColor2"
             }`}
@@ -285,7 +322,8 @@ const ActivateAccountPage = () => {
             )}
           </button>
           <button
-            onClick={() => setCurrentFilter("staff")}
+            // onClick={() => setCurrentFilter("staff")}
+            onClick={handleStaffButtonClick}
             className={`flex-1 relative rounded-md border border-gray-300 bg-white p-2 ${
               currentFilter === "staff" && "border-mainColor2"
             }`}
@@ -301,235 +339,329 @@ const ActivateAccountPage = () => {
               </span>
             )}
           </button>
-        </div>
-        <Toaster />
+        </div> */}
+        {currentFilter === null ? (
+          <div>
+            {showButtons && (
+              <div className="h-[20rem] mt-[10rem] bg-white rounded-lg p-5 flex items-center">
+                {" "}
+                <div className="w-full text-sm font-bold text-gray-700  space-x-5 flex  mt-5">
+                  <button
+                    // onClick={() => setCurrentFilter("student")}
+                    onClick={handleStudentButtonClick}
+                    className={`flex flex-col justify-center items-center hover:bg-gray-50 hover:shadow cursor-pointer  flex-1 rounded-md border bg-white border-mainColor  p-3 relative ${
+                      currentFilter === "student" && "border-mainColor2"
+                    }`}
+                  >
+                    <UserCircle size={40} color="#0b0b6a" weight="light" />
 
-        <form onSubmit={handleSubmit}>
-          <div className=" flex flex-col w-full space-y-5 mt-5 text-sm">
-            <div className="flex space-x-5">
-              <div className="space-y-2">
-                <label htmlFor="first_name" className="font-semibold">
-                  First name
-                </label>
-                <input
-                  type="text"
-                  id="first_name"
-                  name="first_name"
-                  value={form.first_name}
-                  onChange={handleInputChange}
-                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                  focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                  required
-                />
-              </div>
+                    <Label className="text-[#0b0b6a] text-sm mt-3">
+                      Student
+                    </Label>
+                    {currentFilter === "student" && (
+                      <span>
+                        <CheckCircle
+                          size={22}
+                          weight="fill"
+                          className="text-mainColor2 absolute top-1.5 right-2"
+                        />
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    // onClick={() => setCurrentFilter("staff")}
+                    onClick={handleStaffButtonClick}
+                    className={`flex flex-col justify-center hover:bg-gray-50 hover:shadow items-center cursor-pointer  flex-1 relative rounded-md border border-mainColor bg-white text-white p-3 ${
+                      currentFilter === "staff" && "border-mainColor2"
+                    }`}
+                  >
+                    <UserCircleGear size={40} color="#0b0b6a" weight="light" />
 
-              <div className="space-y-2">
-                <label htmlFor="last_name" className="font-semibold">
-                  Last name
-                </label>
-                <input
-                  type="text"
-                  id="last_name"
-                  name="last_name"
-                  value={form.last_name}
-                  onChange={handleInputChange}
-                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                  focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                  required
-                />
-              </div>
-            </div>
+                    <Label className="text-[#0b0b6a] text-sm mt-3">Staff</Label>
 
-            {currentFilter === "student" && (
-              <div className="space-y-2">
-                <label htmlFor="student_number" className="font-semibold">
-                  Student Number
-                </label>
-                <input
-                  type="text"
-                  id="student_number"
-                  name="student_number"
-                  value={form.student_number}
-                  onChange={handleInputChange}
-                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                  required
-                />
+                    {currentFilter === "staff" && (
+                      <span>
+                        <CheckCircle
+                          size={22}
+                          weight="fill"
+                          className="text-mainColor2 absolute top-1.5 right-2"
+                        />
+                      </span>
+                    )}
+                  </button>
+                </div>
               </div>
             )}
-
-            <div className="space-y-2">
-              <label htmlFor="email" className="font-semibold">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={form.email}
-                onChange={handleInputChange}
-                className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                required
-              />
-            </div>
-
-            {currentFilter === "staff" && (
-              <div className="space-y-2">
-                <label htmlFor="department" className="font-semibold">
-                  Department
-                </label>
-                <input
-                  type="text"
-                  id="department"
-                  name="department"
-                  value={form.department}
-                  onChange={handleInputChange}
-                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                  required
-                />
-              </div>
-            )}
-
-            {currentFilter === "staff" && (
-              <div className="space-y-2">
-                <label htmlFor="contact_number" className="font-semibold">
-                  Contact number
-                </label>
-                <input
-                  type="number"
-                  id="contact_number"
-                  name="contact_number"
-                  value={form.contact_number}
-                  onChange={handleInputChange}
-                  minLength={11}
-                  className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                  required
-                />
-              </div>
-            )}
-
-            <div className="relative space-y-2">
-              <label htmlFor="password">Password</label>
-              <input
-                type={isPasswordVisible ? "text" : "password"}
-                id="password"
-                name="password"
-                value={form.password}
-                className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                onChange={handlePasswordChange}
-                required
-              />
-              <p
-                className={
-                  passwordValidationMessage === "Password Strength: Strong"
-                    ? "text-green-500"
-                    : "text-red-500"
-                }
-              >
-                {passwordValidationMessage}
-              </p>
-
-              <button
-                className="absolute right-2 top-8 "
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsPasswordVisible(!isPasswordVisible);
-                }}
-              >
-                {isPasswordVisible ? (
-                  <EyeSlash size="25" color="#969696" weight="light" />
-                ) : (
-                  <Eye size="25" color="#969696" weight="light" />
-                )}
-              </button>
-            </div>
-
-            <div className="relative space-y-2">
-              <label htmlFor="confirm_password">Confirm Password</label>
-              <input
-                type={isConfirmPasswordVisible ? "text" : "password"}
-                id="confirm_password"
-                name="confirm_password"
-                value={form.confirm_password}
-                className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                onChange={handleConfirmPasswordChange}
-                required
-              />
-              <p
-                className={
-                  passwordMatchMessage === "Passwords match."
-                    ? "text-green-500"
-                    : "text-red-500"
-                }
-              >
-                {passwordMatchMessage}
-              </p>
-
-              <button
-                className="absolute right-2 top-8 "
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
-                }}
-              >
-                {isConfirmPasswordVisible ? (
-                  <EyeSlash size="25" color="#969696" weight="light" />
-                ) : (
-                  <Eye size="25" color="#969696" weight="light" />
-                )}
-              </button>
-            </div>
-
-            {currentFilter === "student" && (
-              <div className="relative space-y-2">
-                <label htmlFor="confirm_password">Referral Code</label>
-                <input
-                  type="text"
-                  id="referral_code"
-                  name="referral_code"
-                  value={form.referral_code}
-                  className="border-gray uppercase-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
-                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
-                  onChange={handleInputChange}
-                  placeholder="(Optional)"
-                  min={8}
-                />
-              </div>
-            )}
-
-            <div className="flex items-center mb-5">
-              <input
-                type="checkbox"
-                id="termsCheckbox"
-                checked={isCheckboxChecked}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              <label htmlFor="termsCheckbox" className="text-sm">
-                I agree to the{" "}
-                <Link to="#" onClick={() => setTermsAndConditions(true)}>
-                  Terms and Conditions
-                </Link>
-              </label>
-            </div>
-            <button
-              disabled={!isCheckboxChecked}
-              className={`text-white h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center ${
-                !isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-            >
-              Submit
-            </button>
+            <Toaster />
           </div>
-        </form>
+        ) : (
+          <>
+            {showForm && (
+              <>
+                {/* Your form JSX */}
+                <div className="flex flex-col p-2 font-bold text-3xl text-center text-mainColor2">
+                  {currentFilter === "student" && (
+                    <Label className=" font-bold text-2xl text-center text-mainColor2">
+                      Student
+                    </Label>
+                  )}
 
-        <p className="mt-8 text-center">
-          Account have an account?{" "}
+                  {currentFilter === "staff" && (
+                    <Label className=" font-bold p-2 text-2xl text-center text-mainColor2">
+                      Staff
+                    </Label>
+                  )}
+                </div>
+                <form onSubmit={handleSubmit}>
+                  <div className=" flex flex-col w-full space-y-5 mt-5 text-sm">
+                    <div className="flex space-x-5">
+                      <div className="space-y-2">
+                        <label htmlFor="first_name" className="font-semibold">
+                          First name
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          name="first_name"
+                          value={form.first_name}
+                          onChange={handleInputChange}
+                          className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                  focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label htmlFor="last_name" className="font-semibold">
+                          Last name
+                        </label>
+                        <input
+                          type="text"
+                          id="last_name"
+                          name="last_name"
+                          value={form.last_name}
+                          onChange={handleInputChange}
+                          className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                  focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    {currentFilter === "student" && (
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="student_number"
+                          className="font-semibold"
+                        >
+                          Student Number
+                        </label>
+                        <input
+                          type="text"
+                          id="student_number"
+                          name="student_number"
+                          value={form.student_number}
+                          onChange={handleInputChange}
+                          className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                          required
+                        />
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="font-semibold">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleInputChange}
+                        className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                        required
+                      />
+                    </div>
+
+                    {currentFilter === "staff" && (
+                      <div className="space-y-2">
+                        <label htmlFor="department" className="font-semibold">
+                          Department
+                        </label>
+                        <input
+                          type="text"
+                          id="department"
+                          name="department"
+                          value={form.department}
+                          onChange={handleInputChange}
+                          className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                          required
+                        />
+                      </div>
+                    )}
+
+                    {currentFilter === "staff" && (
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="contact_number"
+                          className="font-semibold"
+                        >
+                          Contact number
+                        </label>
+                        <input
+                          type="number"
+                          id="contact_number"
+                          name="contact_number"
+                          value={form.contact_number}
+                          onChange={handleInputChange}
+                          minLength={11}
+                          className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                          required
+                        />
+                      </div>
+                    )}
+
+                    <div className="relative space-y-2">
+                      <label htmlFor="password">Password</label>
+                      <input
+                        type={isPasswordVisible ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        value={form.password}
+                        className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                        onChange={handlePasswordChange}
+                        required
+                      />
+                      <p
+                        className={
+                          passwordValidationMessage ===
+                          "Password Strength: Strong"
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }
+                      >
+                        {passwordValidationMessage}
+                      </p>
+
+                      <button
+                        className="absolute right-2 top-8 "
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsPasswordVisible(!isPasswordVisible);
+                        }}
+                      >
+                        {isPasswordVisible ? (
+                          <EyeSlash size="25" color="#969696" weight="light" />
+                        ) : (
+                          <Eye size="25" color="#969696" weight="light" />
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="relative space-y-2">
+                      <label htmlFor="confirm_password">Confirm Password</label>
+                      <input
+                        type={isConfirmPasswordVisible ? "text" : "password"}
+                        id="confirm_password"
+                        name="confirm_password"
+                        value={form.confirm_password}
+                        className="border-gray-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                        onChange={handleConfirmPasswordChange}
+                        required
+                      />
+                      <p
+                        className={
+                          passwordMatchMessage === "Passwords match."
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }
+                      >
+                        {passwordMatchMessage}
+                      </p>
+
+                      <button
+                        className="absolute right-2 top-8 "
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsConfirmPasswordVisible(
+                            !isConfirmPasswordVisible
+                          );
+                        }}
+                      >
+                        {isConfirmPasswordVisible ? (
+                          <EyeSlash size="25" color="#969696" weight="light" />
+                        ) : (
+                          <Eye size="25" color="#969696" weight="light" />
+                        )}
+                      </button>
+                    </div>
+
+                    {currentFilter === "student" && (
+                      <div className="relative space-y-2">
+                        <label htmlFor="confirm_password">Referral Code</label>
+                        <input
+                          type="text"
+                          id="referral_code"
+                          name="referral_code"
+                          value={form.referral_code}
+                          className="border-gray uppercase-300 border-[1.8px] rounded-md py-2 px-3 drop-shadow-sm focus:outline-none
+                focus:border-primary focus:ring-1 w-full focus:ring-primary hover:border-primary"
+                          onChange={handleInputChange}
+                          placeholder="(Optional)"
+                          min={8}
+                        />
+                      </div>
+                    )}
+
+                    <div className="flex items-center mb-5">
+                      <input
+                        type="checkbox"
+                        id="termsCheckbox"
+                        checked={isCheckboxChecked}
+                        onChange={handleCheckboxChange}
+                        className="mr-2"
+                      />
+                      <label htmlFor="termsCheckbox" className="text-sm">
+                        I agree to the{" "}
+                        <Link
+                          to="#"
+                          onClick={() => setTermsAndConditions(true)}
+                        >
+                          Terms and Conditions
+                        </Link>
+                      </label>
+                    </div>
+                    <button
+                      disabled={!isCheckboxChecked}
+                      className={`text-white h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center ${
+                        !isCheckboxChecked
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }`}
+                    >
+                      Register Account
+                    </button>
+                  </div>
+                </form>
+                <button
+                onClick={handleReloadRegister}
+                  className={`text-mainColor2 h-[3rem] mt-3 bg-white border shadow hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center`}
+                >
+                  Select Role
+                </button>
+              </>
+            )}
+          </>
+        )}
+
+        <p className="mt-5 text-center">
+          Already have an account?{" "}
           <span
             onClick={() => navigate(-1)}
             className="text-mainColor font-bold"
