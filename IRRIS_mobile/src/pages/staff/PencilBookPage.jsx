@@ -60,9 +60,21 @@ const PencilBookPage = () => {
   useEffect(() => {
     fetchFacility();
 
+    // const now = new Date();
+    // const formattedNow = now.toISOString().slice(0, 16);
+
+    // setMinDate(formattedNow);
+
     const now = new Date();
-    const formattedNow = now.toISOString().slice(0, 16); // Format: "YYYY-MM-DDTHH:mm"
-    setMinDate(formattedNow);
+    const fifteenDaysFromNow = new Date(
+      now.getTime() + 15 * 24 * 60 * 60 * 1000
+    ); // Add milliseconds for 15 days
+    const formattedFifteenDaysFromNow = fifteenDaysFromNow
+      .toISOString()
+      .slice(0, 16); // Format: "YYYY-MM-DDTHH:mm"
+
+    setMinDate(formattedFifteenDaysFromNow); // Set the minDate to 15 days from now
+
     const disabledDatesArray = [
       "2024-02-14T12:00",
       "2023-02-18T18:30",
@@ -234,11 +246,11 @@ const PencilBookPage = () => {
             disabled={true}
           />
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center ">
             <p className="font-semibold">Event type</p>
-            <Link onClick={handleInfoClick}>
-              <Info size={40} color="#787878" weight="fill" />
-            </Link>
+            <button onClick={handleInfoClick}>
+              <Info size={23} className="text-mainColor2" weight="fill" />
+            </button>
           </div>
 
           <div className="w-full flex justify-center font-semibold  space-x-3">
@@ -561,6 +573,7 @@ const PencilBookPage = () => {
               id="request_file"
               name="request_file"
               accept=".pdf"
+              required
               onChange={handleFileChange}
               className="border w-full text-sm rounded-md "
             />
