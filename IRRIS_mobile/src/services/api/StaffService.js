@@ -115,3 +115,30 @@ export const cancelPencilBook = async (id) => {
     throw error;
   }
 };
+
+export const getLogistics = async () => {
+  try {
+    // Correctly construct the URL with the query parameter
+    const response = await api.get(`/logistic-table`);
+
+    console.log("Get pencil-book-details response:", response);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Get pencil-book-details  error:",
+      error.response || error.message
+    );
+    throw error;
+  }
+};
+
+export const requestLogistic = async (form) => {
+  try {
+    const response = await api.post(`/staff-logistic-request`, form);
+    console.log("Request staff-logistic-request", response);
+    return response.data;
+  } catch (error) {
+    console.error("Request staff-logistic-request", error.response);
+    throw error;
+  }
+};
