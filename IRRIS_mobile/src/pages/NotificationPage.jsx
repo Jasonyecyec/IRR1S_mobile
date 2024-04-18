@@ -7,6 +7,23 @@ import Cookies from "js-cookie";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { formatDate, formatDateTime } from "../utils/utils";
 import "react-loading-skeleton/dist/skeleton.css";
+import PageTitle from "../components/PageTitle";
+
+const SkeletonNotification = ({ count }) => {
+  return (
+    <div className="w-full ">
+      <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
+        {[...Array(count)].map((_, index) => (
+          <Skeleton
+            width={"w-full"}
+            height={"6rem"}
+            className="rounded-lg mb-5"
+          />
+        ))}
+      </SkeletonTheme>
+    </div>
+  );
+};
 
 const NotificationPage = () => {
   const navigate = useNavigate();
@@ -31,38 +48,12 @@ const NotificationPage = () => {
   }, []);
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 bg-mainColor flex items-center ">
-        <button onClick={() => navigate(-1)}>
-          <ArrowLeft size={32} color="#ffffff" weight="bold" />
-        </button>
-      </div>
+      <PageTitle title="Notifications" />
 
       <div className=" flex-1 p-3 space-y-3">
-        <p className="font-semibold text-xl">Notifications</p>
-
         <div className=" h-[40rem] overflow-auto space-y-5">
           {isLoading ? (
-            <div className="w-full ">
-              <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
-                <Skeleton
-                  width={"w-full"}
-                  height={"6rem"}
-                  className="rounded-lg mb-5"
-                />
-
-                <Skeleton
-                  width={"w-full"}
-                  height={"6rem"}
-                  className="rounded-lg mb-5"
-                />
-
-                <Skeleton
-                  width={"w-full"}
-                  height={"6rem"}
-                  className="rounded-lg"
-                />
-              </SkeletonTheme>
-            </div>
+            <SkeletonNotification count={5} />
           ) : notification && notification.length !== 0 ? (
             notification.map((item) => (
               <div className="shadow-md bg-white rounded-lg p-5" key={item.id}>

@@ -295,12 +295,14 @@ const ActivateAccountPage = () => {
   //Password validation
 
   return (
-    <div className=" h-screen w-screen bg-secondaryColor 2  flex flex-col p-8  relative">
+    <div className=" h-screen w-screen bg-secondaryColor 2  flex flex-col p-8 py-10   relative overflow-y-auto">
       {isLoading && <Loading />}
       <div>
-        <h1 className="text-black font-bold text-3xl text-center text-mainColor2">
-          Create Account
-        </h1>
+        <p className="text-black font-bold text-3xl text-center text-mainColor2 flex flex-col">
+          <span> Create Account </span>
+          {currentFilter === "student" && <span>For Student</span>}
+          {currentFilter === "staff" && <span>For Staff</span>}
+        </p>
 
         {/* <div className="w-full text-sm font-bold text-gray-700 space-x-5 flex mt-5">
           <button
@@ -341,23 +343,34 @@ const ActivateAccountPage = () => {
           </button>
         </div> */}
         {currentFilter === null ? (
-          <div>
+          <div className="mt-[5rem] ">
+            <div className="text-center w-full  flex justify-center">
+              <p className="text-center w-[70%] ">
+                Choose the type of account you want to create:
+              </p>
+            </div>
+
             {showButtons && (
-              <div className="h-[20rem] mt-[10rem] bg-white rounded-lg p-5 flex items-center">
+              <div className="rounded-lg p-5 flex items-center">
                 {" "}
-                <div className="w-full text-sm font-bold text-gray-700  space-x-5 flex  mt-5">
+                <div className="w-full text-sm font-bold text-gray-700   flex  mt-5 space-x-8 ">
                   <button
                     // onClick={() => setCurrentFilter("student")}
                     onClick={handleStudentButtonClick}
-                    className={`flex flex-col justify-center items-center hover:bg-gray-50 hover:shadow cursor-pointer  flex-1 rounded-md border bg-white border-mainColor  p-3 relative ${
+                    className={`flex flex-col justify-center items-center flex-1  space-y-3  hover:bg-gray-50 hover:shadow cursor-pointer bg-white  shadow  flex-1 rounded-2xl border    p-3 relative ${
                       currentFilter === "student" && "border-mainColor2"
                     }`}
                   >
-                    <UserCircle size={40} color="#0b0b6a" weight="light" />
+                    <span>
+                      {" "}
+                      <UserCircle
+                        size={70}
+                        className="text-gray-500"
+                        weight="light"
+                      />
+                    </span>
 
-                    <Label className="text-[#0b0b6a] text-sm mt-3">
-                      Student
-                    </Label>
+                    <p className="text-mainColor2 font-bol text-xl ">Student</p>
                     {currentFilter === "student" && (
                       <span>
                         <CheckCircle
@@ -371,14 +384,20 @@ const ActivateAccountPage = () => {
                   <button
                     // onClick={() => setCurrentFilter("staff")}
                     onClick={handleStaffButtonClick}
-                    className={`flex flex-col justify-center hover:bg-gray-50 hover:shadow items-center cursor-pointer  flex-1 relative rounded-md border border-mainColor bg-white text-white p-3 ${
+                    className={`flex flex-col justify-center hover:bg-gray-50 hover:shadow space-y-2  items-center cursor-pointer  flex-1 relative shadow rounded-2xl border bg-white text-white p-3 ${
                       currentFilter === "staff" && "border-mainColor2"
                     }`}
                   >
-                    <UserCircleGear size={40} color="#0b0b6a" weight="light" />
-
-                    <Label className="text-[#0b0b6a] text-sm mt-3">Staff</Label>
-
+                    {" "}
+                    <span>
+                      {" "}
+                      <UserCircleGear
+                        size={70}
+                        className="text-gray-500"
+                        weight="light"
+                      />
+                    </span>
+                    <p className="text-mainColor2 font-bol text-xl ">Staff</p>
                     {currentFilter === "staff" && (
                       <span>
                         <CheckCircle
@@ -399,7 +418,7 @@ const ActivateAccountPage = () => {
             {showForm && (
               <>
                 {/* Your form JSX */}
-                <div className="flex flex-col p-2 font-bold text-3xl text-center text-mainColor2">
+                {/* <div className="flex flex-col p-2 font-bold text-3xl text-center text-mainColor2">
                   {currentFilter === "student" && (
                     <Label className=" font-bold text-2xl text-center text-mainColor2">
                       Student
@@ -411,7 +430,7 @@ const ActivateAccountPage = () => {
                       Staff
                     </Label>
                   )}
-                </div>
+                </div> */}
                 <form onSubmit={handleSubmit}>
                   <div className=" flex flex-col w-full space-y-5 mt-5 text-sm">
                     <div className="flex space-x-5">
@@ -650,7 +669,7 @@ const ActivateAccountPage = () => {
                   </div>
                 </form>
                 <button
-                onClick={handleReloadRegister}
+                  onClick={handleReloadRegister}
                   className={`text-mainColor2 h-[3rem] mt-3 bg-white border shadow hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center`}
                 >
                   Select Role
@@ -664,7 +683,7 @@ const ActivateAccountPage = () => {
           Already have an account?{" "}
           <span
             onClick={() => navigate(-1)}
-            className="text-mainColor font-bold"
+            className="text-mainColor2 font-bold font-"
           >
             {" "}
             Login

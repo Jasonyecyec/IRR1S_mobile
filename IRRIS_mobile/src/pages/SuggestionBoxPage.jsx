@@ -553,7 +553,7 @@ const SuggestionBoxPage = () => {
       )}
 
       {/* ------------------------------------------------------------------------------------------------------------------ */}
-      <header className="fixed z-[-1] top-0 left-0 right-0 bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
+      {/* <header className="fixed z-[-1] top-0 left-0 right-0 bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
         <div className="backbutton  w-[2rem] ml-2 mt-1">
           <Link to="/" className="text-white  ">
             <ArrowLeft size={32} />
@@ -568,7 +568,8 @@ const SuggestionBoxPage = () => {
             Suggestion
           </p>
         </div>
-      </div>
+      </div> */}
+      <PageTitle title={"Suggestion"} />
 
       {/* SUGGESTION BOX FORM */}
 
@@ -713,14 +714,14 @@ const SuggestionBoxPage = () => {
             </label>
           </div>
           <button
-        type="submit"
-        disabled={!isCheckboxChecked}
-        className={`text-white h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center ${
-          !isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-      >
-        Report Now
-      </button>
+            type="submit"
+            disabled={!isCheckboxChecked}
+            className={`text-white h-[3rem] bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center ${
+              !isCheckboxChecked ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            Report Now
+          </button>
         </form>
       </div>
       {termsAndConditions && (

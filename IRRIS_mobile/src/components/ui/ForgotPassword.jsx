@@ -8,6 +8,7 @@ import { verifyOTP, resendOTP } from "@/src/services/api/StudentService";
 import { forgotPassword2 } from "@/src/services/api/sharedService";
 import { validatePassword } from "@/src/utils/utils"; // Import the password validation function
 import { Eye, EyeSlash } from "@phosphor-icons/react";
+import PageTitle from "../PageTitle";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState(""); // State to store the email value
@@ -38,7 +39,6 @@ const ForgotPassword = () => {
   const toggleConfirmPasswordVisibility = () => {
     setIsConfirmPasswordVisible((prev) => !prev);
   };
-  
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -67,7 +67,7 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       console.error("Error checking email:", error);
-      toast.error("Error checking email");
+      toast.error("Email not found.");
       setIsEmailVerified(false);
     } finally {
       setIsLoadingCheckEmail(false); // Reset loading state for Check Email button
@@ -218,7 +218,7 @@ const ForgotPassword = () => {
     <div>
       <div className=" h-full">
         {/* Header and other JSX remain unchanged */}
-        <header className="fixed z-[-1] top-0 left-0 right-0 bg-mainColor2  rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
+        {/* <header className="fixed z-[-1] top-0 left-0 right-0 bg-mainColor2  rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
           <div className="backbutton  w-[2rem] ml-2 mt-1">
             <Link to="/" className="text-white">
               <ArrowLeft size={32} />
@@ -231,7 +231,8 @@ const ForgotPassword = () => {
               User Verification
             </p>
           </div>
-        </div>
+        </div> */}
+        <PageTitle title="User Verification" />
 
         <div className="flex justify-center mt-[8rem]">
           <div className="form-container max-w-sm w-full bg-white rounded-md p-8 shadow-lg">
@@ -248,7 +249,7 @@ const ForgotPassword = () => {
                     type="email"
                     id="email"
                     value={email}
-                    placeholder="juandelacruz@gmail.com"
+                    placeholder="Please enter email"
                     onChange={handleEmailChange}
                     className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2"
                     required
@@ -391,7 +392,6 @@ const ForgotPassword = () => {
                     required
                   />
 
-                 
                   {/* Display password match message */}
                 </div>
                 <div>
