@@ -16,7 +16,7 @@ import { formatDate } from "@/src/utils/utils";
 import { useNavigate } from "react-router-dom";
 import { getJobOrder } from "@/src/services/api/manpowerService";
 import "../../index.css";
-import UPkeepLogo from "/qcu_upkeep_logo.png";
+import UPkeepLogo from "/qcu_logo.png";
 import { Toaster, toast } from "sonner";
 
 import {
@@ -295,7 +295,7 @@ const ManpowerHomePage = () => {
 
       <div className="flex p-3 justify-between">
         <div className="flex items-center font-semibold text-mainColor space-x-2">
-          <img src={UPkeepLogo} className="w-12 h-12" />
+        <img src={UpKeepLogo} className="w-9 h-7" />
           <p className="text-xl">
             Hello!{" "}
             <span>

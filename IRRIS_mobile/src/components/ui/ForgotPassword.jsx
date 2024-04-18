@@ -6,38 +6,34 @@ import { getUserDetailsByEmail } from "@/src/services/api/sharedService";
 import OtpInput from "react-otp-input";
 import { verifyOTP, resendOTP } from "@/src/services/api/StudentService";
 import { forgotPassword2 } from "@/src/services/api/sharedService";
-import { validatePassword } from "@/src/utils/utils"; // Import the password validation function
+import { validatePassword } from "@/src/utils/utils";
 import { Eye, EyeSlash } from "@phosphor-icons/react";
 import PageTitle from "../PageTitle";
+import emailVerification from "../../assets/images/VectorForgotPassword/otp-send.jpg";
+import emailOTP from "../../assets/images/VectorForgotPassword/otp.jpg";
+import passwordInput from "../../assets/images/VectorForgotPassword/put-password.jpg";
+import verifyPassword from "../../assets/images/VectorForgotPassword/password-verify.jpg";
+import changeVerify from "../../assets/images/VectorForgotPassword/password-change.jpg";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState(""); // State to store the email value
-  const [otp, setOtp] = useState(""); // State to store the OTP value
-  const [newPassword, setNewPassword] = useState(""); // State to store the new password
-  const [confirmPassword, setConfirmPassword] = useState(""); // State to store the confirm password
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [isOtpVerified, setIsOtpVerified] = useState(false); // State to track OTP verification
-  const [isChangingPassword, setIsChangingPassword] = useState(false); // State to track password change process
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [passwordValidationMessage, setPasswordValidationMessage] =
-    useState(""); // State for password validation message
-  const [passwordMatchMessage, setPasswordMatchMessage] = useState(""); // State for password match message
-  const [isSendCodeDisabled, setIsSendCodeDisabled] = useState(false); // State to disable the "Send Code" button
-  const [countdown, setCountdown] = useState(60); // State for countdown timer
+    useState("");
+  const [passwordMatchMessage, setPasswordMatchMessage] = useState("");
+  const [isSendCodeDisabled, setIsSendCodeDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(60);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
-  const [isLoadingCheckEmail, setIsLoadingCheckEmail] = useState(false); // State to track loading state for Check Email button
+  const [isLoadingCheckEmail, setIsLoadingCheckEmail] = useState(false);
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
-  };
-
-  // const toggleConfirmPasswordVisibility = () => {
-  //   setIsConfirmPasswordVisible((prev) => !prev);
-  // };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setIsConfirmPasswordVisible((prev) => !prev);
+    
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -47,14 +43,13 @@ const ForgotPassword = () => {
   const sendCodeTimer = useRef(null);
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value); // Update email state as the user types
+    setEmail(e.target.value);
   };
 
   const handleCheckEmail = async () => {
     try {
-      setIsLoadingCheckEmail(true); // Set loading state for Check Email button
+      setIsLoadingCheckEmail(true);
 
-      // Perform email verification logic here
       const userDetailsResponse = await getUserDetailsByEmail(email);
 
       if (userDetailsResponse.error) {
@@ -62,7 +57,7 @@ const ForgotPassword = () => {
         setIsEmailVerified(false);
       } else {
         setIsEmailVerified(true);
-        setIsOtpVerified(false); // Reset OTP verification status when email changes
+        setIsOtpVerified(false);
         toast.success("User found");
       }
     } catch (error) {
@@ -70,20 +65,19 @@ const ForgotPassword = () => {
       toast.error("Email not found.");
       setIsEmailVerified(false);
     } finally {
-      setIsLoadingCheckEmail(false); // Reset loading state for Check Email button
+      setIsLoadingCheckEmail(false);
     }
   };
 
   const handleSendCode = () => {
-    // Perform code sending logic here
-    setIsSendCodeDisabled(true); // Disable the "Send Code" button
-    setCountdown(60); // Reset countdown timer
+    setIsSendCodeDisabled(true);
+    setCountdown(60);
     sendCodeTimer.current = setInterval(() => {
-      setCountdown((prevCountdown) => prevCountdown - 1); // Update countdown every second
+      setCountdown((prevCountdown) => prevCountdown - 1);
     }, 1000);
     setTimeout(() => {
-      clearInterval(sendCodeTimer.current); // Clear the interval after 60 seconds
-      setIsSendCodeDisabled(false); // Re-enable the "Send Code" button
+      clearInterval(sendCodeTimer.current);
+      setIsSendCodeDisabled(false);
     }, 60000);
     return toast.promise(resendOTP(email), {
       loading: "Sending OTP ...",
@@ -103,7 +97,6 @@ const ForgotPassword = () => {
   };
 
   useEffect(() => {
-    // Clear the timer when the component unmounts
     return () => {
       clearInterval(sendCodeTimer.current);
     };
@@ -126,24 +119,19 @@ const ForgotPassword = () => {
   };
 
   const handleSubmitForgotPassword = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
-    // Check if passwo1rds match
     if (newPassword !== confirmPassword) {
-      // Show toast for password mismatch
       toast.error("Passwords do not match.");
       return;
     }
-    // Navigate to the login page
-    // Navigate to the login page after 3 seconds
+
     setTimeout(() => {
       navigate("/login");
     }, 3000);
-    // navigate("/login");
-    // Set loading state to true
+
     setIsChangingPassword(true);
 
-    // Perform password change logic here
     try {
       const response = await forgotPassword2({
         email,
@@ -151,38 +139,32 @@ const ForgotPassword = () => {
         confirmPassword,
       });
 
-      // Display success toast
       toast.success("Password successfully changed!");
 
-      // Navigate to the appropriate route
       navigate(response.route);
     } catch (error) {
       console.error("Error changing password:", error);
-      setIsError(true); // Set isError state to true
-      toast.error(error.response.data.message); // Display error toast
+      setIsError(true);
+      toast.error(error.response.data.message);
     } finally {
-      // Reset loading state after the asynchronous operation
       setIsChangingPassword(false);
     }
   };
 
   const handleSubmitOTPVerification = async () => {
-    // Perform OTP verification logic here
-    // Disable the button
     submitButtonRef.current.disabled = true;
     try {
       const response = await notifyVerifyOTP(email, otp);
-      setIsPasswordVisible(response.success); // Only show password fields if OTP verification succeeds
+      setIsPasswordVisible(response.success);
       if (response.success) {
-        toast.success(response); // Display success toast only if OTP verification succeeds
+        toast.success(response);
       }
     } catch (error) {
-      setIsOtpVerified(false); // Reset OTP verification status
-      setIsPasswordVisible(false); // Hide password fields if OTP verification fails
+      setIsOtpVerified(false);
+      setIsPasswordVisible(false);
       console.log(error);
-      toast.error(error.response.data.message); // Display error toast for OTP verification failure
+      toast.error(error.response.data.message);
     } finally {
-      // Re-enable the button after the asynchronous operation
       submitButtonRef.current.disabled = false;
       setIsLoading(false);
     }
@@ -192,79 +174,69 @@ const ForgotPassword = () => {
     setOtp(value);
   };
 
-  // Function to handle password change and validate password
   const handlePasswordChange = (value) => {
-    setNewPassword(value); // Update new password state
-    const { isValid, errors } = validatePassword(value); // Validate password
+    setNewPassword(value);
+    const { isValid, errors } = validatePassword(value);
     setPasswordValidationMessage(
       isValid ? "Password Strength: Strong" : errors
-    ); // Set validation message
+    );
   };
 
-  const handleNewPasswordChange = (e) => {
-    setNewPassword(e.target.value); // Update new password state
-  };
-
-  // Function to handle confirm password change and validate if it matches with new password
   const handleConfirmPasswordChange = (value) => {
-    setConfirmPassword(value); // Update confirm password state
-    // Check if passwords match
+    setConfirmPassword(value);
     setPasswordMatchMessage(
       value === newPassword ? "Passwords match." : "Passwords don't match."
     );
+
+    
   };
 
   return (
     <div>
-      <div className=" h-full">
-        {/* Header and other JSX remain unchanged */}
-        {/* <header className="fixed z-[-1] top-0 left-0 right-0 bg-mainColor2  rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
-          <div className="backbutton  w-[2rem] ml-2 mt-1">
-            <Link to="/" className="text-white">
-              <ArrowLeft size={32} />
-            </Link>
-          </div>
-        </header>
-        <div className="flex justify-center mt-[5rem] z-1">
-          <div className="banner w-[17rem] h-[3.2rem] pt-1 rounded-full bg-blue-700 flex justify-center align-center  mt-[-2rem]">
-            <p className="text-3xl font-medium  text-white dark:text-white">
-              User Verification
-            </p>
-          </div>
-        </div> */}
+      <div className="h-full">
         <PageTitle title="User Verification" />
 
-        <div className="flex justify-center mt-[8rem]">
+        <div className="flex justify-center mt-[1rem]">
           <div className="form-container max-w-sm w-full bg-white rounded-md p-8 shadow-lg">
             {!isEmailVerified && (
               <div className="mb-6">
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    placeholder="Please enter email"
-                    onChange={handleEmailChange}
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2"
-                    required
-                  />
+                <div className="flex flex-col">
+                  <div className="flex items-center justify-center">
+                    {" "}
+                    <img
+                      src={emailVerification}
+                      className="bg-red p-3  "
+                      alt="email"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-gray-700 font-bold mb-2"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      value={email}
+                      placeholder="Please enter email"
+                      onChange={handleEmailChange}
+                      className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2"
+                      required
+                    />
+                  </div>
                 </div>
                 <div>
                   <button
                     onClick={handleCheckEmail}
                     className={`bg-mainColor2 mt-4 text-white w-full py-2 rounded-md hover:bg-opacity-80 transition duration-300 ${
                       isLoadingCheckEmail ? "opacity-50 cursor-not-allowed" : ""
-                    }`} // Add conditional classes to disable button when loading
-                    disabled={isLoadingCheckEmail} // Disable the button when loading
+                    }`}
+                    disabled={isLoadingCheckEmail}
                   >
-                    {isLoadingCheckEmail ? "Checking Email..." : "Check Email"}{" "}
-                    {/* Change button text based on loading state */}
+                    {isLoadingCheckEmail ? "Checking Email..." : "Check Email"}
                   </button>
                 </div>
               </div>
@@ -273,6 +245,10 @@ const ForgotPassword = () => {
             {isEmailVerified && !isOtpVerified && (
               <>
                 <div className="mb-6">
+                  <div className="flex items-center justify-center">
+                    {" "}
+                    <img src={emailOTP} className="bg-red p-3  " alt="email" />
+                  </div>
                   <label
                     htmlFor="otp"
                     className="block text-gray-700 font-bold mb-4"
@@ -284,7 +260,6 @@ const ForgotPassword = () => {
                       value={otp}
                       onChange={handleOTPInput}
                       numInputs={4}
-                      // Add the renderInput prop here
                       renderInput={(inputProps, index) => (
                         <input
                           {...inputProps}
@@ -312,7 +287,7 @@ const ForgotPassword = () => {
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-mainColor2"
                     } text-mainColor2 bg-white border shadow w-[80%] mr-2 py-2 rounded-md hover:bg-opacity-80 transition duration-300`}
-                    disabled={isSendCodeDisabled} // Disable the button if sending code
+                    disabled={isSendCodeDisabled}
                   >
                     {isSendCodeDisabled ? `00 : ${countdown}` : "Send Code"}
                   </button>
@@ -328,8 +303,23 @@ const ForgotPassword = () => {
             )}
 
             {isEmailVerified && isOtpVerified && (
-              <form className="mt-6">
-                {/* New Password Input */}
+              <form className="">
+                <div className="flex items-center justify-center">
+                  {passwordMatchMessage === "Passwords match." ? (
+                    <img
+                      src={verifyPassword}
+                      className="bg-red p-3"
+                      alt="verify-password"
+                    />
+                  ) : (
+                    <img
+                      src={passwordInput}
+                      className="bg-red p-3"
+                      alt="new-password"
+                    />
+                  )}
+                </div>
+
                 <div className="mb-6 relative">
                   <label
                     htmlFor="newPassword"
@@ -343,11 +333,11 @@ const ForgotPassword = () => {
                     id="newPassword"
                     value={newPassword}
                     onChange={(e) => handlePasswordChange(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2 pr-10" // Add pr-10 for padding on the right to accommodate the button
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2 pr-10"
                     required
                   />
 
-                  <button
+                  {/* <button
                     onClick={togglePasswordVisibility}
                     className="absolute inset-y-0 right-0 h-full pt-7 px-3 flex items-center"
                   >
@@ -356,11 +346,9 @@ const ForgotPassword = () => {
                     ) : (
                       <Eye size={30} />
                     )}
-                  </button>
-                  {/* Display password validation message */}
+                  </button> */}
                 </div>
                 <div>
-                  {" "}
                   <p
                     className={
                       passwordValidationMessage === "Password Strength: Strong"
@@ -372,7 +360,6 @@ const ForgotPassword = () => {
                   </p>
                 </div>
 
-                {/* Confirm Password Input */}
                 <div className="mb-6 relative">
                   <label
                     htmlFor="confirmPassword"
@@ -381,18 +368,16 @@ const ForgotPassword = () => {
                     Confirm Password
                   </label>
                   <input
-                    type={isConfirmPasswordVisible ? "text" : "password"}
+                    type="password"
                     placeholder="Confirm Password"
                     id="confirmPassword"
                     value={confirmPassword}
                     onChange={(e) =>
                       handleConfirmPasswordChange(e.target.value)
                     }
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2 pr-10" // Add pr-10 for padding on the right to accommodate the button
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-mainColor2 pr-10"
                     required
                   />
-
-                  {/* Display password match message */}
                 </div>
                 <div>
                   <p
@@ -406,12 +391,11 @@ const ForgotPassword = () => {
                   </p>
                 </div>
 
-                {/* Button to submit password change */}
                 <button
                   type="submit"
                   onClick={handleSubmitForgotPassword}
                   className="bg-mainColor text-white w-full  py-2 rounded-md hover:bg-opacity-80 transition duration-300"
-                  disabled={isChangingPassword} // Disable the button when changing password
+                  disabled={isChangingPassword}
                 >
                   {isChangingPassword
                     ? "Changing Password..."
