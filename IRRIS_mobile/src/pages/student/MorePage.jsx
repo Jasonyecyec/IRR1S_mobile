@@ -20,7 +20,7 @@ import "../../index.css";
 import useUserStore from "@/src/services/state/userStore";
 import CalendarPage from "../staff/CalendarPage";
 import useNotificationStore from "@/src/services/state/notificationStore";
-import UkeepLogo from "/qcu_logo.png";
+import UpkeepLogo from "/qcu_logo.png";
 
 const moreItems = [
   // { to: "", label: "Report", icon: ReportIcon },
