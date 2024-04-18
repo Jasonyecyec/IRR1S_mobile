@@ -23,7 +23,7 @@ import { Spinner } from "flowbite-react";
 import { formatDateTime } from "../utils/utils";
 import StatusIndicator from "../components/StatusIndicator";
 import { CalendarBlank } from "@phosphor-icons/react";
-import UkeepLogo from "/qcu_logo.png";
+import UpKeepLogo from "/qcu_logo.png";
 import beamsClient from "@/src/pushNotificationConfig";
 import StatusBadgeReport from "../components/StatusBadgeReport";
 
@@ -170,7 +170,7 @@ const HomePage = () => {
     <div className="h-full bg-secondaryColor">
       <div className="flex p-3 justify-between">
         <div className="flex items-center font-semibold text-mainColor space-x-2">
-        <img src={UpKeepLogo} className="w-9 h-7" />
+          <img src={UpKeepLogo} className="w-9 h-7" />
           <p className="text-xl">
             Hello!{" "}
             <span>
