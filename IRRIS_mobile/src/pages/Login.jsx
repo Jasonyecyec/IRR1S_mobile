@@ -265,13 +265,14 @@ const Login = () => {
                 {/* Removed mt-5 class */}
                 Don't have an account?{" "}
               </p>
-             
             </div>
           </div>
 
           <div className="flex justify-end mt-5 ">
             <Link to="/suggestion-box">
-              <span className="font-bold text-sm text-[#16425B]">Suggestion</span>
+              <span className="font-bold text-sm text-[#16425B]">
+                Suggestion
+              </span>
             </Link>
           </div>
         </div>

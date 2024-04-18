@@ -207,7 +207,7 @@ const RequestPage = () => {
   return (
     <div className="w-screen h-screen flex flex-col">
       <Toaster richColors position="top-center" />
-      <PageTitle title="REQUEST" />
+      <PageTitle title="Request" />
 
       {isShowConfirmation && (
         <ConfirmationModal
@@ -239,7 +239,7 @@ const RequestPage = () => {
         />
       )}
 
-      <div className="flex-1 p-5 pt-14" onSubmit={handleSubmit}>
+      <div className="flex-1 p-5 pt-10" onSubmit={handleSubmit}>
         <form className="space-y-5">
           <div className="space-y-2 flex flex-col">
             <label for="request_type" className="text-sm font-semibold">
@@ -258,6 +258,17 @@ const RequestPage = () => {
               <option value="maintenance">Maintenance</option>
               <option value="logistics">Logistics</option>
             </select>
+
+            {!form.request_type && (
+              <div className="text-sm">
+                <p className="font-semibold">
+                  Please select a request type first.{" "}
+                </p>
+                <span className="text-gray-500">
+                  Choose a request type above to proceed.
+                </span>
+              </div>
+            )}
           </div>
 
           {form.request_type === "manpower" ||
@@ -425,9 +436,9 @@ const RequestPage = () => {
             </>
           )}
 
-          <div className="flex space-x-3 font-semibold text-lg pt-5">
+          <div className="flex space-x-5 font-semibold text-lg pt-5">
             <button
-              className="flex-1 bg-mainColor text-white rounded-md"
+              className="flex-1 border  text-gray-500 rounded-md bg-gray-50 hover:bg-gray-100 ease-in-out duration-150"
               onClick={(e) => {
                 e.preventDefault();
                 navigate(-1);
@@ -437,7 +448,7 @@ const RequestPage = () => {
             </button>
             <button
               type="submit"
-              className="bg-mainColor text-white rounded-md px-3 py-2 flex-1"
+              className="bg-mainColor2 text-white rounded-md px-3 py-2 flex-1"
             >
               SUBMIT
             </button>

@@ -227,25 +227,35 @@ const StaffHomepage = () => {
         </div>
 
         {/* MORE SERVICES */}
-        <div className=" flex justify-center items-center flex-wrap gap-x-5 gap-y-5  ">
+        <div className=" flex justify-center items-center flex-wrap gap-5  ">
           {servicesItems.map((item, index) => (
-            <Link className="bg-blue-100 hover:bg-white w-[26%] h-[48%] rounded-lg" key={index} to={item.to}>
+            <Link
+              className="bg-blue-100 hover:bg-blue-200 ease-in-out duration-150   w-[26%] h-[50%]  rounded-lg flex justify-center items-center"
+              key={index}
+              to={item.to}
+            >
               <div
                 key={index}
-                className="flex p-2 flex-col space-y-2 items-center "
+                className="flex p-1  flex-col space-y-2 items-center justify-center"
               >
                 {/* <span className="bg-black h-12 w-12">s</span>
                  */}
-                {item.icon &&
-                  React.createElement(item.icon, {
-                    size: "2.3rem",
-                    // color: "#",
-                    className: "text-[#0f59cb]",
-                  })}
-                <p className="font-semibold text-xs text-[#0f59cb]">{item.label}</p>{" "}
+                <span>
+                  {" "}
+                  {item.icon &&
+                    React.createElement(item.icon, {
+                      size: "2rem",
+                      // color: "#",
+                      className: "text-[#0f59cb]",
+                    })}
+                </span>
+                <p className="font-semibold text-xs text-[#0f59cb]">
+                  {item.label}
+                </p>{" "}
                 <div>
-                <p className="font-semibold mt-[-0.5rem] text-xs text-[#0f59cb]">{item.label2}</p>{" "}
-
+                  <p className="font-semibold mt-[-0.5rem] text-xs text-[#0f59cb]">
+                    {item.label2}
+                  </p>{" "}
                 </div>
               </div>
             </Link>
