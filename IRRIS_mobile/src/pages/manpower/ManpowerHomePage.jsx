@@ -10,13 +10,15 @@ import Cookies from "js-cookie";
 import ReportIcon from "../../assets/images/report_icon.png";
 import RequestIcon from "../../assets/images/request_icon.png";
 import DailyTaskIcon from "../../assets/images/dailyTask_icon.png";
-import { Clock, MapPin, Circle } from "@phosphor-icons/react";
+import { Clock, MapPin, Circle, Power } from "@phosphor-icons/react";
 import { Spinner } from "flowbite-react";
 import { formatDate } from "@/src/utils/utils";
 import { useNavigate } from "react-router-dom";
 import { getJobOrder } from "@/src/services/api/manpowerService";
 import "../../index.css";
 import UPkeepLogo from "/qcu_upkeep_logo.png";
+import { Toaster, toast } from "sonner";
+
 import {
   Bell,
   WarningCircle,
@@ -24,6 +26,14 @@ import {
   Notepad,
 } from "@phosphor-icons/react";
 import StatusBadgeReport from "@/src/components/StatusBadgeReport";
+import {
+  getManpowerStatus,
+  setManpowerOffline,
+  setManpowerOnline,
+} from "@/src/services/api/manpowerService";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import ConfirmationModal from "@/src/components/ConfirmationModal";
 
 const ManpowerHomePage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -33,6 +43,10 @@ const ManpowerHomePage = () => {
   const navigate = useNavigate();
   const [recentJobOrder, setRecentJobOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [manpowerStatus, setManpowerStatus] = useState(null);
+  const [isFetchingStatus, setIsFetchingStatus] = useState(null);
+  const [isLoadingStatus, setIsLoadingStatus] = useState(false);
+  const [openConfirmStatus, setOpenConfirmStatus] = useState(false);
 
   const {
     isJobOrderNotif,
@@ -63,6 +77,46 @@ const ManpowerHomePage = () => {
       console.log(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchManpowerStatus = async () => {
+    setIsFetchingStatus(true);
+    try {
+      const { manpower_status } = await getManpowerStatus();
+      console.log("manpower_status", manpower_status);
+      setManpowerStatus(manpower_status);
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsFetchingStatus(false);
+    }
+  };
+
+  const handleConfirmOffline = async () => {
+    setIsLoadingStatus(true);
+    try {
+      const response = await setManpowerOffline();
+      setManpowerStatus("not-available");
+      toast.info("Status set as 'not available'.");
+    } catch (error) {
+      console.log("Error", error);
+    } finally {
+      setIsLoadingStatus(false);
+      setOpenConfirmStatus(false);
+    }
+  };
+
+  const handleOnlineButton = async () => {
+    setIsLoadingStatus(true);
+    try {
+      const response = await setManpowerOnline();
+      setManpowerStatus("available");
+      toast.success("You are now available for job orders.");
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsLoadingStatus(false);
     }
   };
 
@@ -195,6 +249,7 @@ const ManpowerHomePage = () => {
       });
     }
 
+    fetchManpowerStatus();
     // initializePusherBeams();
 
     // listenToJobOrder();
@@ -228,6 +283,16 @@ const ManpowerHomePage = () => {
 
   return (
     <div className="h-full flex flex-col bg-secondaryColor">
+      <Toaster richColors position="top-center" />
+      {openConfirmStatus && (
+        <ConfirmationModal
+          isLoading={isLoadingStatus}
+          onCloseModal={() => setOpenConfirmStatus(false)}
+          handleConfirmButton={handleConfirmOffline}
+          content={"Are you sure you want to go offline?"}
+        />
+      )}
+
       <div className="flex p-3 justify-between">
         <div className="flex items-center font-semibold text-mainColor space-x-2">
           <img src={UPkeepLogo} className="w-12 h-12" />
@@ -239,16 +304,6 @@ const ManpowerHomePage = () => {
             </span>
           </p>
         </div>
-        {/* <button onClick={handleNotificationButton} className="relative">
-          {notification && (
-            <span className="absolute top-[2px] right-[3px] flex h-3 w-3 ">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accentColor opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-accentColor text-xs justify-center items-center text-white"></span>
-            </span>
-          )}
-
-          <Bell size={"2.3rem"} color="#1656ea" weight="fill" />
-        </button> */}
 
         <Link to={`/manpower/notification/${user?.id}`}>
           <button>
@@ -256,6 +311,47 @@ const ManpowerHomePage = () => {
           </button>
         </Link>
       </div>
+
+      {isFetchingStatus ? (
+        <div className="px-5 w-32 h-[2.5rem] rounded-full">
+          <Skeleton width={"100%"} height={"100%"} className="rounded-full" />
+        </div>
+      ) : (
+        manpowerStatus && (
+          <div className=" px-5 flex">
+            {manpowerStatus === "not-available" ? (
+              <button
+                onClick={handleOnlineButton}
+                className=" rounded-full bg-gray-600 text-gray-50 font-semibold  flex items-center p-2 px-3 space-x-2"
+                disabled={isLoadingStatus}
+              >
+                <div className="rounded-full">
+                  <Power
+                    size={24}
+                    weight="bold"
+                    className=" text-white rounded-full "
+                  />
+                </div>
+
+                <span>GO ONLINE</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => setOpenConfirmStatus(true)}
+                className=" rounded-full  bg-gray-100 font-semibold  flex items-center  space-x-3"
+              >
+                <div className="rounded-full bg-green-500 p-2 w-10 h-10">
+                  <Power
+                    size={24}
+                    weight="bold"
+                    className=" text-white rounded-full "
+                  />
+                </div>
+              </button>
+            )}
+          </div>
+        )
+      )}
 
       <div className="p-5 flex-1 flex flex-col space-y-7">
         <div className="p-2 rounded-lg">

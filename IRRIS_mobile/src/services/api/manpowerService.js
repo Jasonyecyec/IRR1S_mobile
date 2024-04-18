@@ -195,3 +195,33 @@ export const finishReportForm = async (formData, id) => {
     throw error;
   }
 };
+
+export const getManpowerStatus = async () => {
+  try {
+    const response = await api.get(`/manpower-status`);
+    return response.data;
+  } catch (error) {
+    console.error("Get /manpower-status", error.response);
+    throw error;
+  }
+};
+
+export const setManpowerOffline = async () => {
+  try {
+    const response = await api.put(`/manpower-offline`);
+    return response.data;
+  } catch (error) {
+    console.error("Get /manpower-online", error.response);
+    throw error;
+  }
+};
+
+export const setManpowerOnline = async () => {
+  try {
+    const response = await api.put(`/manpower-online`);
+    return response.data;
+  } catch (error) {
+    console.error("Get /manpower-online", error.response);
+    throw error;
+  }
+};
