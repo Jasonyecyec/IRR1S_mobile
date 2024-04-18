@@ -8,7 +8,7 @@ import "../../index.css";
 import { useNavigate } from "react-router-dom";
 import useNotificationStore from "@/src/services/state/notificationStore";
 import beamsClient from "@/src/pushNotificationConfig";
-import UpKeepLogo from "/qcu_upkeep_logo.png";
+import UpKeepLogo from "/qcu_logo.png";
 import { formatDateTime } from "@/src/utils/utils";
 import StatusIndicator from "@/src/components/StatusIndicator";
 import {
@@ -181,7 +181,7 @@ const StaffHomepage = () => {
     <div className="h-full bg-secondaryColor">
       <div className="flex p-3 justify-between">
         <div className="flex items-center font-semibold text-mainColor space-x-2">
-          <img src={UpKeepLogo} className="w-12 h-12" />
+          <img src={UpKeepLogo} className="w-9 h-7" />
           <p className="text-xl">
             Hello!{" "}
             <span>

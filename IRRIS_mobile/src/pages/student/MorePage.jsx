@@ -20,7 +20,7 @@ import "../../index.css";
 import useUserStore from "@/src/services/state/userStore";
 import CalendarPage from "../staff/CalendarPage";
 import useNotificationStore from "@/src/services/state/notificationStore";
-import UkeepLogo from "/qcu_upkeep_logo.png";
+import UkeepLogo from "/qcu_logo.png";
 
 const moreItems = [
   // { to: "", label: "Report", icon: ReportIcon },
@@ -65,7 +65,7 @@ const MorePage = () => {
       {" "}
       <div className="flex p-3 justify-between">
         <div className="flex items-center font-semibold text-mainColor space-x-2">
-          <img src={UkeepLogo} className="w-12 h-12" />
+        <img src={UpKeepLogo} className="w-9 h-7" />
           <p className="text-xl">
             Hello!{" "}
             <span>
