@@ -82,6 +82,17 @@ export const getRequestDetails = async (id, type) => {
   }
 };
 
+export const cancelRequest = async (id, form) => {
+  try {
+    const response = await api.patch(`/cancel-request/${id}`, form);
+    console.log("Request cancel-request response", response);
+    return response.data;
+  } catch (error) {
+    console.error("Get cancel-request  error", error.response);
+    throw error;
+  }
+};
+
 export const getPencilBookHistory = async (id, status = null) => {
   try {
     const params = status !== null ? { status } : {};

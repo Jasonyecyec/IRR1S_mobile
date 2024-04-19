@@ -80,7 +80,7 @@ const RequestHistoryPage = () => {
                   {" "}
                   <div className="w-full space-y-1">
                     <p className="text-right w-full text-xs text-gray-600">
-                      {formatDateTime(item.created_at)}
+                      {formatDateTime(item.updated_at)}
                     </p>
                     <div
                       key={item.id}
@@ -135,7 +135,7 @@ const RequestHistoryPage = () => {
                 >
                   <div className="w-full space-y-1" key={item.id}>
                     <p className="text-right w-full text-xs text-gray-600">
-                      {formatDateTime(item.created_at)}
+                      {formatDateTime(item.updated_at)}
                     </p>
                     <div
                       key={item.id}
