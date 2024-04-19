@@ -199,6 +199,8 @@ export const finishReportForm = async (formData, id) => {
 export const getManpowerStatus = async (id) => {
   try {
     const response = await api.get(`/manpower-status/${id}`);
+    console.log("Get /manpower-status", response);
+
     return response.data;
   } catch (error) {
     console.error("Get /manpower-status", error.response);
