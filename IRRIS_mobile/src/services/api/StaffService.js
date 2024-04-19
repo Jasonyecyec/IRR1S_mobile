@@ -1,3 +1,4 @@
+// import { type } from "os";
 import api from "./api";
 
 export const fetchFacilityToReserve = async () => {
@@ -55,14 +56,28 @@ export const requestService = async (form) => {
   }
 };
 
-export const getStaffRequest = async (userId, status = null) => {
+export const getStaffRequest = async (userId, filter) => {
   try {
-    const params = status !== null ? { status } : {};
-    const response = await api.get(`/request-history/${userId}`, { params });
+    const response = await api.get(`/request-history/${userId}`, {
+      params: { filter },
+    });
     console.log("Request history response", response);
     return response.data;
   } catch (error) {
     console.error("Get Request history  error", error.response);
+    throw error;
+  }
+};
+
+export const getRequestDetails = async (id, type) => {
+  try {
+    const response = await api.get(`/request-details/${id}`, {
+      params: { type },
+    });
+    console.log("Request request-details response", response);
+    return response.data;
+  } catch (error) {
+    console.error("Get request-details  error", error.response);
     throw error;
   }
 };

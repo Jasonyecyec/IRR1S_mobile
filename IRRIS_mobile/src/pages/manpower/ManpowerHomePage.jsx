@@ -83,7 +83,7 @@ const ManpowerHomePage = () => {
   const fetchManpowerStatus = async () => {
     setIsFetchingStatus(true);
     try {
-      const { manpower_status } = await getManpowerStatus();
+      const { manpower_status } = await getManpowerStatus(user?.id);
       console.log("manpower_status", manpower_status);
       setManpowerStatus(manpower_status);
     } catch (error) {
@@ -96,7 +96,7 @@ const ManpowerHomePage = () => {
   const handleConfirmOffline = async () => {
     setIsLoadingStatus(true);
     try {
-      const response = await setManpowerOffline();
+      const response = await setManpowerOffline(user?.id);
       setManpowerStatus("not-available");
       toast.info("Status set as 'not available'.");
     } catch (error) {
@@ -110,7 +110,7 @@ const ManpowerHomePage = () => {
   const handleOnlineButton = async () => {
     setIsLoadingStatus(true);
     try {
-      const response = await setManpowerOnline();
+      const response = await setManpowerOnline(user?.id);
       setManpowerStatus("available");
       toast.success("You are now available for job orders.");
     } catch (error) {
