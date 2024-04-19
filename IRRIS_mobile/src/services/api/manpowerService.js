@@ -196,9 +196,9 @@ export const finishReportForm = async (formData, id) => {
   }
 };
 
-export const getManpowerStatus = async () => {
+export const getManpowerStatus = async (id) => {
   try {
-    const response = await api.get(`/manpower-status`);
+    const response = await api.get(`/manpower-status/${id}`);
     return response.data;
   } catch (error) {
     console.error("Get /manpower-status", error.response);
@@ -206,9 +206,9 @@ export const getManpowerStatus = async () => {
   }
 };
 
-export const setManpowerOffline = async () => {
+export const setManpowerOffline = async (id) => {
   try {
-    const response = await api.put(`/manpower-offline`);
+    const response = await api.put(`/manpower-offline/${id}`);
     return response.data;
   } catch (error) {
     console.error("Get /manpower-online", error.response);
@@ -216,9 +216,9 @@ export const setManpowerOffline = async () => {
   }
 };
 
-export const setManpowerOnline = async () => {
+export const setManpowerOnline = async (id) => {
   try {
-    const response = await api.put(`/manpower-online`);
+    const response = await api.put(`/manpower-online/${id}`);
     return response.data;
   } catch (error) {
     console.error("Get /manpower-online", error.response);

@@ -253,8 +253,8 @@ const RequestPage = () => {
               onChange={handleChange}
               required
             >
-              <option value="">Select Request</option>
-              <option value="manpower">Manpower Assistance</option>
+              <option value="">Select Request </option>
+              <option value="manpower">Service Provider Assistance</option>
               <option value="maintenance">Maintenance</option>
               <option value="logistics">Logistics</option>
             </select>
