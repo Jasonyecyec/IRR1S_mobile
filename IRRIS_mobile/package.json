@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",
+    "@fullcalendar/timegrid": "^6.1.11",
     "@fullcalendar/react": "^6.1.10",
     "@fullcalendar/scrollgrid": "^6.1.10",
     "@phosphor-icons/react": "^2.0.14",
