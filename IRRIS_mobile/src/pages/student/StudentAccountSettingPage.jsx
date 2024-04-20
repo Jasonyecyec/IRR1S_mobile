@@ -103,8 +103,9 @@ const StudentAccountSettingPage = () => {
             </p>
             <p className="text-base">{user?.email}</p>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              QCU {user?.user_role}
-            </span>
+  QCU {user?.user_role === "manpower" ? "Service Provider" : user?.user_role}
+</span>
+
             {userDetails && (
               <p className="capitalize  text-sm">
                 <span>{userDetails?.user_details?.department}</span>
