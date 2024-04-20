@@ -1,11 +1,60 @@
 import React, { useEffect, useState } from "react";
 import PageTitle from "@/src/components/PageTitle";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import styled from "@emotion/styled";
 import { getAllEvents, getPencilBook } from "@/src/services/api/sharedService";
 import { getImageUrl, formatDate } from "@/src/utils/utils";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+
+const FullCalendarStyled = styled.div`
+  height: 100%;
+
+  // .fc-button.fc-prev-button,
+  // .fc-button.fc-next-button,
+  // .fc-button.fc-button-primary {
+  //   background: red;
+  //   background-image: none;
+  // }
+
+  .fc-button.fc-button-primary {
+    background: #1a72fa;
+    background-image: none;
+    font-size: 10px;
+    padding: 3px;
+    width: 5rem;
+    text-transform: capitalize;
+  }
+
+  .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    margin-left: -1px;
+    background: #3b82f6;
+    padding: 2px;
+    font-size: 10px;
+    width: 3rem;
+  }
+
+  .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    background: #3b82f6;
+    padding: 1px;
+    font-size: 10px;
+
+    width: 3rem;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 21px;
+    font-weight: bold;
+    color: #121212;
+    margin: 0px;
+  }
+`;
 
 const CalendarPage = () => {
   const [events, setEvents] = useState(null);
@@ -81,17 +130,25 @@ const CalendarPage = () => {
       <PageTitle title="CALENDAR" />
       <div className=" p-5 pt-10 space-y-3">
         <div className=" p-3 h-[22.5rem] shadow-md ">
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridMonth"
-            weekends={true}
-            height="100%"
-            displayEventTime={false}
-            displayEventEnd={false}
-            events={events}
+          <FullCalendarStyled>
+            <FullCalendar
+              defaultView="dayGridMonth"
+              plugins={[timeGridPlugin, dayGridPlugin]}
+              initialView="dayGridMonth"
+              headerToolbar={{
+                left: "prev,next today",
+                center: "title",
+                right: "timeGridDay,timeGridWeek,dayGridMonth", // Include timeGrid views in the header
+              }}
+              weekends={true}
+              height="100%"
+              displayEventTime={false}
+              displayEventEnd={false}
+              events={events}
 
-            // eventContent={renderEventContent}
-          />
+              // eventContent={renderEventContent}
+            />
+          </FullCalendarStyled>
         </div>
         <div className="flex flex-col w-[12rem]">
           <select
