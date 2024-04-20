@@ -432,7 +432,7 @@ const ReportForm = () => {
         <SuccessModal
           title={"Report Task Completed"}
           message={
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, reiciendis!"
+            "This form is specifically designed for reporting issues that have not yet been addressed but require attention from a service provider for resolution."
           }
           handleCloseButton={() => navigate("/manpower/home")}
         />
