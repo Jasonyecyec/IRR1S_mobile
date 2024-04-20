@@ -486,7 +486,7 @@ const StudentAboutUs = () => {
       toast.success("Feedback submitted successfully!");
 
       // Once submitted successfully, close the confirmation modal
-      // setShowConfirmationModal(false);   
+      // setShowConfirmationModal(false);
       console.log("showConfirmationModal:", showConfirmationModal); // Log to track the modal's visibility
 
       // Show toaster notification
@@ -535,7 +535,7 @@ const StudentAboutUs = () => {
                       <form onSubmit={handleNextPhase} className="space-y-3">
                         <div className="flex flex-col justify-center ">
                           <h2 className="text-1xl font-semibold text-blue-800">
-                            UP KEEP : System Evaluation
+                            FMS : System Evaluation
                           </h2>
                         </div>
                         <div className="flex flex-col  ">
