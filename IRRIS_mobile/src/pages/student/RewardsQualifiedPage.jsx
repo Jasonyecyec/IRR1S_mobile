@@ -144,8 +144,7 @@ const RewardsQualifiedPage = () => {
 
               {reward.criteria === "points" && (
                 <p>
-                  Minimun points to achieve <span>{reward.total_points}</span>{" "}
-                  points
+                  Points to achieve <span>{reward.total_points}</span> points
                 </p>
               )}
 

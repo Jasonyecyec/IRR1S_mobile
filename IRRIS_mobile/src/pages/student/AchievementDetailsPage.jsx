@@ -98,8 +98,8 @@ const AchievementDetailsPage = () => {
 
               {achievement.criteria === "points" && (
                 <p className="text-gray-500">
-                  Minimun points to achieve{" "}
-                  <span>{achievement.total_points}</span> points
+                  Points to achieve <span>{achievement.total_points}</span>{" "}
+                  points
                 </p>
               )}
 
