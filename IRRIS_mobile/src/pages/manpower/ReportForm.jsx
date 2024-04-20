@@ -431,9 +431,7 @@ const ReportForm = () => {
       {successModal && (
         <SuccessModal
           title={"Report Task Completed"}
-          message={
-            "This form is specifically designed for reporting issues that have not yet been addressed but require attention from a service provider for resolution."
-          }
+          message={"The report has been created, You can now start the task! "}
           handleCloseButton={() => navigate("/manpower/home")}
         />
       )}
@@ -498,8 +496,9 @@ const ReportForm = () => {
           <div>
             <p className="font-bold text-lg">Report Form</p>
             <p className="text-sm text-gray-500">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere
-              vitae dicta ex aspernatur quos unde?
+              This form is specifically designed for reporting issues that have
+              not yet been addressed but require attention from a service
+              provider for resolution.
             </p>
           </div>
 

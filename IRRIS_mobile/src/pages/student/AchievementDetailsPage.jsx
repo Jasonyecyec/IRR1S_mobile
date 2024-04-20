@@ -13,7 +13,7 @@ import { DownloadSimple } from "@phosphor-icons/react";
 import ConfirmationModal from "@/src/components/ConfirmationModal";
 import SuccessModal from "@/src/components/SuccessModal";
 import Loading from "@/src/components/Loading";
-
+import { formatDateTime } from "@/src/utils/utils";
 const AchievementDetailsPage = () => {
   const { achievementId } = useParams();
   const [achievement, setAchievementDetails] = useState(null);

@@ -461,19 +461,7 @@ const SuggestionBoxPage = () => {
         />
       )}
 
-      {/* {isOpenModal && (
-        <SuccessModal
-          message="Suggestion Reported Successfully!"
-          handleCloseButton={() => navigate("/login")}
-        />
-      )} */}
-      {/* Render the ErrorModal component if isError is true */}
-      {/* {isError.error && (
-        <ErrorModal
-          message={isError.message}
-          handleCloseButton={handleCloseErrorModal} // Pass the function to close the error modal
-        />
-      )} */}
+     
       {openModal && (
         <SuccessModal
           message="Suggestion Reported Successfully!"
@@ -553,22 +541,7 @@ const SuggestionBoxPage = () => {
       )}
 
       {/* ------------------------------------------------------------------------------------------------------------------ */}
-      {/* <header className="fixed z-[-1] top-0 left-0 right-0 bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
-        <div className="backbutton  w-[2rem] ml-2 mt-1">
-          <Link to="/" className="text-white  ">
-            <ArrowLeft size={32} />
-          </Link>
-        </div>
-      </header>
-
-      <div className="flex justify-center mt-[5rem] z-1">
-        <div className="banner w-[17rem] h-[3.2rem] pt-1 rounded-full bg-blue-700 flex justify-center align-center  mt-[-2rem]">
-          {" "}
-          <p className="text-3xl font-medium  text-white dark:text-white">
-            Suggestion
-          </p>
-        </div>
-      </div> */}
+    
       <PageTitle title={"Suggestion"} />
 
       {/* SUGGESTION BOX FORM */}

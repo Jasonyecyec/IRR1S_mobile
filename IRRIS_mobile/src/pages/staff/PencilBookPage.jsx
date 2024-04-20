@@ -12,6 +12,7 @@ import Loading from "@/src/components/Loading";
 import { Spinner } from "flowbite-react";
 import { CheckCircle, Info } from "@phosphor-icons/react";
 import PencilBookInfoModal from "@/src/components/ui/PencilBookInfoModal";
+import { Toaster, toast } from "sonner";
 
 const PencilBookPage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -188,6 +189,15 @@ const PencilBookPage = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]; // Get the first selected file
+    const fileType = file.type; // Get the file type
+
+    // Check if the file type is not PDF
+    if (fileType !== "application/pdf") {
+      toast.error("Please upload a PDF file."); // Use toast.error for error notification
+      e.target.value = null; // Clear the file input
+      return; // Exit the function
+    }
+
     setForm((prev) => ({
       ...prev,
       request_file: file,
@@ -550,7 +560,7 @@ const PencilBookPage = () => {
               id="message"
               rows="4"
               class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Other equipmet/technical requirements."
+              placeholder="Other equipments/technical requirements."
               name="description"
               value={form.description}
               onChange={handleChange}

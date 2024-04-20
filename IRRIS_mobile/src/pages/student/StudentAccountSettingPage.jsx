@@ -7,6 +7,7 @@ import {
   Trash,
   UserSquare,
 } from "@phosphor-icons/react";
+import PageTitle from "@/src/components/PageTitle";
 
 import UserSample from "../../assets/images/user_sample.jpg";
 import useUserStore from "../../services/state/userStore";
@@ -56,7 +57,7 @@ const StudentAccountSettingPage = () => {
         isChangePasswordModalOpen ? "backdrop-filter backdrop-blur-lg" : ""
       }
     >
-      <header className="bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
+      <header className="bg-mainColor2  p-2 flex items-center justify-between ">
         <div className="backbutton w-[2rem] ml-2 mt-1">
           <Link to={`/${user?.user_role}/profile`} className="text-white">
             <ArrowLeft size={32} />
@@ -65,8 +66,8 @@ const StudentAccountSettingPage = () => {
       </header>
 
       <div className="AccountSettingCard w-full flex justify-center items-center mt-10">
-        <div className="w-full pt-10 h-[50vh] max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex flex-col items-center pb-10">
+        <div className="w-full pt-11 h-[50vh] max-w-sm bg-white border  border-gray-200 rounded-lg shadow shadow-blue-100 shadow-lg dark:bg-gray-800 dark:border-gray-700">
+          <div className="flex flex-col items-center ">
             <h5 className="mb-10 text-3xl font-bold ml-10 mr-10 text-gray-900 dark:text-white">
               Account Setting
             </h5>
@@ -121,7 +122,7 @@ const StudentAccountSettingPage = () => {
           <div>
             <div className="w-full p-4 text-center bg-white rounded-lg sm:p-8 dark:bg-gray-800 ">
               <div className="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
-                <button
+                {/* <button
                   disabled
                   className="flex items-center justify-between w-full sm:w-auto bg-blue-400    text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                 >
@@ -134,7 +135,7 @@ const StudentAccountSettingPage = () => {
                     </div>
                   </div>
                   <CaretRight size={32} />
-                </button>
+                </button> */}
                 <button
                   onClick={handleOpenChangePasswordModal}
                   className="flex items-center justify-between w-full sm:w-auto bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
@@ -150,7 +151,7 @@ const StudentAccountSettingPage = () => {
                   <CaretRight size={32} />
                 </button>
 
-                <button
+                {/* <button
                   disabled
                   className="flex items-center justify-between w-full sm:w-auto bg-blue-400    text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                 >
@@ -163,7 +164,7 @@ const StudentAccountSettingPage = () => {
                     </div>
                   </div>
                   <CaretRight size={32} />
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

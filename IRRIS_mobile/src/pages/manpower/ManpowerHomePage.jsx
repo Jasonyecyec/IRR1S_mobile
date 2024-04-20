@@ -297,10 +297,10 @@ const ManpowerHomePage = () => {
         <div className="flex items-center font-semibold text-mainColor space-x-2">
           <img src={UpKeepLogo} className="w-9 h-7" />
           <p className="text-xl">
-            Hello!{" "}
+            Hello,{" "}
             <span>
               {" "}
-              {user?.first_name} {user?.last_name}
+              {user?.first_name} {user?.last_name}!
             </span>
           </p>
         </div>
