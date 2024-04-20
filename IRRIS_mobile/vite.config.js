@@ -10,45 +10,45 @@ export default defineConfig({
     react(),
     VitePWA({
       manifest: {
-        name: 'QCU-UPKEEP',
-        short_name: 'QCU-UPKEEP',
+        name: 'QCU-FMS',
+        short_name: 'QCU-FMS',
         start_url: '/',
         background_color: '#ffffff',
         theme_color: '#ffffff',
         display: 'standalone',
         icons: [
           {
-            src: "/icon_16.png",
+            src: "/16.png",
             type: "image/png",
             sizes: "16x16",
           },
           {
-            src: "/icon_20.png",
+            src: "/20.png",
             type: "image/png",
             sizes: "20x20",
           },
           {
-            src: "/icon_32.png",
+            src: "/32.png",
             type: "image/png",
             sizes: "32x32",
           },
           {
-            src: "/icon_64.png",
+            src: "/64.png",
             type: "image/png",
             sizes: "64x64",
           },
           {
-            src: "/icon_144.png",
+            src: "/144.png",
             type: "image/png",
             sizes: "144x144",
           },
           {
-            src: '/icon_192.png',
+            src: '/192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/icon_512.png',
+            src: '/512.png',
             type: 'image/png',
             sizes: '512x512',
             purpose: 'maskable'
