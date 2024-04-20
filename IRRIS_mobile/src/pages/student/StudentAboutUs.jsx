@@ -745,9 +745,7 @@ const StudentAboutUs = () => {
                         className="emoticon-input  items-center justify-center"
                       >
                         <div className="flex items-center ">
-                          <h2 className="text-1xl  font-bold">
-                            UP KEEP : Finale Grande!
-                          </h2>
+                          <h2 className="text-1xl  font-bold">QCU : FMS</h2>
                         </div>
                         {/* Add your form fields for Phase 3 here */}
                         <div>
@@ -797,7 +795,7 @@ const StudentAboutUs = () => {
                                     Rate Us Now!
                                   </Label>
                                   <Label className="text-4xl font-extrabold text-blue-800">
-                                    QCU : UP KEEP
+                                    QCU : FMS
                                   </Label>
                                 </div>
                                 {/* Displaying the stars with colors based on starColors state */}
