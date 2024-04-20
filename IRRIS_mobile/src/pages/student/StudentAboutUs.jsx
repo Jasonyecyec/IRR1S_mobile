@@ -19,6 +19,7 @@ import FeedbackCreateModal from "./ConfirmationFeedbackModal";
 import { feedbackEvaluation } from "../../services/api/sharedService";
 import { getUserDetails } from "@/src/services/api/sharedService";
 import useUserStore from "../../services/state/userStore";
+import PageTitle from "@/src/components/PageTitle";
 
 const StudentAboutUs = () => {
   const [activeTab, setActiveTab] = useState("about");
@@ -507,40 +508,37 @@ const StudentAboutUs = () => {
 
   return (
     <div className="container mx-auto">
-      <header className="  bg-mainColor2 rounded-b-[2.5rem] h-20 flex items-center justify-between px-5">
+      <header className="  bg-mainColor2 p-2 flex items-center justify-between px-5">
         <div className="backbutton  w-[100%] ml-2 mt-1 flex justify-between">
           <Link to={`/${user?.user_role}/profile`} className="text-white">
             <ArrowLeft size={32} />
           </Link>
-          <Link to="#">
-            <UsersThree size={36} color="#fcfcfc" weight="fill" />
-          </Link>
         </div>
       </header>
       <div className="flex justify-center items-center">
-        <span className="text-2xl text-white rounded-[2.5rem] bg-blue-700 mt-[-2rem] w-[15rem] h-[3.5rem]  flex justify-center items-center">
+        <span className="text-2xl text-white rounded-[2.5rem] mt-[-3rem] w-[15rem]   flex justify-center items-center">
           Feedback Form
         </span>
       </div>
-      <div className="h-[150vh]  overflow-y-auto pt-1 pb-1">
+      <div className="h-[85vh]  overflow-y-auto pt-1 pb-1">
         <div>
           <div className="flex justify-center items-center ">
             <div className="w-[95%] max-w-sm bg-white dark:bg-gray-800 dark:border-gray-700">
-              <div className="satisfactory-container mt-[orem] h-[40rem]">
+              <div className="satisfactory-container mt-[1rem]">
                 <div className=" pb-1"></div>
-                <div className=" overflow-y-auto">
+                <div className=" overflow-y-auto border rounded-lg shadow-blue-300 shadow-lg p-5">
                   {/* multi step form */}
                   <div className="container mx-auto">
                     {phase === 1 && (
                       <form onSubmit={handleNextPhase} className="space-y-3">
                         <div className="flex flex-col justify-center ">
-                          <h2 className="text-1xl font-semibold text-blue-800">
-                            FMS : System Evaluation
+                          <h2 className="text-1xl font-bold text-blue-800">
+                            QCU-FMS : SYSTEM EVALUATION
                           </h2>
                         </div>
                         <div className="flex flex-col  ">
                           {/* Selected option displayed */}
-                          <div className="flex ">
+                          {/* <div className="flex ">
                             <div className="flex items-center w-[50%] ">
                               <Label className="text-sm w-[50%] font-bold text-gray-600">
                                 Functionality:
@@ -557,8 +555,8 @@ const StudentAboutUs = () => {
                                 {ratingMaintainability || ""} Stars
                               </Label>
                             </div>
-                          </div>
-                          <div className="flex ">
+                          </div> */}
+                          {/* <div className="flex ">
                             <div className="flex w-[50%]">
                               {" "}
                               <Label className="text-sm w-[50%] font-bold text-gray-600">
@@ -576,7 +574,7 @@ const StudentAboutUs = () => {
                                 {ratingEfficiency || ""} Stars
                               </Label>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="flex flex-col items-center justify-center">
                           {/* star rating functionality*/}
@@ -745,25 +743,27 @@ const StudentAboutUs = () => {
                         className="emoticon-input  items-center justify-center"
                       >
                         <div className="flex items-center ">
-                          <h2 className="text-1xl  font-bold">QCU : FMS</h2>
+                          <h2 className="text-1xl text-mainColor  font-bold">
+                            QCU-FMS : SYSTEM EVALUATION
+                          </h2>
                         </div>
                         {/* Add your form fields for Phase 3 here */}
                         <div>
                           <div>
                             <div className="flex flex-col justify-center">
-                              <div>
+                              <div className="p-4">
                                 <div>
                                   <Label>Thank you for evaluating us </Label>
                                   <Label> {user?.first_name} !</Label>
                                 </div>
-                                <div className="flex items-center ">
+                                <div className="flex mt-8 items-center ">
                                   <p>Overall Evaluation:</p>
                                 </div>
                               </div>
-                              <br />
+
                               {/* ----------------- */}
                               <div className="flex flex-col">
-                                <div className="flex ">
+                                {/* <div className="flex ">
                                   <Label className=" w-[30%] text-md ">
                                     Evaluator :
                                   </Label>
@@ -788,32 +788,32 @@ const StudentAboutUs = () => {
                                     onChange={handleNameChange}
                                     className="border-none text-sm w-[70%] font-extrabold mt-[-0.3rem]"
                                   />
-                                </div>
-                                <br />
+                                </div> */}
+
                                 <div className="flex flex-col items-center justify-center">
-                                  <Label className="text-lg bold text-gray-700">
+                                  {/* <Label className="text-lg bold text-gray-700">
                                     Rate Us Now!
-                                  </Label>
+                                  </Label> */}
                                   <Label className="text-4xl font-extrabold text-blue-800">
-                                    QCU : FMS
+                                    QCU-FMS
                                   </Label>
                                 </div>
                                 {/* Displaying the stars with colors based on starColors state */}
                                 <div className="flex items-center justify-center">
-                                  <div className="flex justify-center items-center border w-[67%] h-[5rem] rounded-[3rem] shadow">
+                                  <div className="flex justify-center items-center border w-[70%] h-[4.5rem] mt-2 mb-2 rounded-[3rem] shadow">
                                     {starColorsoverall.map((color, index) => {
                                       // Define an array of icon components to alternate
                                       const icons = [
-                                        <HeartBreak size={62} weight="fill" />,
-                                        <SmileyAngry size={62} weight="fill" />,
-                                        <SmileyMeh size={62} weight="fill" />,
-                                        <Smiley size={62} weight="fill" />,
-                                        <Heart size={62} weight="fill" />,
+                                        <HeartBreak size={50} weight="fill" />,
+                                        <SmileyAngry size={50} weight="fill" />,
+                                        <SmileyMeh size={50} weight="fill" />,
+                                        <Smiley size={50} weight="fill" />,
+                                        <Heart size={50} weight="fill" />,
                                       ];
 
                                       return (
                                         <button
-                                          className=" "
+                                          className="ml-3"
                                           type="button"
                                           key={index}
                                           onClick={(event) =>
@@ -848,7 +848,7 @@ const StudentAboutUs = () => {
                             </div>
                           </div>
 
-                          <div>
+                          <div className="p-4">
                             <p className="text-md font-semibold text-gray-700">
                               What's on your mind?
                             </p>

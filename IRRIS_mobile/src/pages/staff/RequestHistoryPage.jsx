@@ -89,8 +89,10 @@ const RequestHistoryPage = () => {
                       )}-500 space-y-3`}
                     >
                       <div className="flex justify-between ">
-                        <span className="text-xs capitalize bg-mainColor2 text-white p-1.5 rounded-md tracking-wide	w-24 text-center">
-                          {item.request_type}
+                        <span className="text-xs capitalize bg-mainColor2 w-[7rem] text-white p-1.5 rounded-md tracking-wide	w-24 text-center">
+                          {item.request_type === "manpower"
+                            ? "Service Provider"
+                            : item.request_type}
                         </span>
                         <span>
                           {" "}

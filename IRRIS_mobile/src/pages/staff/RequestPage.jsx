@@ -224,9 +224,9 @@ const RequestPage = () => {
         <SuccessModal
           message={`Request ${
             form.request_type === "manpower"
-              ? "Manpower assistance"
+              ? "Service Provider assistance"
               : "Maintenance"
-          } successfully! Please wait for admin approval.`}
+          } successfully! Please wait for the admin approval.`}
           handleCloseButton={() => navigate("/staff/request-history")}
         />
       )}

@@ -66,27 +66,6 @@ const ConfirmationFeedbackModal = ({
     fetchUserDetails(user?.id);
   }, []);
 
-  // const handleConfirmAndClose = async () => {
-  //   handleConfirmation();
-  //   try {
-  //     const feedbackSubmissionResult = await submitFeedback();
-  //     if (feedbackSubmissionResult.success) {
-  //       showSuccessToast("Feedback submitted successfully!");
-  //       handleOpenModal(true);
-  //       // Reset isError state when submission is successful
-  //     setIsError(false);
-  //     setErrorMessage("");
-  //     } else {
-  //       setIsError(true);
-  //       setErrorMessage(feedbackSubmissionResult.error);
-  //       handleOpenModal(false);
-  //     }
-  //   } catch (error) {
-  //     setIsError(true);
-  //     setErrorMessage("You already evaluated our system! Please come back again after 3 months.");
-  //     handleOpenModal(false);
-  //   }
-  // };
 
   const handleConfirmAndClose = async () => {
     setIsLoading(true);
@@ -152,7 +131,7 @@ const ConfirmationFeedbackModal = ({
       onClose={onCloseModalFeedback}
       size="lg"
       popup
-      className="pt-[10rem]"
+      className="pt-[6rem]"
     >
       {isSuccess && (
         <SuccessModal
@@ -186,7 +165,7 @@ const ConfirmationFeedbackModal = ({
           </Label>
         </div>
         <div className="flex flex-col">
-          <div className="flex flex-col mb-5">
+          <div className="flex flex-col mb-5 p-4">
             <div className="flex">
               <Label className="text-md text-gray-800 w-[20%]">Name :</Label>
               <Label className="text-md text-gray-800 w-[80%]">
@@ -202,40 +181,40 @@ const ConfirmationFeedbackModal = ({
               </Label>
             </div>
           </div>
-          <div className="flex flex-col ">
-            <div className="flex flex-row">
-              <Label className="text-md text-gray-800 w-[40%]">
+          <div className="flex flex-col p-4 ">
+            <div className="flex flex-row p-2 justify-between">
+              <Label className="text-md text-gray-800 ">
                 Functionality :
               </Label>
-              <Label className="text-md text-gray-800 w-[60%]">
+              <Label className="text-md text-gray-800">
                 {functionalityRating}
               </Label>
             </div>
-            <div className="flex flex-row">
-              <Label className="text-md text-gray-800 w-[40%]">
+            <div className="flex flex-row p-2 justify-between">
+              <Label className="text-md text-gray-800 ">
                 Maintainability :
               </Label>
-              <Label className="text-md text-gray-800 w-[60%]">
+              <Label className="text-md text-gray-800 ">
                 {maintainabilityRating}
               </Label>
             </div>
-            <div className="flex flex-row">
-              <Label className="text-md text-gray-800 w-[40%]">
+            <div className="flex flex-row p-2 justify-between">
+              <Label className="text-md text-gray-800 ">
                 Portability :
               </Label>
-              <Label className="text-md text-gray-800 w-[60%]">
+              <Label className="text-md text-gray-800">
                 {portabilityRating}
               </Label>
             </div>
-            <div className="flex flex-row">
-              <Label className="text-md text-gray-800 w-[40%]">
+            <div className="flex flex-row p-2 justify-between">
+              <Label className="text-md text-gray-800 ">
                 Efficiency :
               </Label>
-              <Label className="text-md text-gray-800 w-[60%]">
+              <Label className="text-md text-gray-800 ">
                 {efficiencyRating}
               </Label>
             </div>
-            <div className="flex flex-row">
+            <div className="flex flex-row p-2 justify-between">
               <Label className="text-md text-gray-800 w-[40%]">Opinion :</Label>
               <Label className="text-md text-gray-800 w-[60%]">
                 {opinionRating}
@@ -243,7 +222,7 @@ const ConfirmationFeedbackModal = ({
             </div>
           </div>
         </div>
-        <div className="flex justify-center align-items-center mt-6">
+        <div className="flex justify-center align-items-center p-2 mt-6">
           <button
             type="submit"
             onClick={handleConfirmAndClose}
