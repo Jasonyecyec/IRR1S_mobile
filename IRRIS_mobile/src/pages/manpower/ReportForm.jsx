@@ -432,7 +432,7 @@ const ReportForm = () => {
         <SuccessModal
           title={"Report Task Completed"}
           message={
-            "This Form is for only the issue that hasn't been reported but will be fixing by a service provider!"
+            "This form is specifically designed for reporting issues that have not yet been addressed but require attention from a service provider for resolution."
           }
           handleCloseButton={() => navigate("/manpower/home")}
         />
