@@ -103,8 +103,11 @@ const StudentAccountSettingPage = () => {
             </p>
             <p className="text-base">{user?.email}</p>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-  QCU {user?.user_role === "manpower" ? "Service Provider" : user?.user_role}
-</span>
+              QCU{" "}
+              {user?.user_role === "manpower"
+                ? "Service Provider"
+                : user?.user_role}
+            </span>
 
             {userDetails && (
               <p className="capitalize  text-sm">
@@ -118,7 +121,10 @@ const StudentAccountSettingPage = () => {
           <div>
             <div className="w-full p-4 text-center bg-white rounded-lg sm:p-8 dark:bg-gray-800 ">
               <div className="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
-                <button disabled className="flex items-center justify-between w-full sm:w-auto bg-blue-400    text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                <button
+                  disabled
+                  className="flex items-center justify-between w-full sm:w-auto bg-blue-400    text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                >
                   <div className="flex items-center">
                     <UserSquare className="me-3 w-7 h-7" />
                     <div>
@@ -144,7 +150,10 @@ const StudentAccountSettingPage = () => {
                   <CaretRight size={32} />
                 </button>
 
-                <button disabled className="flex items-center justify-between w-full sm:w-auto bg-blue-400    text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                <button
+                  disabled
+                  className="flex items-center justify-between w-full sm:w-auto bg-blue-400    text-white rounded-lg px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                >
                   <div className="flex items-center">
                     <Trash className="me-3 w-7 h-7" />
                     <div>
