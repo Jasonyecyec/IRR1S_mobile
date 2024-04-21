@@ -574,7 +574,8 @@ const PencilBookPage = () => {
             >
               Reservation request letter
               <span className="font-normal text-sm text-gray-500">
-                upload your reservation request letter here in pdf format
+                Please upload your approved letter here in PDF format. Thank
+                you!
               </span>
             </label>
 
