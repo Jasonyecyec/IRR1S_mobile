@@ -197,6 +197,7 @@ const ReviewFacilityPage = () => {
                     <div>
                       <img
                         alt="user-img"
+                        src={getImageUrl(item.user?.profile_image)}
                         className="w-12 h-12 rounded-full bg-red-300"
                       />
                     </div>

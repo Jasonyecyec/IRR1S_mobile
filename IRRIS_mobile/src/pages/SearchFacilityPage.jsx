@@ -58,7 +58,7 @@ const SearchFacilityPage = () => {
   }, []);
 
   return (
-    <div className="h-screen w-screen background ">
+    <div className="h-screen w-screen bg-secondaryColor ">
       {" "}
       <PageTitle title="SEARCH FACILITY" />
       <div className=" p-5 pt-14">
