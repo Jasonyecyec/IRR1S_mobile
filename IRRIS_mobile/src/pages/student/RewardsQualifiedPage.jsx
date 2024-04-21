@@ -4,6 +4,7 @@ import {
   getQualifiedStudents,
   getRewardDetails,
   generateCertificate,
+  getAlreadyClaimed,
 } from "@/src/services/api/StudentService";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatDateTime, getImageUrl } from "@/src/utils/utils";
@@ -28,6 +29,8 @@ const RewardsQualifiedPage = () => {
   const [reward, setReward] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [alreadyClaimed, setAlreadyClaimed] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [openErrorModal, setOpenErrorModal] = useState(false);
   const [qualifiedLeaders, seQualifiedLeaders] = useState(null);
@@ -86,6 +89,19 @@ const RewardsQualifiedPage = () => {
     }
   };
 
+  const fetchAlreadyClaimed = async () => {
+    setIsFetching(true);
+    try {
+      const { claimed } = await getAlreadyClaimed(user?.id, rewardsId);
+      console.log("already claimed", claimed);
+      setAlreadyClaimed(claimed);
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   useEffect(() => {
     if (claimAvailable === true) {
       console.log("Claim available, rendering button");
@@ -97,6 +113,7 @@ const RewardsQualifiedPage = () => {
   }, [claimAvailable]);
 
   useEffect(() => {
+    fetchAlreadyClaimed();
     fetchRewardDetails();
     fetchQualifiedStudents();
   }, [rewardsId]);
@@ -117,7 +134,7 @@ const RewardsQualifiedPage = () => {
       {openSuccessModal && (
         <SuccessModal
           message={
-            "Reward successfully claimed and downloaded, You can now view it in your achievements page"
+            "Reward successfully claimed and downloaded! You can now view it in your achievements page."
           }
           handleCloseButton={() => navigate("/student/more")}
         />
@@ -270,8 +287,11 @@ const RewardsQualifiedPage = () => {
 
       {claimAvailable && (
         <button
+          disabled={alreadyClaimed}
           onClick={() => setOpenConfirmationModal(true)}
-          className="bg-mainColor text-lg text-white absolute left-1/2 transform -translate-x-1/2 bottom-20 w-[80%] rounded-full p-2 font-semibold mx-auto"
+          className={`${
+            alreadyClaimed ? "bg-gray-500" : "bg-mainColor2"
+          } text-lg text-white absolute left-1/2 transform -translate-x-1/2 bottom-20 w-[80%] rounded-full p-2 font-semibold mx-auto `}
         >
           Claim Reward
         </button>

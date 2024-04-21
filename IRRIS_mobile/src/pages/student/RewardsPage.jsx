@@ -161,7 +161,7 @@ const RewardsPage = () => {
             currentReward === "certificates"
               ? "bg-blue-100 text-mainColor2"
               : " "
-          } p-2 rounded-md ease-in-out duration-150 w-28`}
+          } p-2 rounded-md ease-in-out duration-150 w-28 border`}
           onClick={() => setCurrentReward("certificates")}
         >
           Certificates
@@ -169,7 +169,7 @@ const RewardsPage = () => {
         <button
           className={`${
             currentReward === "coupon" ? "bg-blue-100 text-mainColor2" : " "
-          } p-2 rounded-md ease-in-out duration-150 w-28`}
+          } p-2 rounded-md ease-in-out duration-150 w-28 border`}
           onClick={() => setCurrentReward("coupon")}
         >
           Vouchers

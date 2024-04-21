@@ -163,6 +163,23 @@ export const getQualifiedStudents = async (id) => {
   }
 };
 
+export const getAlreadyClaimed = async (id, rewardId) => {
+  try {
+    const response = await api.get(
+      `/student-already-claimed/${id}/${rewardId}`
+    );
+
+    console.log("Fetch student-already-claimed response:", response);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Fetch student-already-claimedresponse error:",
+      error.response || error.message
+    );
+    throw error;
+  }
+};
+
 export const getRewardDetails = async (id) => {
   try {
     const response = await api.get(`/reward-details/${id}`);
