@@ -256,7 +256,7 @@ const RequestPage = () => {
               <option value="">Select Request </option>
               <option value="manpower">Service Provider Assistance</option>
               <option value="maintenance">Maintenance</option>
-              {/* <option value="logistics">Logistics</option> */}
+              <option value="logistics">Logistics</option>
             </select>
 
             {!form.request_type && (
