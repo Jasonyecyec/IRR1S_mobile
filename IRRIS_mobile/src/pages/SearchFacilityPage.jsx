@@ -119,7 +119,11 @@ const SearchFacilityPage = () => {
                           />
                           <span className="font-semibold">
                             {" "}
-                            {facility.averageRating}/5
+                            {/* {facility.averageRating}/5 */}
+                            {facility.averageRating
+                              ? facility.averageRating.toFixed(1)
+                              : 0}
+                            /5
                           </span>
                         </p>
                       </div>
