@@ -682,7 +682,7 @@ const SuggestionBoxPage = () => {
             <label htmlFor="termsCheckbox" className="text-sm">
               I agree to the{" "}
               <Link to="#" onClick={() => setTermsAndConditions(true)}>
-                Terms and Conditions
+                <Label className="text-mainColor font-bold">Terms and Conditions</Label>
               </Link>
             </label>
           </div>
