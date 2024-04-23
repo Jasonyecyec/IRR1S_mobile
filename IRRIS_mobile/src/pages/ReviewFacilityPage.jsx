@@ -140,7 +140,9 @@ const ReviewFacilityPage = () => {
                       <p className="space-x-3 flex">
                         <StarRating rating={Math.floor(facilityRating)} />
                         <span className="font-semibold">
-                          {facilityRating}/5
+                          {/* {facilityRating} */}
+                          {facilityRating ? facilityRating.toFixed(1) : 0}
+                          /5
                         </span>
                       </p>
                     )}
@@ -211,7 +213,7 @@ const ReviewFacilityPage = () => {
                         <p>
                           <StarRating rating={Math.floor(item.rating)} />
                         </p>
-                        <p>{formatDate(item.created_at)}</p>
+                        <p className="text-xs">{formatDate(item.created_at)}</p>
                       </div>
                       <p>{item.comment}</p>
                     </div>
