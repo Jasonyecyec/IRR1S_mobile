@@ -146,18 +146,22 @@ const TasksPage = () => {
                       <span>Task No. {job.id}</span>
                     </p>
 
-                    <p className="flex items-center space-x-1">
-                      <MapPin size={20} color="#121212" />
-                      <span>
-                        Location: {job.report?.facility?.facilities_name}
-                      </span>
-                    </p>
+                    {job.report && (
+                      <>
+                        <p className="flex items-center space-x-1">
+                          <MapPin size={20} color="#121212" />
+                          <span>
+                            Location: {job.report?.facility?.facilities_name}
+                          </span>
+                        </p>
 
-                    <p className="flex items-center space-x-1">
-                      <WarningCircle size={20} color="#121212" />
+                        <p className="flex items-center space-x-1">
+                          <WarningCircle size={20} color="#121212" />
 
-                      <span>Issue: {job.report?.description}</span>
-                    </p>
+                          <span>Issue: {job.report?.description}</span>
+                        </p>
+                      </>
+                    )}
                   </div>
                 ))
               ) : (
