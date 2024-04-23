@@ -651,8 +651,9 @@ const ActivateAccountPage = () => {
                         <Link
                           to="#"
                           onClick={() => setTermsAndConditions(true)}
+                          className=""
                         >
-                          Terms and Conditions
+                          <Label className="font-bold text-mainColor">Terms and Conditions</Label>
                         </Link>
                       </label>
                     </div>
