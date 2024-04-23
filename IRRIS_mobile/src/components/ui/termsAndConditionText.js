@@ -49,7 +49,7 @@ export const termsAndConditionsText = {
   term7: {
     title: "7. Contact Us",
     points: [
-      "7.1 If you have any questions or concerns about this agreement, please contact us at [contact information].",
+      "7.1 If you have any questions or concerns about this agreement, please contact us at qcu.fms@gmail.com.",
     ],
   },
 };

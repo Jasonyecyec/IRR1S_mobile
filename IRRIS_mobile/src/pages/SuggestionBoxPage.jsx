@@ -554,7 +554,7 @@ const SuggestionBoxPage = () => {
               className="block text-sm font-medium text-gray-900 dark:text-white"
             >
               <span className="flex items-center justify-between">
-                Facility ID
+                QR CODE ID
               </span>
             </label>
             <span className="text-[0.6rem] font-small">
