@@ -219,9 +219,9 @@ const Login = () => {
               }}
             >
               {isShowPassword ? (
-                <EyeSlash size="30" color="#969696" weight="light" />
-              ) : (
                 <Eye size="30" color="#969696" weight="light" />
+              ) : (
+                <EyeSlash size="30" color="#969696" weight="light" />
               )}
             </button>
           </div>
