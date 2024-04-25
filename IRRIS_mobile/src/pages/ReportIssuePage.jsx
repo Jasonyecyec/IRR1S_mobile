@@ -60,6 +60,12 @@ const ReportIssuePage = () => {
   const [searchTerm, setSearchTerm] = useState(""); // Step 1: Add state for search term
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const timeoutIdRef = useRef(null);
+  const [showManualInput, setShowManualInput] = useState(false);
+
+  // Toggle the visibility of manual input
+  const toggleManualInput = () => {
+    setShowManualInput((prev) => !prev);
+  };
 
   const navigate = useNavigate();
 
@@ -119,6 +125,13 @@ const ReportIssuePage = () => {
     //SET FORM VALUE
     setSearchTerm(issuesSelect);
   };
+  // Add useEffect hook to clear description when searchTerm changes
+  useEffect(() => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      description: "", // Clear description when searchTerm changes
+    }));
+  }, [searchTerm]);
 
   const handleIssueOnBlur = () => {
     // Clear any existing timeouts to avoid multiple dropdown hide calls
@@ -436,24 +449,34 @@ const ReportIssuePage = () => {
           </div>
         </div>
       )}
+
+      
+
       <PageTitle title="REPORT ISSUE" />
       <div className="h-full w-full  p-5 pt-5 ">
         <form onSubmit={handleSubmitButton} className="space-y-8">
           <div className="space-y-2 text-sm">
-            <TextInput
-              placeholder="Facility ID"
-              label="Facility ID"
-              value={facility?.qr_code}
-              disabled={true}
-            />
-            <TextInput
-              placeholder="Room"
-              label="Room"
-              value={facility?.facilities_name}
-              disabled={true}
-            />
-
-            {/* <div className=" relative">
+            <div className="flex justify-between">
+              <div className="w-[40%]">
+                <TextInput
+                  placeholder="Facility ID"
+                  label="Facility ID"
+                  value={facility?.qr_code}
+                  disabled={true}
+                />
+              </div>
+              <div className="w-[40%]">
+                <TextInput
+                  placeholder="Room"
+                  label="Room"
+                  value={facility?.facilities_name}
+                  disabled={true}
+                  className="w-[90%]"
+                />
+              </div>
+            </div>
+            <br />{" "}
+            <div className=" relative">
               <label
                 htmlFor="issue-type"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -490,9 +513,39 @@ const ReportIssuePage = () => {
                 </div>
               )}
             </div>
-            <p className="text-center font-semibold text-gray-500">Or</p> */}
-
-            <div>
+            <div className="flex flex-col">
+              <p className="text-center font-semibold text-gray-500 mb-3">Or</p>
+              <button
+                type="button"
+                className="font-semibold bg-gray-50 h-[2.8rem] mb-2 border shadow shadow-md p-2 rounded-lg"
+                onClick={toggleManualInput}
+              >
+                {showManualInput
+                  ? "Hide Manual Input"
+                  : "Input the Issue Manually"}
+              </button>
+            </div>
+            {showManualInput && (
+        <div>
+          <label
+            for="message"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Input Issue details
+          </label>
+          <textarea
+            id="message"
+            rows="4"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Please provide accurate description of the issue."
+            name="description"
+            value={form.description}
+            required
+            onChange={handleChange}
+          ></textarea>
+        </div>
+      )}
+            {/* <div>
               <label
                 for="message"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -509,8 +562,7 @@ const ReportIssuePage = () => {
                 required
                 onChange={handleChange}
               ></textarea>
-            </div>
-
+            </div> */}
             <div className="space-x-3  flex items-center py-3">
               <input
                 type="checkbox"
@@ -527,7 +579,6 @@ const ReportIssuePage = () => {
                 *This task is urgent.
               </span>
             </div>
-
             <div className="mt-2">
               <div className="mb-2 block">
                 <Label htmlFor="file" value="Upload Picture" />
@@ -570,13 +621,13 @@ const ReportIssuePage = () => {
               }}
               className="border p-3 text-black bg-white shadow rounded-lg flex-1 font-bold text-base"
             >
-              Back
+              Cancel
             </button>
             <button
               className="bg-mainColor2 p-3 text-white rounded-lg shadow flex-1 font-bold text-base"
               type="submit"
             >
-              Submit
+              Submit Report
             </button>
           </div>
         </form>

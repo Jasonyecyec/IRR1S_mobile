@@ -17,7 +17,7 @@ const FacilityInputModal = ({
       <div className="p-5 border w-full space-y-5 shadow-lg rounded-md bg-white relative">
         <div className="flex justify-between items-center">
           <h4 className="text-lg font-bold text-center mt-8 w-full uppercase">
-            facility id/name
+            room id/name
           </h4>
           <button
             onClick={onCloseModal}
@@ -32,7 +32,7 @@ const FacilityInputModal = ({
             type="text"
             name="qrCode"
             value={qrCode}
-            placeholder="Enter Facility ID/Name"
+            placeholder="Enter the Room Name"
             className=" w-full rounded-md"
             onChange={handleOnChange}
           />
@@ -53,7 +53,7 @@ const FacilityInputModal = ({
             {isLoading ? (
               <Spinner aria-label="Medium sized spinner example" size="md" />
             ) : (
-              "Submit"
+              "Report Issue Now"
             )}
           </button>
         </div>
