@@ -450,8 +450,6 @@ const ReportIssuePage = () => {
         </div>
       )}
 
-      
-
       <PageTitle title="REPORT ISSUE" />
       <div className="h-full w-full  p-5 pt-5 ">
         <form onSubmit={handleSubmitButton} className="space-y-8">
@@ -515,6 +513,13 @@ const ReportIssuePage = () => {
             </div>
             <div className="flex flex-col">
               <p className="text-center font-semibold text-gray-500 mb-3">Or</p>
+              <label className="text-gray-600 text-sm mb-1">
+                Manual Input:
+              </label>
+              <p className="text-gray-500 text-xs mb-2">
+                If you prefer to input the issue details manually, click the
+                button below.
+              </p>
               <button
                 type="button"
                 className="font-semibold bg-gray-50 h-[2.8rem] mb-2 border shadow shadow-md p-2 rounded-lg"
@@ -526,25 +531,25 @@ const ReportIssuePage = () => {
               </button>
             </div>
             {showManualInput && (
-        <div>
-          <label
-            for="message"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Input Issue details
-          </label>
-          <textarea
-            id="message"
-            rows="4"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Please provide accurate description of the issue."
-            name="description"
-            value={form.description}
-            required
-            onChange={handleChange}
-          ></textarea>
-        </div>
-      )}
+              <div>
+                <label
+                  for="message"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Input Issue details
+                </label>
+                <textarea
+                  id="message"
+                  rows="4"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Please provide accurate description of the issue."
+                  name="description"
+                  value={form.description}
+                  required
+                  onChange={handleChange}
+                ></textarea>
+              </div>
+            )}
             {/* <div>
               <label
                 for="message"
