@@ -77,11 +77,11 @@ const ScanFacilityPage = () => {
         <p className="font-semibold">OR</p>
 
         <button
-          className="rounded-full px-8 bg-gray-50 py-1 shadow text-sm font-semibold flex justify-center items-center space-x-3"
+          className="rounded-full w-[80%] h-[3rem] px-8 bg-gray-50 py-1 shadow shadow-lg text-sm font-semibold flex justify-center items-center space-x-3"
           onClick={() => setOpenModal(true)}
         >
           <IdentificationCard size={32} color="#828282" />{" "}
-          <span>Use Facility ID</span>
+          <span>Use Room Name</span>
         </button>
       </div>
 
