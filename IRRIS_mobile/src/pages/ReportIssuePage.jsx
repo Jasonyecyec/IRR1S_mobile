@@ -172,7 +172,6 @@ const ReportIssuePage = () => {
     }));
   };
 
- 
   // Function to close RoomAssets modal
   const closeRoomAssetsModal = () => {
     setShowRoomAssetsModal(false);
@@ -402,39 +401,32 @@ const ReportIssuePage = () => {
       };
 
       // Get the cookie by its name
-    const userIdCookie = Cookies.get("user_id");
+      const userIdCookie = Cookies.get("user_id");
 
-    setForm((prevForm) => ({
-      ...prevForm,
-      user_id: userIdCookie,
-      facility_id: facility.id,
-    }));
-  
+      setForm((prevForm) => ({
+        ...prevForm,
+        user_id: userIdCookie,
+        facility_id: facility.id,
+      }));
+
       fetchRoomAssets();
     }
   }, [facilityId]);
 
-  
+  // Function to open RoomAssets modal and fetch room assets based on QR code
+  const openRoomAssetsModal = async () => {
+    // setIsLoading(true); // Set loading state while fetching
+    setShowRoomAssetsModal(true); // Open modal once room assets are fetched
 
-  
-  
-  
-
-
-// Function to open RoomAssets modal and fetch room assets based on QR code
-const openRoomAssetsModal = async () => {
-  // setIsLoading(true); // Set loading state while fetching
-  setShowRoomAssetsModal(true); // Open modal once room assets are fetched
-
-  // try {
-  //   const roomAssets = await fetchFacilityByQRCode(facility?.qr_code);
-  //   setRoomAssets(roomAssets); // Set room assets received from API
-  // } catch (error) {
-  //   console.error("Error fetching room assets:", error);
-  // } finally {
-  //   setIsLoading(false); // Always clear loading state
-  // }
-};
+    // try {
+    //   const roomAssets = await fetchFacilityByQRCode(facility?.qr_code);
+    //   setRoomAssets(roomAssets); // Set room assets received from API
+    // } catch (error) {
+    //   console.error("Error fetching room assets:", error);
+    // } finally {
+    //   setIsLoading(false); // Always clear loading state
+    // }
+  };
 
   return (
     <div className="bg-secondaryColor h-screen w-screen relative">
@@ -519,7 +511,6 @@ const openRoomAssetsModal = async () => {
           qrCodeId={facility?.qr_code} // Pass QR code ID as prop
           roomAssets={roomAssets} // Pass room assets as prop
           facilityId={facility?.room_assets} // Pass facility ID as prop
-
         />
       )}
 
@@ -546,6 +537,15 @@ const openRoomAssetsModal = async () => {
                 />
               </div>
             </div>
+            <div className="mb-2">
+              {/* <label className="block text-sm font-medium text-gray-900 dark:text-white">
+                Room Assets
+              </label> */}
+              <p className="text-gray-500 text-xs">
+                Any relevant room assets can be viewed down below the button. This will help us
+                understand the context of your report better.
+              </p>
+            </div>
             <button
               onClick={openRoomAssetsModal}
               type="button"
@@ -553,7 +553,8 @@ const openRoomAssetsModal = async () => {
             >
               Room Assets
             </button>
-            <br /><br />{" "}
+            <br />
+            <br />{" "}
             <div className=" relative">
               <label
                 htmlFor="issue-type"
