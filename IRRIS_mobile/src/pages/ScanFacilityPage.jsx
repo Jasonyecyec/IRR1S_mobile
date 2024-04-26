@@ -67,7 +67,7 @@ const ScanFacilityPage = () => {
       <PageTitle title="SCAN FACILITY CODE" closeFunction={navigateToHome} />
 
       <div className=" h-full flex flex-col space-y-5  items-center w-full mt-32 p-10">
-        <div className="bg-white p-3 shadow-md border rounded-lg space-y-1">
+        <div className="bg-white p-3 shadow-lg border border-gray-300  rounded-lg space-y-1">
           <p className="text-center font-semibold">Scan QR</p>
 
           <Link to="/qr-scanner">
@@ -77,7 +77,7 @@ const ScanFacilityPage = () => {
         <p className="font-semibold">OR</p>
 
         <button
-          className="rounded-full w-[80%] h-[3rem] px-8 bg-gray-50 py-1  shadow-md text-sm font-semibold flex justify-center items-center space-x-3"
+          className="rounded-full w-[80%] h-[3rem] px-8 bg-gray-50 py-1 border border-gray-300 shadow-md text-sm font-semibold flex justify-center items-center space-x-3"
           onClick={() => setOpenModal(true)}
         >
           <IdentificationCard size={32} color="#828282" />{" "}
