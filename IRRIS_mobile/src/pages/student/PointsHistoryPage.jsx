@@ -4,6 +4,7 @@ import useUserStore from "@/src/services/state/userStore";
 import Skeleton from "react-loading-skeleton";
 import { formatDateTime } from "@/src/utils/utils";
 import "react-loading-skeleton/dist/skeleton.css";
+import PageTitle from "@/src/components/PageTitle";
 
 const PointsHistoryPage = () => {
   const { user, setUser } = useUserStore((state) => ({
@@ -34,9 +35,11 @@ const PointsHistoryPage = () => {
 
   return (
     <div className=" h-full bg-secondaryColor">
-      <div className="bg-mainColor2 text-white text-center p-3">
+    <PageTitle title={'Points Earned History'}/>
+    
+      {/* <div className="bg-mainColor2 text-white text-center p-3">
         <p className="font-semibold text-lg">Points Earned History</p>
-      </div>
+      </div> */}
 
       <div className=" h-full overflow-y-auto   pb-20 ">
         {isLoading ? (
