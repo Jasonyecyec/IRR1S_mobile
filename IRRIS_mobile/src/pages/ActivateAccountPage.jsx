@@ -242,6 +242,8 @@ const ActivateAccountPage = () => {
 
         navigate(response.route);
       } catch (error) {
+        console.log("error", error.response.data.message);
+
         if (error.response.data.message) {
           notify(error.response.data.message);
         }
@@ -252,8 +254,6 @@ const ActivateAccountPage = () => {
         ) {
           notify(error.response.data.message.password[0]);
         }
-
-        console.log("error", error.response.data);
       } finally {
         setIsLoading(false);
       }
@@ -297,6 +297,7 @@ const ActivateAccountPage = () => {
   return (
     <div className=" h-screen w-screen bg-secondaryColor 2  flex flex-col p-8 py-10   relative overflow-y-auto">
       {isLoading && <Loading />}
+      <Toaster />
       <div>
         <p className="text-black font-bold text-3xl text-center text-mainColor2 flex flex-col">
           <span> Create Account </span>
@@ -411,7 +412,6 @@ const ActivateAccountPage = () => {
                 </div>
               </div>
             )}
-            <Toaster />
           </div>
         ) : (
           <>
@@ -653,7 +653,9 @@ const ActivateAccountPage = () => {
                           onClick={() => setTermsAndConditions(true)}
                           className=""
                         >
-                          <Label className="font-bold text-mainColor">Terms and Conditions</Label>
+                          <Label className="font-bold text-mainColor">
+                            Terms and Conditions
+                          </Label>
                         </Link>
                       </label>
                     </div>
