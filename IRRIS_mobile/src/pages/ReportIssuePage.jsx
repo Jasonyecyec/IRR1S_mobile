@@ -14,8 +14,9 @@ import {
 import ConfirmationModal from "../components/ConfirmationModal";
 import useUserStore from "../services/state/userStore";
 import Cookies from "js-cookie";
-import { reportFacility } from "../services/api/sharedService";
+import { reportFacility, fetchFacility } from "../services/api/sharedService";
 import { useNavigate } from "react-router-dom";
+import RoomAssets from "../components/ui/RoomAssets";
 
 // Your maintenance categories data
 const issueCategories = {
@@ -61,6 +62,9 @@ const ReportIssuePage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const timeoutIdRef = useRef(null);
   const [showManualInput, setShowManualInput] = useState(false);
+  const [showRoomAssetsModal, setShowRoomAssetsModal] = useState(false);
+  const facilityId = location.state?.id; // Get facility ID from location state
+  const [roomAssets, setRoomAssets] = useState([]);
 
   // Toggle the visibility of manual input
   const toggleManualInput = () => {
@@ -166,6 +170,12 @@ const ReportIssuePage = () => {
       ...prevForm,
       urgency: !form.urgency,
     }));
+  };
+
+ 
+  // Function to close RoomAssets modal
+  const closeRoomAssetsModal = () => {
+    setShowRoomAssetsModal(false);
   };
 
   const handleRemoveImage = (e) => {
@@ -360,12 +370,38 @@ const ReportIssuePage = () => {
     setCanvas(null);
   };
 
+  // useEffect(() => {
+  //   if (!facility) {
+  //     navigate("/scan-facility");
+  //   }
+
+  //   // Get the cookie by its name
+  //   const userIdCookie = Cookies.get("user_id");
+
+  //   setForm((prevForm) => ({
+  //     ...prevForm,
+  //     user_id: userIdCookie,
+  //     facility_id: facility.id,
+  //   }));
+  // }, []);
+
   useEffect(() => {
     if (!facility) {
       navigate("/scan-facility");
-    }
+    } else {
+      const fetchRoomAssets = async () => {
+        try {
+          // Call your API to fetch room assets based on the facility ID
+          const response = await fetchFacility(facility); // Assuming fetchFacility function fetches room assets based on facility ID
+          console.log("Response from fetchFacility:", facility); // Log the response
 
-    // Get the cookie by its name
+          setRoomAssets(response.roomAssets); // Assuming response contains roomAssets
+        } catch (error) {
+          console.error("Error fetching room assets:", error);
+        }
+      };
+
+      // Get the cookie by its name
     const userIdCookie = Cookies.get("user_id");
 
     setForm((prevForm) => ({
@@ -373,7 +409,33 @@ const ReportIssuePage = () => {
       user_id: userIdCookie,
       facility_id: facility.id,
     }));
-  }, []);
+  
+      fetchRoomAssets();
+    }
+  }, [facilityId]);
+
+  
+
+  
+  
+  
+
+
+// Function to open RoomAssets modal and fetch room assets based on QR code
+const openRoomAssetsModal = async () => {
+  // setIsLoading(true); // Set loading state while fetching
+  setShowRoomAssetsModal(true); // Open modal once room assets are fetched
+
+  // try {
+  //   const roomAssets = await fetchFacilityByQRCode(facility?.qr_code);
+  //   setRoomAssets(roomAssets); // Set room assets received from API
+  // } catch (error) {
+  //   console.error("Error fetching room assets:", error);
+  // } finally {
+  //   setIsLoading(false); // Always clear loading state
+  // }
+};
+
   return (
     <div className="bg-secondaryColor h-screen w-screen relative">
       {openModal && (
@@ -390,7 +452,7 @@ const ReportIssuePage = () => {
           isLoading={isLoading}
           onCloseModal={onCloseModalSubmit}
           handleConfirmButton={handleConfirmButtonSubmit}
-          content="Do you confirm that the details are correct?"
+          content="Are you sure that the report details are correct?"
         />
       )}
 
@@ -449,6 +511,17 @@ const ReportIssuePage = () => {
           </div>
         </div>
       )}
+      {showRoomAssetsModal && (
+        <RoomAssets
+          isOpen={showRoomAssetsModal}
+          onClose={closeRoomAssetsModal}
+          // facilityId={facilityId} // Pass facility ID as prop
+          qrCodeId={facility?.qr_code} // Pass QR code ID as prop
+          roomAssets={roomAssets} // Pass room assets as prop
+          facilityId={facility?.room_assets} // Pass facility ID as prop
+
+        />
+      )}
 
       <PageTitle title="REPORT ISSUE" />
       <div className="h-full w-full  p-5 pt-5 ">
@@ -473,7 +546,14 @@ const ReportIssuePage = () => {
                 />
               </div>
             </div>
-            <br />{" "}
+            <button
+              onClick={openRoomAssetsModal}
+              type="button"
+              className="font-semibold w-full text-xs uppercase bg-gray-50 h-[2.8rem] mb-2 border shadow shadow-md p-2 rounded-lg"
+            >
+              Room Assets
+            </button>
+            <br /><br />{" "}
             <div className=" relative">
               <label
                 htmlFor="issue-type"
@@ -522,12 +602,10 @@ const ReportIssuePage = () => {
               </p>
               <button
                 type="button"
-                className="font-semibold bg-gray-50 h-[2.8rem] mb-2 border shadow shadow-md p-2 rounded-lg"
+                className="font-semibold text-xs uppercase bg-gray-50 h-[2.8rem] mb-2 border shadow shadow-md p-2 rounded-lg"
                 onClick={toggleManualInput}
               >
-                {showManualInput
-                  ? "Hide Manual Input"
-                  : "Input the Issue Manually"}
+                {showManualInput ? "Hide Manual Input" : "Manual Input"}
               </button>
             </div>
             {showManualInput && (
