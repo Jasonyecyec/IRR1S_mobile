@@ -367,7 +367,7 @@ const ManpowerHomePage = () => {
           </p>
           <div className="flex justify-between">
             <button
-              className="bg-white shadow flex flex-col space-y-1 items-center justify-center w-28 h-28 rounded-md relative"
+              className="bg-white shadow flex flex-col space-y-1 mr-3 items-center justify-center w-28 h-28 rounded-md relative"
               onClick={handleReportButton}
             >
               <WarningCircle className="text-[#0f59cb] w-10 h-10" />
@@ -385,7 +385,7 @@ const ManpowerHomePage = () => {
             </button>
 
             <button
-              className="bg-white shadow space-y-1  flex flex-col items-center justify-center w-28 h-28 rounded-md relative"
+              className="bg-white shadow space-y-1 mr-3 flex flex-col items-center justify-center w-28 h-28 rounded-md relative"
               onClick={handleRequestButton}
             >
               <NotePencil className="text-[#0f59cb] w-10 h-10" />
