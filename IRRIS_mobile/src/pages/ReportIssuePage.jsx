@@ -4,6 +4,7 @@ import "../index.css";
 import { useLocation } from "react-router-dom";
 import { Label, FileInput } from "flowbite-react";
 import TextInput from "../components/TextInput";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 import {
   Camera,
   Aperture,
@@ -518,32 +519,36 @@ const ReportIssuePage = () => {
       <div className="h-full w-full  p-5 pt-5 ">
         <form onSubmit={handleSubmitButton} className="space-y-8">
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <div className="w-[40%]">
-                <TextInput
+            <div className="flex justify-between justify-center items-center">
+              <div className="w-[50%] flex justify-center items-center bg-gray-200 rounded-lg p-2">
+                <Label className="w-[50%] text-right">Facility ID :</Label>
+                <input
                   placeholder="Facility ID"
-                  label="Facility ID"
+                  // label="Facility ID"
                   value={facility?.qr_code}
                   disabled={true}
+                  className="border border-none p-2 w-[50%] font-bold"
                 />
               </div>
-              <div className="w-[40%]">
-                <TextInput
+              <div className="w-[50%] flex justify-center items-center bg-gray-200 rounded-lg p-2 ml-3">
+              <Label className="w-[40%] text-right">Room :</Label>
+                <input
                   placeholder="Room"
-                  label="Room"
+                  // label="Room"
                   value={facility?.facilities_name}
                   disabled={true}
-                  className="w-[90%]"
+                  className=" border border-none p-2 w-[50%] font-bold"
                 />
               </div>
             </div>
-            <div className="mb-2">
+
+            <div className="mb-2 pt-6">
               {/* <label className="block text-sm font-medium text-gray-900 dark:text-white">
                 Room Assets
               </label> */}
               <p className="text-gray-500 text-xs">
-                Any relevant room assets can be viewed down below the button. This will help us
-                understand the context of your report better.
+                Any relevant room assets can be viewed down below the button.
+                This will help us understand the context of your report better.
               </p>
             </div>
             <button
@@ -556,25 +561,36 @@ const ReportIssuePage = () => {
             <br />
             <br />{" "}
             <div className=" relative">
-              <label
+              {/* <label className="text-gray-600 text-sm mb-1">
+                Manual Input:
+              </label> */}
+              <p className="text-gray-500 text-xs mb-2">
+                If you prefer to input the issue details manually, click the
+                "Manual Input" button below.
+              </p>
+              {/* <label
                 htmlFor="issue-type"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Select Issue
-              </label>
-
-              <input
-                type="text"
-                placeholder="Search issue"
-                className="w-full rounded-md"
-                value={searchTerm}
-                onChange={handleSearchInputChange}
-                onBlur={handleIssueOnBlur}
-                onFocus={() => setIsDropdownOpen(true)}
-              />
+              </label> */}
+              <div>
+                <input
+                  type="text"
+                  placeholder="Search issue"
+                  className="w-full rounded-md pl-10"
+                  value={searchTerm}
+                  onChange={handleSearchInputChange}
+                  onBlur={handleIssueOnBlur}
+                  onFocus={() => setIsDropdownOpen(true)}
+                />
+                <div className="absolute inset-y-0 mt-10 left-0 pl-3 flex items-center pointer-events-none">
+                  <MagnifyingGlass size={24} color="#ccc" />
+                </div>
+              </div>
 
               {isDropdownOpen && (
-                <div className="bg-white space-y-4 shadow-lg absolute bottom-[-8.3rem] rounded-b-md  py-3 left-0 w-full h-32 overflow-auto">
+                <div className="bg-white space-y-4 shadow-lg absolute bottom-[-15.2rem] rounded-b-md  py-3 left-0 w-full h-[15rem] overflow-auto border border-gray-400">
                   {filteredCategories().map((category, index) => (
                     <div
                       key={index}
@@ -594,13 +610,7 @@ const ReportIssuePage = () => {
             </div>
             <div className="flex flex-col">
               <p className="text-center font-semibold text-gray-500 mb-3">Or</p>
-              <label className="text-gray-600 text-sm mb-1">
-                Manual Input:
-              </label>
-              <p className="text-gray-500 text-xs mb-2">
-                If you prefer to input the issue details manually, click the
-                button below.
-              </p>
+
               <button
                 type="button"
                 className="font-semibold text-xs uppercase bg-gray-50 h-[2.8rem] mb-2 border shadow shadow-md p-2 rounded-lg"
