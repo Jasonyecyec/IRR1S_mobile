@@ -575,9 +575,9 @@ const ActivateAccountPage = () => {
                         }}
                       >
                         {isPasswordVisible ? (
-                          <EyeSlash size="25" color="#969696" weight="light" />
-                        ) : (
                           <Eye size="25" color="#969696" weight="light" />
+                        ) : (
+                          <EyeSlash size="25" color="#969696" weight="light" />
                         )}
                       </button>
                     </div>
@@ -614,9 +614,9 @@ const ActivateAccountPage = () => {
                         }}
                       >
                         {isConfirmPasswordVisible ? (
-                          <EyeSlash size="25" color="#969696" weight="light" />
-                        ) : (
                           <Eye size="25" color="#969696" weight="light" />
+                        ) : (
+                          <EyeSlash size="25" color="#969696" weight="light" />
                         )}
                       </button>
                     </div>
