@@ -584,7 +584,6 @@ const PencilBookPage = () => {
               id="request_file"
               name="request_file"
               accept=".pdf"
-              required
               onChange={handleFileChange}
               className="border w-full text-sm rounded-md "
             />

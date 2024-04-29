@@ -158,7 +158,7 @@ const TasksPage = () => {
                         <p className="flex items-center space-x-1">
                           <WarningCircle size={20} color="#121212" />
 
-                          <span>Issue: {job.report?.description}</span>
+                          <span>Issue: {job.report?.issues}</span>
                         </p>
                       </>
                     )}
