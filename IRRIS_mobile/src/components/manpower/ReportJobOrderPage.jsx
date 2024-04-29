@@ -34,7 +34,7 @@ const ReportJobOrderPage = ({
       <p className="font-bold pb-2">Job Order : REPORT </p>
 
       <div className="border-y-2  flex pb-5 text-sm space-y-1">
-        <div className="flex-1 ">
+        <div className="flex-1 space-y-1">
           <p className="flex items-center space-x-1 pt-2">
             <Clock size={20} color="#121212" />
             <span>Date Assigned: {formatDate(taskInProgress?.created_at)}</span>
@@ -59,8 +59,14 @@ const ReportJobOrderPage = ({
           </p>
           <p className="flex items-center space-x-1">
             <WarningCircle size={20} color="#121212" />
-            <span>Issue: {taskInProgress?.report?.description}</span>
+            <span>Issue: {taskInProgress?.report?.issues}</span>
           </p>
+          {taskInProgress?.report?.description && (
+            <p className="flex items-center space-x-1">
+              <WarningCircle size={20} color="#121212" />
+              <span>Description: {taskInProgress?.report?.description}</span>
+            </p>
+          )}
         </div>
 
         {taskInProgress.status === "assigned" &&
@@ -137,8 +143,8 @@ const ReportJobOrderPage = ({
               onChange={handleReportStatus}
             >
               <option value="">Select status</option>
-              <option value="valid">Validated</option>
-              <option value="not-valid">No Fault Found</option>
+              <option value="valid">Ready for Action</option>
+              <option value="not-valid">No Issue Detected</option>
               <option value="pending">Pending</option>
             </select>
           </div>

@@ -689,7 +689,11 @@ const ManpowerProgressPage = () => {
           isLoading={isLoading}
           onCloseModal={onCloseModalConfirm}
           handleConfirmButton={handleConfirmButton}
-          content="Are you sure you want to finish the task?"
+          content={
+            finishFormData.status === "pending"
+              ? "Are you sure you want to submit? "
+              : "Are you sure you want to finish the task? "
+          }
         />
       )}
 
