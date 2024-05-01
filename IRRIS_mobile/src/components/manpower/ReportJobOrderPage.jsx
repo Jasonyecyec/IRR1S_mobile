@@ -9,6 +9,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 import ImageModal from "../ImageModal";
+import IssueCheckboxes from "./IssueCheckboxes";
 
 const ReportJobOrderPage = ({
   taskInProgress,
@@ -28,9 +29,11 @@ const ReportJobOrderPage = ({
   handleFinishFormChange,
   handlePendingReason,
   pendingReason,
+  issueCheckboxes,
+  handleIssueCheckboxChange,
 }) => {
   return (
-    <div className="bg-white rounded-lg p-3 shadow-md">
+    <div className="bg-white rounded-lg p-3 shadow-md ">
       <p className="font-bold pb-2">Job Order : REPORT </p>
 
       <div className="border-y-2  flex pb-5 text-sm space-y-1">
@@ -148,6 +151,18 @@ const ReportJobOrderPage = ({
               <option value="pending">Pending</option>
             </select>
           </div>
+
+          {reportStatus === "valid" && (
+            <div className="space-y-1">
+              <p>Select appropriate issues</p>
+              <div className="grid w-full border rounded-md grid-cols-2 gap-3 h-[7rem] overflow-y-auto p-2 py-3 ">
+                <IssueCheckboxes
+                  issueType={taskInProgress?.issue_type}
+                  handleIssueCheckboxChange={handleIssueCheckboxChange}
+                />
+              </div>
+            </div>
+          )}
 
           {reportStatus === "pending" && (
             <div>

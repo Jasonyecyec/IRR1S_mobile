@@ -62,6 +62,7 @@ const ManpowerProgressPage = () => {
     comments: null,
     due_date: null,
   });
+  const [issueCheckboxes, setIssueCheckboxes] = useState([]);
 
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [canvas, setCanvas] = useState(null);
@@ -103,6 +104,21 @@ const ManpowerProgressPage = () => {
       toast.dismiss("error");
     };
   }, []);
+
+  const handleIssueCheckboxChange = (e) => {
+    const { checked, value } = e.currentTarget;
+    if (checked) {
+      // If checkbox is checked and its value is not already in the array, add it
+      if (!issueCheckboxes.includes(value)) {
+        setIssueCheckboxes((prevCheckboxes) => [...prevCheckboxes, value]);
+      }
+    } else {
+      // If checkbox is unchecked, remove its value from the array
+      setIssueCheckboxes((prevCheckboxes) =>
+        prevCheckboxes.filter((checkbox) => checkbox !== value)
+      );
+    }
+  };
 
   useEffect(() => {
     const fetchTaskDetails = async () => {
@@ -376,6 +392,11 @@ const ManpowerProgressPage = () => {
           formObjectData.estimated_duration_minutes = estimatedDuration;
         }
 
+        //issue checkbox is not empty
+        if (issueCheckboxes.length !== 0) {
+          formObjectData.issue_checkboxes = issueCheckboxes;
+        }
+
         const { job_order } = await acceptJobOrder(
           formObjectData,
           taskInProgress.id
@@ -598,6 +619,11 @@ const ManpowerProgressPage = () => {
       return;
     }
 
+    if (reportStatus === "valid" && issueCheckboxes.length === 0) {
+      notify("Please select atleast one appropriate issue");
+      return;
+    }
+
     if (reportStatus === "not-valid" || reportStatus === "pending") {
       setIsNotValidOrDelayModal(true);
       console.log("are you sure you want to submit");
@@ -640,6 +666,8 @@ const ManpowerProgressPage = () => {
         return;
       }
     }
+
+    console.log("issueCheckboxes", issueCheckboxes);
 
     setOpenModalConfirm(true);
   };
@@ -798,6 +826,8 @@ const ManpowerProgressPage = () => {
                       handleFinishFormChange={handleFinishFormChange}
                       handlePendingReason={handlePendingReason}
                       pendingReason={pendingReason}
+                      issueCheckboxes={issueCheckboxes}
+                      handleIssueCheckboxChange={handleIssueCheckboxChange}
                     />
                   ) : task === "request" ? (
                     <RequestJobOrderPage
