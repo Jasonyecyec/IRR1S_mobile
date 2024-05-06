@@ -127,6 +127,22 @@ export const getPencilBookDetails = async (id) => {
   }
 };
 
+export const requestReschedEvent = async (id, form) => {
+  try {
+    // Correctly construct the URL with the query parameter
+    const response = await api.post(`/user-reschedule-event/${id}`, form);
+
+    console.log("Get user-reschedule-event response:", response);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Get user-reschedule-event  error:",
+      error.response || error.message
+    );
+    throw error;
+  }
+};
+
 export const cancelPencilBook = async (id) => {
   try {
     const response = await api.patch(`/pencil-book-cancelled/${id}`);

@@ -24,7 +24,7 @@ const issueCategories = {
   "Maintenance and Repairs": {
     "Roof Leaks": "carpentry",
     "Window Breaks": "carpentry",
-    "Electrical Issues": "electrical",
+    "Electrical Issue": "electrical",
     "Plumbing Problems": "plumbing",
     "Broken Chairs/Tables": "carpentry",
     "Elevator Malfunction": "electrical",
@@ -531,7 +531,7 @@ const ReportIssuePage = () => {
                 />
               </div>
               <div className="w-[50%] flex justify-center items-center bg-gray-200 rounded-lg p-2 ml-3">
-              <Label className="w-[40%] text-right">Room :</Label>
+                <Label className="w-[40%] text-right">Room :</Label>
                 <input
                   placeholder="Room"
                   // label="Room"
@@ -541,7 +541,6 @@ const ReportIssuePage = () => {
                 />
               </div>
             </div>
-
             <div className="mb-2 pt-6">
               {/* <label className="block text-sm font-medium text-gray-900 dark:text-white">
                 Room Assets

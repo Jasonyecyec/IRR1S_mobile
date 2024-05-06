@@ -80,6 +80,7 @@ const PencilBookHistory = () => {
             <option value="accepted">Pencil Booked</option>
             <option value="rejected">Rejected</option>
             <option value="reserved">Reserved</option>
+            <option value="rescheduled">Rescheduled</option>
           </select>
         </div>
 
