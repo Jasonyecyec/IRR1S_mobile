@@ -10,6 +10,8 @@ const getStatusColor = (status) => {
       return "blue";
     case "rejected":
       return "red";
+    case "rescheduled":
+      return "purple";
     default:
       return "gray"; // Default color if status is not recognized
   }
