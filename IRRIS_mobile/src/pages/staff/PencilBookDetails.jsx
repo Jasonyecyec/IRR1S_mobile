@@ -252,16 +252,22 @@ const PencilBookDetails = () => {
         {pencilBook && pencilBook.status === "rescheduled" && (
           <div className="mt-10 space-y-5  w-full ">
             <div>
-              <p className="text-sm font-semibold text-red-500">
-                Conflict schedule
+              <p>Your scheduled event has been adjusted by the admin to:.</p>
+              <p className="font-semibold">
+                <span className="text-gray-500">Start date: </span>
+                <span>{formatDateTime(pencilBook.start_date)}</span>
               </p>
-              <p className="">
-                Your scheduled event conflicts with another event set by the
-                admin. Please choose a different date or time.
+              <p className="font-semibold">
+                <span className="text-gray-500">End date: </span>
+                <span>{formatDateTime(pencilBook.end_date)}</span>
               </p>
+              <p className="text-sm font-semibold text-mainColor2 mt-5">
+                Reschedule reason:
+              </p>
+              <p className="">{pencilBook.reschedule_reason}</p>
             </div>
 
-            {pencilBook.user_resched == 1 && (
+            {/* {pencilBook.user_resched == 1 && (
               <div>
                 <p className="text-mainColor2 font-semibold">
                   Requested reschedule
@@ -277,14 +283,14 @@ const PencilBookDetails = () => {
                   <span>{formatDateTime(pencilBook.resched_end_date)}</span>
                 </p>
               </div>
-            )}
+            )} */}
 
-            <button
+            {/* <button
               onClick={() => setOpenChangeScheduleModal(true)}
               className="w-full bg-mainColor2 text-white rounded-lg p-2 font-semibold"
             >
               Change Schedule
-            </button>
+            </button> */}
           </div>
         )}
 
