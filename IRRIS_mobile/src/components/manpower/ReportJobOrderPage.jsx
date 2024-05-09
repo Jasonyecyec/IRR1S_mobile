@@ -154,10 +154,10 @@ const ReportJobOrderPage = ({
 
           {reportStatus === "valid" && (
             <div className="space-y-1">
-              <p>Select appropriate issues</p>
-              <div className="grid w-full border rounded-md grid-cols-2 gap-3 h-[7rem] overflow-y-auto p-2 py-3 ">
+              <p>Choose the items that need attention.</p>
+              <div className="w-full">
                 <IssueCheckboxes
-                  issueType={taskInProgress?.issue_type}
+                  issueType={taskInProgress?.report?.issues}
                   handleIssueCheckboxChange={handleIssueCheckboxChange}
                 />
               </div>
