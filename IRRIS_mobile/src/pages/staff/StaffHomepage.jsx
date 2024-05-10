@@ -183,17 +183,18 @@ const StaffHomepage = () => {
         <div className="flex items-center font-semibold text-mainColor space-x-2">
           <img src={UpKeepLogo} className="w-9 h-7" />
           <div className="flex flex-col">
-             <p className="text-xl">
-            Hello,{" "}
-            <span>
+            <p className="text-xl">
+              Hello,{" "}
+              <span>
+                {" "}
+                {user?.first_name} {user?.last_name}!
+              </span>
+            </p>
+            <p className="text-xs uppercase font-semibold">
               {" "}
-              {user?.first_name} {user?.last_name}!
-            </span>
-          </p>
-          <p className="text-xs uppercase font-semibold">{user?.user_role}</p>
-
+              {user?.user_role === "staff" ? "Employee" : user?.user_role}
+            </p>
           </div>
-         
         </div>
         <button onClick={handleNotificationButton} className="relative">
           {notification && (
