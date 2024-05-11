@@ -398,7 +398,7 @@ const ActivateAccountPage = () => {
                         weight="light"
                       />
                     </span>
-                    <p className="text-mainColor2 font-bol text-xl ">Staff</p>
+                    <p className="text-mainColor2 font-bol text-xl ">Employee</p>
                     {currentFilter === "staff" && (
                       <span>
                         <CheckCircle
