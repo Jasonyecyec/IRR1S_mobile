@@ -302,7 +302,7 @@ const ActivateAccountPage = () => {
         <p className="text-black font-bold text-3xl text-center text-mainColor2 flex flex-col">
           <span> Create Account </span>
           {currentFilter === "student" && <span>For Student</span>}
-          {currentFilter === "staff" && <span>For Staff</span>}
+          {currentFilter === "staff" && <span>For Employee</span>}
         </p>
 
         {/* <div className="w-full text-sm font-bold text-gray-700 space-x-5 flex mt-5">
