@@ -508,10 +508,7 @@ const ReportIssuePage = () => {
         <RoomAssets
           isOpen={showRoomAssetsModal}
           onClose={closeRoomAssetsModal}
-          // facilityId={facilityId} // Pass facility ID as prop
-          qrCodeId={facility?.qr_code} // Pass QR code ID as prop
-          roomAssets={roomAssets} // Pass room assets as prop
-          facilityId={facility?.room_assets} // Pass facility ID as prop
+          facility={facility}
         />
       )}
 
