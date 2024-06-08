@@ -111,7 +111,7 @@ function App() {
 
         // Subscribe to push notifications
         await client.setDeviceInterests([`job-order-${userIdCookie}`]);
-        console.log("Device interests have been set");
+        console.log("Device interests have been set job order");
 
         // Get and log device interests
         const interests = await client.getDeviceInterests();
@@ -278,7 +278,7 @@ function App() {
   }, [user]);
 
   return (
-    <>
+    <div className="flex justify-center w-full">
       <Routes>
         <Route
           path="/"
@@ -596,7 +596,7 @@ function App() {
 
         <Route path="/*" element={<ErrorPage />} />
       </Routes>
-    </>
+    </div>
   );
 }
 
