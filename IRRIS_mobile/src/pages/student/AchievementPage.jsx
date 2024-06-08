@@ -60,7 +60,7 @@ const AchievementPage = () => {
   }, [currentCertificateId]);
 
   return (
-    <div className="h-screen w-screen flex  flex-col">
+    <div className="h-screen w-screen flex  flex-col max-w-[414px]">
       <div className="text-center p-3 bg-mainColor2 text-white font-semibold text-lg relative">
         <button onClick={() => navigate(-1)} className="absolute top-3 left-3 ">
           <CaretLeft size={28} />{" "}
