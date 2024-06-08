@@ -164,7 +164,7 @@ const Login = () => {
   );
 
   return (
-    <div className=" h-screen w-screen flex flex-col items-center justify-center   relative">
+    <div className=" h-screen w-screen max-w-[414px] flex flex-col items-center justify-center   relative">
       <Toaster />
 
       <div className="bg-white rounded-md w-[80%] flex flex-col items-center justify-center space-y-8 h-[30rem]  px-5 py-10 z-10 shadow-lg relative mb-20">

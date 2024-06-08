@@ -295,7 +295,7 @@ const ActivateAccountPage = () => {
   //Password validation
 
   return (
-    <div className=" h-screen w-screen bg-secondaryColor 2  flex flex-col p-8 py-10   relative overflow-y-auto">
+    <div className=" h-screen w-screen  max-w-[414px]  bg-secondaryColor 2  flex flex-col p-8 py-10   relative overflow-y-auto">
       {isLoading && <Loading />}
       <Toaster />
       <div>
@@ -398,7 +398,9 @@ const ActivateAccountPage = () => {
                         weight="light"
                       />
                     </span>
-                    <p className="text-mainColor2 font-bol text-xl ">Employee</p>
+                    <p className="text-mainColor2 font-bol text-xl ">
+                      Employee
+                    </p>
                     {currentFilter === "staff" && (
                       <span>
                         <CheckCircle

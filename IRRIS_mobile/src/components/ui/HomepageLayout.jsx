@@ -43,7 +43,7 @@ const HomepageLayout = ({ children }) => {
   }
 
   return (
-    <div className="h-screen w-screen ">
+    <div className="h-screen w-screen max-w-[414px]">
       <main className="h-[90%]  bg-white">{children}</main>
       {currentUser && bottomNavigationComponent}
     </div>

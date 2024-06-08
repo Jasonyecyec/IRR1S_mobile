@@ -5,6 +5,7 @@
 body {
   overscroll-behavior-y: contain;
   scroll-behavior: smooth;
+  width: 100%;
 }
 
 /* ::-webkit-scrollbar{
